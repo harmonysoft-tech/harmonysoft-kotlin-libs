@@ -1,0 +1,1 @@
+Exposes event bus in spring context

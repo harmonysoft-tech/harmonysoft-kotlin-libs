@@ -1,0 +1,1 @@
+Spring bindings for `harmonysoft-http-client-apache`

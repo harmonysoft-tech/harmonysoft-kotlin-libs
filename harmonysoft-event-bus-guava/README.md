@@ -1,0 +1,1 @@
+Guava-based event bus implementation

@@ -1,0 +1,1 @@
+Test event bus implementation which allows to dispatch events synchronously or asynchronously

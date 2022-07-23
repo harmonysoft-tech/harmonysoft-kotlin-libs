@@ -1,0 +1,1 @@
+[jackson](https://github.com/FasterXML/jackson)-based implementation of various `harmonysoft` API like JSON API
