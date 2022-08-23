@@ -33,7 +33,12 @@ class ObjectProviderEnhancer : BeanFactoryPostProcessor {
             }
 
             val beanClassName = definition.beanClassName ?: continue
-            val beanClass = Class.forName(beanClassName)
+            val beanClass = try {
+                Class.forName(beanClassName)
+            } catch (e: Throwable) {
+                logger.info("Skipping dependency provider enhancing for class '{}' - can't load it", beanClassName)
+                continue
+            }
             val constructors = beanClass.constructors
             for (constructor in constructors) {
                 val parameterTypes = constructor.genericParameterTypes
