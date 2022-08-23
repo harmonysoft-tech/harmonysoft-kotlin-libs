@@ -1,6 +1,6 @@
 package tech.harmonysoft.oss.http.client.cucumber
 
-import org.springframework.boot.web.server.LocalServerPort
+import org.springframework.boot.test.web.server.LocalServerPort
 import javax.inject.Named
 
 @Named

@@ -4,5 +4,5 @@ plugins {
 
 dependencies {
     api(project(":harmonysoft-http-client-apache-cucumber"))
-    api(project(":harmonysoft-common-spring"))
+    api(project(":harmonysoft-common-test-spring"))
 }
