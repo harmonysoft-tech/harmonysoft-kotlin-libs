@@ -32,6 +32,7 @@ import java.security.KeyStore
 import java.util.*
 import java.util.concurrent.locks.ReentrantReadWriteLock
 import java.util.zip.GZIPInputStream
+import javax.inject.Inject
 import javax.inject.Named
 import javax.net.ssl.SSLContext
 import kotlin.concurrent.read
@@ -47,6 +48,7 @@ class HttpClientImpl(
     private val logger = LoggerFactory.getLogger(HttpClientImpl::class.java)
     private val lock = ReentrantReadWriteLock(true)
 
+    @Inject
     constructor(
         httpConfigProvider: HttpConfigProvider,
         listeners: Optional<Collection<HttpListener>>
