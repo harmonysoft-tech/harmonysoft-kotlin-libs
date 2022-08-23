@@ -26,3 +26,5 @@ include("harmonysoft-sql")
 
 include("harmonysoft-micrometer")
 include("harmonysoft-micrometer-influxdb")
+
+include("harmonysoft-default-dependencies")
