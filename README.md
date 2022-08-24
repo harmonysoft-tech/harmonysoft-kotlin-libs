@@ -1,2 +1,2 @@
 # harmonysoft-common
-Miscellaneous JVM utility
+Miscellaneous Kotlin JVM utility, cover many areas from configs management to testing.
