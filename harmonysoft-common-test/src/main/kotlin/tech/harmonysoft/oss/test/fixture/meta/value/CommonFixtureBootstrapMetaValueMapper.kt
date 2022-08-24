@@ -16,7 +16,7 @@ class CommonFixtureBootstrapMetaValueMapper(
     override val type = CommonTestFixture.TYPE
 
     override fun map(context: Any, metaValue: String): ProcessingResult<String?, Unit> {
-        return map(CommonTestFixture.TYPE, metaValue)
+        return map(metaValue)
     }
 
     override fun map(metaValue: String): ProcessingResult<String?, Unit> {
