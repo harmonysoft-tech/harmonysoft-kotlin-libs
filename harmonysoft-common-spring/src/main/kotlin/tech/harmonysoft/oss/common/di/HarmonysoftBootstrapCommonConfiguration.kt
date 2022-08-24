@@ -7,7 +7,7 @@ import tech.harmonysoft.oss.common.string.util.isNullOrBlankEffective
 import java.net.InetAddress
 
 @Configuration
-open class BootstrapCommonConfiguration {
+open class HarmonysoftBootstrapCommonConfiguration {
 
     @Bean
     open fun hostInfo(): HostInfo {

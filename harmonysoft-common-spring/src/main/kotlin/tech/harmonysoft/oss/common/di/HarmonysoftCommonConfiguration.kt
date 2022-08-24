@@ -7,7 +7,7 @@ import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
 
 @Configuration
-open class CommonConfiguration {
+open class HarmonysoftCommonConfiguration {
 
     @Bean
     open fun threadPool(@Value("\${harmonysoft.thread.pool.size:10}") threadsNumber: Int): ScheduledExecutorService {

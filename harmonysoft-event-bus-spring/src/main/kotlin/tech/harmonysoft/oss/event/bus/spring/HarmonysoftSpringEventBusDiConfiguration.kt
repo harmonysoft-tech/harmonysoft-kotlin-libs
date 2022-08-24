@@ -6,7 +6,7 @@ import tech.harmonysoft.oss.event.bus.EventBus
 import tech.harmonysoft.oss.event.bus.EventBusFactory
 
 @Configuration
-open class SpringEventBusDiConfiguration {
+open class HarmonysoftSpringEventBusDiConfiguration {
 
     @Bean
     open fun eventBus(factory: EventBusFactory): EventBus {

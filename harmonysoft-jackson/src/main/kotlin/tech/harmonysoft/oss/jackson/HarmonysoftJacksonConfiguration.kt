@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration
 import java.util.*
 
 @Configuration
-open class JacksonConfiguration {
+open class HarmonysoftJacksonConfiguration {
 
     @Json
     @Bean
