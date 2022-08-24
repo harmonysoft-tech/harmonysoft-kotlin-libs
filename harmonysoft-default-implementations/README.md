@@ -1,0 +1,1 @@
+Default implementation of various apis defined in this library, for example `jackson` for `json-api`; `kotlin` for `inpertio-client-jvm`, `spring` for dependency injection, etc
