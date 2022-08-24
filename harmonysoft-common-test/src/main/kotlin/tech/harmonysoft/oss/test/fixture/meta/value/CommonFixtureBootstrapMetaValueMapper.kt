@@ -6,6 +6,7 @@ import tech.harmonysoft.oss.common.ProcessingResult.Companion.success
 import tech.harmonysoft.oss.common.host.HostInfo
 import tech.harmonysoft.oss.common.meta.MetaValueMapper
 import tech.harmonysoft.oss.test.fixture.CommonTestFixture
+import tech.harmonysoft.oss.test.util.NetworkUtil
 import java.net.ServerSocket
 import java.nio.file.Files
 
@@ -26,12 +27,7 @@ class CommonFixtureBootstrapMetaValueMapper(
             }.absolutePath)
             "empty-string" -> success("")
             "null" -> success(null)
-            "free-port" -> {
-                val socket = ServerSocket(0)
-                val port = socket.localPort
-                socket.close()
-                success(port.toString())
-            }
+            "free-port" -> success(NetworkUtil.freePort.toString())
             "current-host" -> success(hostInfo.hostName)
             "current-host-short-name" -> success(hostInfo.shortHostName)
             else -> failure(Unit)
