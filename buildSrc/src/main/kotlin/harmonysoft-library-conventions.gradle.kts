@@ -68,6 +68,10 @@ val sourceJar by tasks.creating(Jar::class) {
     from(sourceSets.main.get().allSource)
 }
 
+tasks.named("jar", Jar::class).configure {
+    archiveClassifier.set("")
+}
+
 artifacts {
     archives(docJar)
     archives(sourceJar)

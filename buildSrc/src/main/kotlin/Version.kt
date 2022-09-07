@@ -1,6 +1,6 @@
 object Version {
 
-    const val APP = "1.16.0"
+    const val APP = "1.17.0"
 
     object Kotlin {
         const val COROUTINE = "1.6.4"
