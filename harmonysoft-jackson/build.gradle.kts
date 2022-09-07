@@ -8,4 +8,5 @@ dependencies {
 
     api("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${Version.JACKSON}")
     api("com.fasterxml.jackson.module:jackson-module-kotlin:${Version.JACKSON}")
+    api("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${Version.JACKSON}")
 }

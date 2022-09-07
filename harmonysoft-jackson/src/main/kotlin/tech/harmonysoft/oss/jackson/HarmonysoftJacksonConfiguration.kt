@@ -1,6 +1,7 @@
 package tech.harmonysoft.oss.jackson
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -18,7 +19,7 @@ open class HarmonysoftJacksonConfiguration {
     }
 
     private fun configure(mapper: ObjectMapper, extensions: Collection<ObjectMapperConfigurationExtension>) {
-        mapper.registerModules(KotlinModule.Builder().build(), KClassModule)
+        mapper.registerModules(KotlinModule.Builder().build(), KClassModule, JavaTimeModule())
         for (extension in extensions) {
             extension.configure(mapper)
         }
