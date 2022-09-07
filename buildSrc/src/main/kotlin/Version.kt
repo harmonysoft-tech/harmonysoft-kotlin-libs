@@ -1,6 +1,6 @@
 object Version {
 
-    const val APP = "1.17.0"
+    const val APP = "1.18.0"
 
     object Kotlin {
         const val COROUTINE = "1.6.4"
@@ -9,7 +9,7 @@ object Version {
 
     const val JAVAX_ANNOTATION = "1.3.2"
     const val JAVAX_INJECT = "1"
-    const val INPERTIO = "1.3.0"
+    const val INPERTIO = "1.4.0"
     const val APACHE_HTTP_CLIENT = "5.1.3"
     const val GUAVA = "31.1-jre"
     const val JACKSON = "2.13.3"
