@@ -17,8 +17,8 @@ class FixtureDataHelper (
     private val allMappers: Provider<Collection<FixtureMetaValueMapper<*>>>,
     private val comparatorConfigProvider: DiElementsComparatorConfigProvider,
 
-    enrichers: Provider<Collection<FixtureDataEnricher<*>>>,
-    metaFunctions: Provider<Collection<FixtureMetaFunction>>
+    enrichers: Provider<Optional<Collection<FixtureDataEnricher<*>>>>,
+    metaFunctions: Provider<Optional<Collection<FixtureMetaFunction>>>
 ) : TestAware {
 
     private val logger = LoggerFactory.getLogger(this::class.java)
@@ -32,13 +32,13 @@ class FixtureDataHelper (
 
     @Suppress("UNCHECKED_CAST")
     private val enrichersByType: Map<FixtureType<Any>, List<FixtureDataEnricher<Any>>> by lazy {
-        enrichers.get().map { it as FixtureDataEnricher<Any> }.groupBy { it.type }.mapValues {
+        enrichers.get().orElse(emptyList()).map { it as FixtureDataEnricher<Any> }.groupBy { it.type }.mapValues {
             it.value.sortedWith(comparatorConfigProvider.data)
         }
     }
 
     private val functionsByName: Map<String, FixtureMetaFunction> by lazy {
-        val functions = metaFunctions.get().groupBy { it.functionName }
+        val functions = metaFunctions.get().orElse(emptyList()).groupBy { it.functionName }
         val duplicateFunctions = functions.filter {
             it.value.size > 1
         }

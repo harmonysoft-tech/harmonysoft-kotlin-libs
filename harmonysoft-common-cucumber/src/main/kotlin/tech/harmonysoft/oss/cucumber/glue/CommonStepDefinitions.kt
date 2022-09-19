@@ -46,7 +46,7 @@ class CommonStepDefinitions {
         }
     }
 
-    @Before
+    @After
     fun notifyOnTestEnd() {
         testCallbacks.ifPresent {
             for (callback in it) {

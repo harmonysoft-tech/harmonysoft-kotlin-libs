@@ -7,6 +7,7 @@ import org.apache.hc.client5.http.classic.methods.*
 import org.apache.hc.core5.http.ContentType
 import org.apache.hc.core5.http.HttpHeaders
 import org.apache.hc.core5.http.HttpStatus
+import org.apache.hc.core5.http.io.entity.StringEntity
 import org.assertj.core.api.Assertions.assertThat
 import tech.harmonysoft.oss.common.collection.CollectionInitializer
 import tech.harmonysoft.oss.http.client.TestHttpClient
@@ -93,6 +94,7 @@ class HttpStepDefinitions {
         val url = getFullUrl(urlOrPath)
         val headers = mapOf(HttpHeaders.CONTENT_TYPE to ContentType.APPLICATION_JSON.mimeType)
         val request = getRequest(httpMethod, url)
+        request.entity = StringEntity(json)
         val response = httpClient.execute(request, HttpResponseConverter.BYTE_ARRAY, headers)
         onResponse(url, httpMethod, response)
     }
@@ -103,6 +105,7 @@ class HttpStepDefinitions {
         val headers = mapOf(HttpHeaders.CONTENT_TYPE to ContentType.APPLICATION_JSON.mimeType) +
                       parseHeaders(headersString)
         val request = getRequest(httpMethod, url)
+        request.entity = StringEntity(json)
         val response = httpClient.execute(request, HttpResponseConverter.BYTE_ARRAY, headers)
         onResponse(url, HttpPost.METHOD_NAME, response)
     }
