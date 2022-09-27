@@ -51,101 +51,26 @@ class StatsRegistry<T : Meter>(
         cacheEntryCreator(staticTags)
     }
 
-    fun getMeter(): T {
-        if (tagNames.isNotEmpty()) {
+    fun getMeter(vararg tagValues: String): T {
+        if (tagNames.size != tagValues.size) {
             throw IllegalArgumentException(
-                "expected to get ${tagNames.size} tag value(s) for tag name(s) $tagNames but got nothing"
+                "expected to get ${tagNames.size} tag value(s) for tag name(s) $tagNames but got ${tagValues.size}: "
+                        + "$tagValues"
             )
         }
-        val entry = _contextTagNames.fold(cache) { cacheEntry, tagName ->
-            val value = executionContextManager.getFromCurrentContext<Any>(tagName) ?: StatsValue.NO_VALUE
-            cacheEntry.getFor(tagName, value, cacheEntryCreator)
-        }
 
-        return entry.meter
-    }
-
-    fun getMeter(tagValue: Any): T {
-        if (tagNames.size != 1) {
-            throw IllegalArgumentException(
-                "expected to get ${tagNames.size} tag value(s) for tag name(s) $tagNames but got one: '$tagValue'"
-            )
-        }
-        val entry = _contextTagNames.fold(cache) { cacheEntry, tagName ->
-            val value = when (tagName) {
-                tagNames[0] -> tagValue
-                else -> executionContextManager.getFromCurrentContext<Any>(tagName) ?: StatsValue.NO_VALUE
+        var entry = _contextTagNames.fold(cache) { cacheEntry, tagName ->
+            val tagIndex = tagNames.indexOf(tagName)
+            val value = if (tagIndex != -1) {
+                tagValues[tagIndex]
+            } else {
+                executionContextManager.getFromCurrentContext<Any>(tagName) ?: StatsValue.NO_VALUE
             }
             cacheEntry.getFor(tagName, value, cacheEntryCreator)
-        }.getFor(tagNames[0], tagValue, cacheEntryCreator)
-
-        return entry.meter
-    }
-
-    fun getMeter(tag1Value: Any, tag2value: Any): T {
-        if (tagNames.size != 2) {
-            throw IllegalArgumentException(
-                "expected to get ${tagNames.size} tag value(s) for tag name(s) $tagNames but gut two: '$tag1Value' "
-                + "and '$tag2value'"
-            )
         }
-
-        val entry = _contextTagNames.fold(cache) { cacheEntry, tagName ->
-            val value = when (tagName) {
-                tagNames[0] -> tag1Value
-                tagNames[1] -> tag2value
-                else -> executionContextManager.getFromCurrentContext<Any>(tagName) ?: StatsValue.NO_VALUE
-            }
-            cacheEntry.getFor(tagName, value, cacheEntryCreator)
-        }.getFor(tagNames[0], tag1Value, cacheEntryCreator).getFor(tagNames[1], tag2value, cacheEntryCreator)
-
-        return entry.meter
-    }
-
-    fun getMeter(tag1Value: Any, tag2value: Any, tag3value: Any): T {
-        if (tagNames.size != 3) {
-            throw IllegalArgumentException(
-                "expected to get ${tagNames.size} tag value(s) for tag name(s) $tagNames but gut three: "
-                + "'$tag1Value', '$tag2value' and '$tag3value'"
-            )
+        for (i in tagNames.indices) {
+            entry = entry.getFor(tagNames[i], tagValues[i], cacheEntryCreator)
         }
-
-        val entry = _contextTagNames.fold(cache) { cacheEntry, tagName ->
-            val value = when (tagName) {
-                tagNames[0] -> tag1Value
-                tagNames[1] -> tag2value
-                tagNames[2] -> tag3value
-                else -> executionContextManager.getFromCurrentContext<Any>(tagName) ?: StatsValue.NO_VALUE
-            }
-            cacheEntry.getFor(tagName, value, cacheEntryCreator)
-        }.getFor(tagNames[0], tag1Value, cacheEntryCreator)
-            .getFor(tagNames[1], tag2value, cacheEntryCreator)
-            .getFor(tagNames[2], tag3value, cacheEntryCreator)
-
-        return entry.meter
-    }
-
-    fun getMeter(tag1Value: Any, tag2value: Any, tag3value: Any, tag4value: Any): T {
-        if (tagNames.size != 4) {
-            throw IllegalArgumentException(
-                "expected to get ${tagNames.size} tag value(s) for tag name(s) $tagNames but gut four: "
-                + "'$tag1Value', '$tag2value', '$tag3value' and '$tag4value'"
-            )
-        }
-
-        val entry = _contextTagNames.fold(cache) { cacheEntry, tagName ->
-            val value = when (tagName) {
-                tagNames[0] -> tag1Value
-                tagNames[1] -> tag2value
-                tagNames[2] -> tag3value
-                tagNames[3] -> tag4value
-                else -> executionContextManager.getFromCurrentContext<Any>(tagName) ?: StatsValue.NO_VALUE
-            }
-            cacheEntry.getFor(tagName, value, cacheEntryCreator)
-        }.getFor(tagNames[0], tag1Value, cacheEntryCreator)
-            .getFor(tagNames[1], tag2value, cacheEntryCreator)
-            .getFor(tagNames[2], tag3value, cacheEntryCreator)
-            .getFor(tagNames[3], tag4value, cacheEntryCreator)
 
         return entry.meter
     }
