@@ -4,6 +4,8 @@ import io.cucumber.java.After
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import org.apache.hc.client5.http.classic.methods.*
+import org.apache.hc.client5.http.entity.mime.ByteArrayBody
+import org.apache.hc.client5.http.entity.mime.MultipartEntityBuilder
 import org.apache.hc.core5.http.ContentType
 import org.apache.hc.core5.http.HttpHeaders
 import org.apache.hc.core5.http.HttpStatus
@@ -110,6 +112,23 @@ class HttpStepDefinitions {
         onResponse(url, HttpPost.METHOD_NAME, response)
     }
 
+    @Given("^file ([^\\s]+) is uploaded using HTTP ([^\\s]+) to ([^\\s]+):$")
+    fun uploadFile(
+        httpPartName: String,
+        fileName: String,
+        httpMethod: String,
+        urlOrPath: String,
+        fileContent: String
+    ) {
+        val url = getFullUrl(urlOrPath)
+        val request = getRequest(httpMethod, url)
+        request.entity = MultipartEntityBuilder.create().apply {
+            addPart(httpPartName, ByteArrayBody(fileContent.toByteArray(), fileName))
+        }.build()
+        val response = httpClient.execute(request, HttpResponseConverter.BYTE_ARRAY)
+        onResponse(url, HttpPost.METHOD_NAME, response)
+    }
+
     @Given("^following default host name is set for HTTP requests$")
     fun setDefaultHostName(hostName: String) {
         defaultHostName.set(hostName)
@@ -153,7 +172,16 @@ class HttpStepDefinitions {
     }
 
     @Then("^last HTTP ([^\\s]+) request returns the following JSON:$")
-    fun verifyJsonResponse(httpMethod: String, expectedJson: String) {
+    fun verifyCompleteJsonResponse(httpMethod: String, expectedJson: String) {
+        verifyJsonResponse(httpMethod, expectedJson, true)
+    }
+
+    @Then("^last HTTP ([^\\s]+) request returns JSON with at least the following data:$")
+    fun verifyPartialJsonResponse(httpMethod: String, expectedJson: String) {
+        verifyJsonResponse(httpMethod, expectedJson, false)
+    }
+
+    private fun verifyJsonResponse(httpMethod: String, expectedJson: String, strict: Boolean) {
         val prepared = fixtureDataHelper.prepareTestData(
             type = CommonTestFixture.TYPE,
             context = Any(),
@@ -162,7 +190,13 @@ class HttpStepDefinitions {
         val expected = parseJson(prepared)
         val rawActual = String(getLastResponse(httpMethod).body)
         val actual = parseJson(rawActual)
-        val errors = CommonJsonUtil.compareAndBind(expected, actual, "<root>", dynamicContext)
+        val errors = CommonJsonUtil.compareAndBind(
+            expected = expected,
+            actual = actual,
+            path = "<root>",
+            context = dynamicContext,
+            strict = strict
+        )
         if (errors.isNotEmpty()) {
             fail("found ${errors.size} error(s) on expected JSON content comparison" +
                  errors.joinToString(prefix = "\n  *)", separator = "\n  *)"))

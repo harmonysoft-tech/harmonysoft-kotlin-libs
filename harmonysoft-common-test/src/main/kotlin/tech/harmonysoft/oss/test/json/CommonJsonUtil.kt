@@ -89,23 +89,35 @@ object CommonJsonUtil {
      *
      * This method allows to do that
      *
+     * @param strict    defines if we should ensure that all data from actual json is present in expected json.
+     *                  For example, we can receive a big json response from server but want just to verify that
+     *                  particular path has particular value
      * @return collection of data comparison errors (if any); empty collection as an indication of successful comparison
      */
-    fun compareAndBind(expected: Any, actual: Any, path: String, context: DynamicBindingContext): Collection<String> {
+    fun compareAndBind(
+        expected: Any,
+        actual: Any,
+        path: String,
+        context: DynamicBindingContext,
+        strict: Boolean = true
+    ): Collection<String> {
         if (expected::class != actual::class) {
             fail("expected an instance of ${expected::class.qualifiedName} ($expected) at path '$path' " +
                  "but got and instance of ${actual::class.qualifiedName} ($actual")
         }
         return when {
             expected is Map<*, *> -> {
-                val missingKeys = (actual as Map<*, *>).keys.toSet() - expected.keys
-                if (missingKeys.isNotEmpty()) {
-                    fail("unexpected data is found at paths ${missingKeys.joinToString { "$path.$it" }}"
-                         + missingKeys.joinToString { "$it: ${actual[it]}" })
+                val actualMap = actual as Map<*, *>
+                if (strict) {
+                    val missingKeys = actualMap.keys.toSet() - expected.keys
+                    if (missingKeys.isNotEmpty()) {
+                        fail("unexpected data is found at paths ${missingKeys.joinToString { "$path.$it" }}"
+                             + missingKeys.joinToString { "$it: ${actual[it]}" })
+                    }
                 }
                 expected.entries.flatMap { (key, value) ->
-                    actual[key]?.let {
-                        compareAndBind(value as Any, it, "$path.$key", context)
+                    actualMap[key]?.let {
+                        compareAndBind(value as Any, it, "$path.$key", context, strict)
                     } ?: fail(
                         "mismatch at path '$path.$key' - expected to find a ${value?.javaClass?.name} "
                         + "value but got null")
@@ -113,7 +125,8 @@ object CommonJsonUtil {
             }
 
             expected is List<*> -> {
-                if (expected.size < (actual as List<*>).size) {
+                val actualList = actual as List<*>
+                if (strict && expected.size < actualList.size) {
                     fail(
                         "unexpected entry(-ies) found at path '$path' - expected ${expected.size} but "
                         + "got ${actual.size} ($expected VS $actual)")
@@ -121,7 +134,7 @@ object CommonJsonUtil {
                 expected.flatMapIndexed { i: Int, expectedValue: Any? ->
                     expectedValue ?: fail("I can't happen, path: $path, index: $i")
                     actual[i]?.let {
-                        compareAndBind(expectedValue, it, "$path[$i]", context)
+                        compareAndBind(expectedValue, it, "$path[$i]", context, strict)
                     } ?: fail(
                         "mismatch at path '$path[$i]' - expected to find a "
                         + "${expectedValue::class.qualifiedName} $expectedValue but got null")
