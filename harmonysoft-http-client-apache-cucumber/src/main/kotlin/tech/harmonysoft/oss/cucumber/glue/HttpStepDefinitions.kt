@@ -112,10 +112,10 @@ class HttpStepDefinitions {
         onResponse(url, HttpPost.METHOD_NAME, response)
     }
 
-    @Given("^file ([^\\s]+) is uploaded using HTTP ([^\\s]+) to ([^\\s]+):$")
+    @Given("^file ([^\\s]+) is uploaded as part ([^\\s]+) using HTTP ([^\\s]+) to ([^\\s]+):$")
     fun uploadFile(
-        httpPartName: String,
         fileName: String,
+        httpPartName: String,
         httpMethod: String,
         urlOrPath: String,
         fileContent: String
