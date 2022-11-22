@@ -12,7 +12,7 @@ class DynamicBindingContext {
     private val logger = LoggerFactory.getLogger(this::class.java)
 
     fun getBinding(key: DynamicBindingKey): Any? {
-        return if (bindings.contains(key)) {
+        return if (bindings.containsKey(key)) {
             bindings[key]
         } else {
             fail("no binding is found for key $key, available bindings: $bindings")

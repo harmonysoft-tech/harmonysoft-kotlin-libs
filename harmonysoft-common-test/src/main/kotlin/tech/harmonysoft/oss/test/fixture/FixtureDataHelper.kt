@@ -91,7 +91,7 @@ class FixtureDataHelper (
                 currentInput
             } else {
                 logger.info("Expanding meta-value <{}> as '{}'", metaValue, remapped)
-                currentInput.replace("<$metaValue", remapped)
+                currentInput.replace("<$metaValue>", remapped)
             }
         }
     }
