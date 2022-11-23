@@ -31,6 +31,7 @@ class HttpStepDefinitions {
 
     private val responses = ConcurrentHashMap<String/* http method */, MutableList<ResponseEntry>>()
     private val defaultHostName = AtomicReference(DEFAULT_HOST_NAME)
+    private val commonHeaders = ConcurrentHashMap<String, String>()
 
     @Inject private lateinit var defaultPortProvider: DefaultWebPortProvider
     @Inject private lateinit var fixtureDataHelper: FixtureDataHelper
@@ -53,13 +54,19 @@ class HttpStepDefinitions {
     fun tearDown() {
         defaultHostName.set(DEFAULT_HOST_NAME)
         responses.clear()
+        commonHeaders.clear()
+    }
+
+    @Given("^common HTTP header is defined: ([^\\s]+)=([^\\s]+)$")
+    fun addCommonHeader(key: String, value: String) {
+        commonHeaders[key] = value
     }
 
     @Given("^HTTP ([^\\s]+) request to ([^\\s]+) is made$")
     fun makeRequest(httpMethod: String, urlOrPath: String) {
         val url = getFullUrl(urlOrPath)
         val request = getRequest(httpMethod, url)
-        val response = httpClient.execute(request, HttpResponseConverter.BYTE_ARRAY)
+        val response = httpClient.execute(request, HttpResponseConverter.BYTE_ARRAY, commonHeaders)
         onResponse(url, httpMethod, response)
     }
 
@@ -72,7 +79,7 @@ class HttpStepDefinitions {
     @Given("^HTTP ([^\\s]+) request to ([^\\s]+) is made with headers '([^']+)'$")
     fun makeRequestWithHeaders(httpMethod: String, urlOrPath: String, rawHeaders: String) {
         val url = getFullUrl(urlOrPath)
-        val headers = parseHeaders(rawHeaders)
+        val headers = commonHeaders + parseHeaders(rawHeaders)
         val request = getRequest(httpMethod, url)
         val response = httpClient.execute(request, HttpResponseConverter.BYTE_ARRAY, headers)
         onResponse(url, httpMethod, response)
@@ -94,7 +101,7 @@ class HttpStepDefinitions {
     @Given("^HTTP ([^\\s]+) request to ([^\\s]+) is made with JSON body:$")
     fun makeRequestWithJsonBody(httpMethod: String, urlOrPath: String, json: String) {
         val url = getFullUrl(urlOrPath)
-        val headers = mapOf(HttpHeaders.CONTENT_TYPE to ContentType.APPLICATION_JSON.mimeType)
+        val headers = mapOf(HttpHeaders.CONTENT_TYPE to ContentType.APPLICATION_JSON.mimeType) + commonHeaders
         val request = getRequest(httpMethod, url)
         request.entity = StringEntity(json)
         val response = httpClient.execute(request, HttpResponseConverter.BYTE_ARRAY, headers)
@@ -104,7 +111,8 @@ class HttpStepDefinitions {
     @Given("^HTTP ([^\\s]+) request to ([^\\s]+) is made with headers '([^']+)' and JSON body:$")
     fun makeRequestHeadersAndJsonBody(httpMethod: String, urlOrPath: String, headersString: String, json: String) {
         val url = getFullUrl(urlOrPath)
-        val headers = mapOf(HttpHeaders.CONTENT_TYPE to ContentType.APPLICATION_JSON.mimeType) +
+        val headers = commonHeaders +
+                      mapOf(HttpHeaders.CONTENT_TYPE to ContentType.APPLICATION_JSON.mimeType) +
                       parseHeaders(headersString)
         val request = getRequest(httpMethod, url)
         request.entity = StringEntity(json)
@@ -125,7 +133,7 @@ class HttpStepDefinitions {
         request.entity = MultipartEntityBuilder.create().apply {
             addPart(httpPartName, ByteArrayBody(fileContent.toByteArray(), fileName))
         }.build()
-        val response = httpClient.execute(request, HttpResponseConverter.BYTE_ARRAY)
+        val response = httpClient.execute(request, HttpResponseConverter.BYTE_ARRAY, commonHeaders)
         onResponse(url, HttpPost.METHOD_NAME, response)
     }
 
