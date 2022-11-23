@@ -1,3 +1,5 @@
+## v1.25.0 released on 23 Nov 2022 UTC
+  * a2eca17557770f7b9fc1e5b1887b654f56516311 added ability to specify common HTTP headers in tests
 ## v1.24.0 released on 22 Nov 2022 UTC
   * 1e301bd63faf7b28f4faf8721c09430857ddafcc corrected file upload step
 ## v1.23.0 released on 22 Nov 2022 UTC
