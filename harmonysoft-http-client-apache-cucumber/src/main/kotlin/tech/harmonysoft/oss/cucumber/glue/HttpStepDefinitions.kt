@@ -5,6 +5,7 @@ import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import org.apache.hc.client5.http.classic.methods.*
 import org.apache.hc.client5.http.entity.mime.ByteArrayBody
+import org.apache.hc.client5.http.entity.mime.ContentBody
 import org.apache.hc.client5.http.entity.mime.MultipartEntityBuilder
 import org.apache.hc.core5.http.ContentType
 import org.apache.hc.core5.http.HttpHeaders
@@ -128,10 +129,24 @@ class HttpStepDefinitions {
         urlOrPath: String,
         fileContent: String
     ) {
+        makeMultiPartRequest(
+            parts = listOf(httpPartName to ByteArrayBody(fileContent.toByteArray(), fileName)),
+            httpMethod = httpMethod,
+            urlOrPath = urlOrPath
+        )
+    }
+
+    fun makeMultiPartRequest(
+        httpMethod: String,
+        urlOrPath: String,
+        parts: Collection<Pair<String, ContentBody>>
+    ) {
         val url = getFullUrl(urlOrPath)
         val request = getRequest(httpMethod, url)
         request.entity = MultipartEntityBuilder.create().apply {
-            addPart(httpPartName, ByteArrayBody(fileContent.toByteArray(), fileName))
+            for ((partName, partBody) in parts) {
+                addPart(partName, partBody)
+            }
         }.build()
         val response = httpClient.execute(request, HttpResponseConverter.BYTE_ARRAY, commonHeaders)
         onResponse(url, HttpPost.METHOD_NAME, response)
