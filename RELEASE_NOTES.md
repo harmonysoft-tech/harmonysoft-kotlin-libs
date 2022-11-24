@@ -1,3 +1,5 @@
+## v1.26.0 released on 24 Nov 2022 UTC
+  * 77ef53819460ed493f1c392f26dbd3e5b4d195d3 provided ability to send multipart HTTP requests in tests with any number of parts
 ## v1.25.0 released on 23 Nov 2022 UTC
   * a2eca17557770f7b9fc1e5b1887b654f56516311 added ability to specify common HTTP headers in tests
 ## v1.24.0 released on 22 Nov 2022 UTC
