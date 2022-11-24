@@ -1,3 +1,6 @@
+## v1.27.0 released on 24 Nov 2022 UTC
+  * 3a73cc86b71e7f2c988584e9c624a836af595fb2 added mock HTTP server test module
+  * 68852460df0ca93c9e9f4c7070f283b3f06cc4f4 gradle release paperwork plugin 1.5.0
 ## v1.26.0 released on 24 Nov 2022 UTC
   * 77ef53819460ed493f1c392f26dbd3e5b4d195d3 provided ability to send multipart HTTP requests in tests with any number of parts
 ## v1.25.0 released on 23 Nov 2022 UTC
