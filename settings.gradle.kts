@@ -18,6 +18,7 @@ include("harmonysoft-http-client-apache-test")
 include("harmonysoft-http-client-apache-cucumber")
 include("harmonysoft-http-client-apache-cucumber-spring")
 
+include("harmonysoft-http-mock-server-cucumber")
 
 include("harmonysoft-json-api")
 include("harmonysoft-jackson")
