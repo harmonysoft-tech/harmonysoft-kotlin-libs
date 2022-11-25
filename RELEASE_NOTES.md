@@ -1,3 +1,5 @@
+## v1.29.0 released on 25 Nov 2022 UTC
+  * 9b92f456728158b3b01761d6d6b8ad3daedc775d make sure that mock http server is started only once
 ## v1.28.0 released on 25 Nov 2022 UTC
   * 506379c9143886e432b3a03fe612ac578bc76694 added mongo-cucumber module
 ## v1.27.0 released on 24 Nov 2022 UTC
