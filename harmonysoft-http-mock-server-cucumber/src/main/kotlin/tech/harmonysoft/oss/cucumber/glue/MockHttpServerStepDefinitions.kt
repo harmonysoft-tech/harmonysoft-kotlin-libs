@@ -26,7 +26,6 @@ import javax.inject.Inject
 
 class MockHttpServerStepDefinitions {
 
-    private val mockRef = AtomicReference<ClientAndServer>()
     private val expectations = ConcurrentHashMap<HttpRequest, ExpectationInfo>()
     private val activeExpectationInfoRef = AtomicReference<ExpectationInfo?>()
     private val activeExpectationInfo: ExpectationInfo
@@ -175,5 +174,10 @@ class MockHttpServerStepDefinitions {
         val expectationId = UUID.randomUUID().toString()
         val responseProviders = CopyOnWriteArrayList<ResponseProvider>()
         val dynamicRequestConditionRef = AtomicReference<DynamicRequestCondition>()
+    }
+
+    companion object {
+
+        private val mockRef = AtomicReference<ClientAndServer>()
     }
 }
