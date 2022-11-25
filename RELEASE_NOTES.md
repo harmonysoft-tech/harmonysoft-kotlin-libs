@@ -1,3 +1,5 @@
+## v1.28.0 released on 25 Nov 2022 UTC
+  * 506379c9143886e432b3a03fe612ac578bc76694 added mongo-cucumber module
 ## v1.27.0 released on 24 Nov 2022 UTC
   * 3a73cc86b71e7f2c988584e9c624a836af595fb2 added mock HTTP server test module
   * 68852460df0ca93c9e9f4c7070f283b3f06cc4f4 gradle release paperwork plugin 1.5.0
