@@ -20,6 +20,9 @@ include("harmonysoft-http-client-apache-cucumber-spring")
 
 include("harmonysoft-http-mock-server-cucumber")
 
+include("harmonysoft-mongo")
+include("harmonysoft-mongo-cucumber")
+
 include("harmonysoft-json-api")
 include("harmonysoft-jackson")
 

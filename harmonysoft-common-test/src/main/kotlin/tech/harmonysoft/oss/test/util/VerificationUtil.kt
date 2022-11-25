@@ -224,4 +224,36 @@ actual data: $actual
             """.trimIndent())
         }
     }
+
+    fun <D, K> verifyContains(
+        expected: D,
+        candidates: Collection<D>,
+        keys: Set<K>,
+        retrievalStrategy: DataProviderStrategy<D, K>,
+        equalityChecker: (K, Any?, Any?) -> Boolean = { _, left, right -> ObjectUtil.areEqual(left, right)}
+    ) {
+        val mismatches = mutableListOf<String>()
+        for (candidate in candidates) {
+            val result = compare(
+                expected = expected,
+                actual = candidate,
+                keys = keys,
+                retrievalStrategy = retrievalStrategy,
+                equalityChecker = equalityChecker
+            )
+            if (result.success) {
+                return
+            }
+            mismatches += result.failureValue
+        }
+
+        if (candidates.isEmpty()) {
+            fail("can not match target data ($expected) - no candidates are found")
+        } else  {
+            fail(
+                "can not match target data - none of ${candidates.size} candidate(s) matches:\n  * " +
+                mismatches.joinToString(separator = "\n  * ")
+            )
+        }
+    }
 }
