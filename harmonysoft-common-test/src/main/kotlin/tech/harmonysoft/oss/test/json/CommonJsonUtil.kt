@@ -137,7 +137,7 @@ object CommonJsonUtil {
                 val actualList = actual as List<*>
                 if (strict && expected.size < actualList.size) {
                     fail(
-                        "unexpected entry(-ies) found at path '$path' - expected ${expected.size} but "
+                        "unexpected entry(-ies) found at path '$path' - expected ${expected.size} elements but "
                         + "got ${actual.size} ($expected VS $actual)")
                 }
                 expected.flatMapIndexed { i: Int, expectedValue: Any? ->
@@ -146,7 +146,7 @@ object CommonJsonUtil {
                         compareAndBind(expectedValue, it, "$path[$i]", context, strict)
                     } ?: fail(
                         "mismatch at path '$path[$i]' - expected to find a "
-                        + "${expectedValue::class.qualifiedName} $expectedValue but got null")
+                        + "${expectedValue::class.qualifiedName} '$expectedValue' but got null")
                 }
             }
 
@@ -161,8 +161,8 @@ object CommonJsonUtil {
             else -> if (expected == actual) {
                 emptyList()
             } else {
-                listOf("mismatch at path '$path' - expected a ${expected::class.qualifiedName} $expected but got "
-                       + "${actual::class.qualifiedName} $actual")
+                listOf("mismatch at path '$path' - expected a ${expected::class.qualifiedName} '$expected' but got "
+                       + "${actual::class.qualifiedName} '$actual'")
             }
         }
     }
