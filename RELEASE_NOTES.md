@@ -1,3 +1,5 @@
+## v1.31.0 released on 28 Nov 2022 UTC
+  * a78d6d3ea7af9541ce147d6041808ca6281e0aa3 quote expected/actual values in case of JSON comparison failure
 ## v1.30.0 released on 28 Nov 2022 UTC
   * d499f18b67ecb6c3762319b59ab05eb4cfbab55c allow to verify that JSON doesn't have data at target path
 ## v1.29.0 released on 25 Nov 2022 UTC
