@@ -8,6 +8,7 @@ import tech.harmonysoft.oss.test.util.TestUtil.fail
 object CommonJsonUtil {
 
     private const val DYNAMIC_VALUE_PREFIX = "dynamic-value-"
+    private const val NOT_SET_MARKER = "<not-set>"
 
     /**
      * Normally when we want to capture any dynamic value from json, we define it as-is, without any quotes:
@@ -116,11 +117,19 @@ object CommonJsonUtil {
                     }
                 }
                 expected.entries.flatMap { (key, value) ->
-                    actualMap[key]?.let {
-                        compareAndBind(value as Any, it, "$path.$key", context, strict)
-                    } ?: fail(
-                        "mismatch at path '$path.$key' - expected to find a ${value?.javaClass?.name} "
-                        + "value but got null")
+                    if (value == NOT_SET_MARKER) {
+                        actualMap[key]?.let {
+                            fail("expected that no value is set at path $path.$key but there is a value of "
+                                 + "type ${it::class.simpleName}: $it")
+                        }
+                        emptyList()
+                    } else {
+                        actualMap[key]?.let {
+                            compareAndBind(value as Any, it, "$path.$key", context, strict)
+                        } ?: fail(
+                            "mismatch at path '$path.$key' - expected to find a ${value?.javaClass?.name} "
+                            + "value but got null")
+                    }
                 }
             }
 
