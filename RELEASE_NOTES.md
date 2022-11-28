@@ -1,3 +1,5 @@
+## v1.30.0 released on 28 Nov 2022 UTC
+  * d499f18b67ecb6c3762319b59ab05eb4cfbab55c allow to verify that JSON doesn't have data at target path
 ## v1.29.0 released on 25 Nov 2022 UTC
   * 9b92f456728158b3b01761d6d6b8ad3daedc775d make sure that mock http server is started only once
 ## v1.28.0 released on 25 Nov 2022 UTC
