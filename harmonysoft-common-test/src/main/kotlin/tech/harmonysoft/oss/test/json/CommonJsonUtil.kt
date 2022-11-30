@@ -135,7 +135,7 @@ object CommonJsonUtil {
 
             expected is List<*> -> {
                 val actualList = actual as List<*>
-                if (strict && expected.size < actualList.size) {
+                if (expected.size != actualList.size) {
                     fail(
                         "unexpected entry(-ies) found at path '$path' - expected ${expected.size} elements but "
                         + "got ${actual.size} ($expected VS $actual)")
