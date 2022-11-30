@@ -1,3 +1,5 @@
+## v1.32.0 released on 30 Nov 2022 UTC
+  * 30534e960c8c37e63bcbef32f4dc1edf37787ced corrected JSON comparison logic for arrays
 ## v1.31.0 released on 28 Nov 2022 UTC
   * a78d6d3ea7af9541ce147d6041808ca6281e0aa3 quote expected/actual values in case of JSON comparison failure
 ## v1.30.0 released on 28 Nov 2022 UTC
