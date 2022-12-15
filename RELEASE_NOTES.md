@@ -1,3 +1,7 @@
+## v1.33.0 released on 15 Dec 2022 UTC
+  * ba721add621e6fc19d017419ac092608aea9f4bd VerificationUtil.verifyContains() now returns found candidate
+  * 7402c2b2cdd41799a009e8c35c524e527b326cdb gradle-release-paperwork plugin is upgraded to 1.7
+  * 861340950f4aa34f741117595448bcb96e350860 release 1.32.0
 ## v1.32.0 released on 30 Nov 2022 UTC
   * 30534e960c8c37e63bcbef32f4dc1edf37787ced corrected JSON comparison logic for arrays
 ## v1.31.0 released on 28 Nov 2022 UTC
