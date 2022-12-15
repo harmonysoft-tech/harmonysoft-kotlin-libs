@@ -231,7 +231,7 @@ actual data: $actual
         keys: Set<K>,
         retrievalStrategy: DataProviderStrategy<D, K>,
         equalityChecker: (K, Any?, Any?) -> Boolean = { _, left, right -> ObjectUtil.areEqual(left, right)}
-    ) {
+    ): D {
         val mismatches = mutableListOf<String>()
         for (candidate in candidates) {
             val result = compare(
@@ -242,7 +242,7 @@ actual data: $actual
                 equalityChecker = equalityChecker
             )
             if (result.success) {
-                return
+                return candidate
             }
             mismatches += result.failureValue
         }
