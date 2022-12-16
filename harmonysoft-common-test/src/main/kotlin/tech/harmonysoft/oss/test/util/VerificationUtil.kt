@@ -232,6 +232,27 @@ actual data: $actual
         retrievalStrategy: DataProviderStrategy<D, K>,
         equalityChecker: (K, Any?, Any?) -> Boolean = { _, left, right -> ObjectUtil.areEqual(left, right)}
     ): D {
+        val result = find(
+            expected = expected,
+            candidates = candidates,
+            keys = keys,
+            retrievalStrategy = retrievalStrategy,
+            equalityChecker = equalityChecker
+        )
+        if (result.success) {
+            return result.successValue
+        } else {
+            fail(result.failureValue)
+        }
+    }
+
+    fun <D, K> find(
+        expected: D,
+        candidates: Collection<D>,
+        keys: Set<K>,
+        retrievalStrategy: DataProviderStrategy<D, K>,
+        equalityChecker: (K, Any?, Any?) -> Boolean = { _, left, right -> ObjectUtil.areEqual(left, right)}
+    ): ProcessingResult<D, String> {
         val mismatches = mutableListOf<String>()
         for (candidate in candidates) {
             val result = compare(
@@ -242,15 +263,15 @@ actual data: $actual
                 equalityChecker = equalityChecker
             )
             if (result.success) {
-                return candidate
+                return ProcessingResult.success(candidate)
             }
             mismatches += result.failureValue
         }
 
-        if (candidates.isEmpty()) {
-            fail("can not match target data ($expected) - no candidates are found")
-        } else  {
-            fail(
+        return if (mismatches.isEmpty()) {
+            ProcessingResult.failure("can not match target data ($expected) - no candidates are found")
+        } else {
+            ProcessingResult.failure(
                 "can not match target data - none of ${candidates.size} candidate(s) matches:\n  * " +
                 mismatches.joinToString(separator = "\n  * ")
             )
