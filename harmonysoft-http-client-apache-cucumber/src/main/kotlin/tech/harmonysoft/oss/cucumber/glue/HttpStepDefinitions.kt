@@ -12,6 +12,7 @@ import org.apache.hc.core5.http.HttpHeaders
 import org.apache.hc.core5.http.HttpStatus
 import org.apache.hc.core5.http.io.entity.StringEntity
 import org.assertj.core.api.Assertions.assertThat
+import tech.harmonysoft.oss.common.ProcessingResult
 import tech.harmonysoft.oss.common.collection.CollectionInitializer
 import tech.harmonysoft.oss.http.client.TestHttpClient
 import tech.harmonysoft.oss.http.client.cucumber.DefaultWebPortProvider
@@ -204,7 +205,18 @@ class HttpStepDefinitions {
         verifyJsonResponse(httpMethod, expectedJson, false)
     }
 
-    private fun verifyJsonResponse(httpMethod: String, expectedJson: String, strict: Boolean) {
+    fun verifyJsonResponse(httpMethod: String, expectedJson: String, strict: Boolean) {
+        val result = matchJsonResponse(httpMethod, expectedJson, strict)
+        if (!result.success) {
+            fail(result.failureValue)
+        }
+    }
+
+    fun matchJsonResponse(
+        httpMethod: String,
+        expectedJson: String,
+        strict: Boolean
+    ): ProcessingResult<Unit, String> {
         val prepared = fixtureDataHelper.prepareTestData(
             type = CommonTestFixture.TYPE,
             context = Any(),
@@ -220,9 +232,13 @@ class HttpStepDefinitions {
             context = dynamicContext,
             strict = strict
         )
-        if (errors.isNotEmpty()) {
-            fail("found ${errors.size} error(s) on expected JSON content comparison" +
-                 errors.joinToString(prefix = "\n  *)", separator = "\n  *)"))
+        return if (errors.isEmpty()) {
+            ProcessingResult.success()
+        } else {
+            ProcessingResult.failure(
+                "found ${errors.size} error(s) on expected JSON content comparison" +
+                errors.joinToString(prefix = "\n  *) ", separator = "\n  *) ")
+            )
         }
     }
 
