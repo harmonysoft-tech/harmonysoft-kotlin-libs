@@ -11,9 +11,13 @@ import io.cucumber.datatable.DataTable
 import io.cucumber.java.After
 import io.cucumber.java.en.Given
 import org.slf4j.Logger
+import tech.harmonysoft.oss.common.ProcessingResult
 import tech.harmonysoft.oss.common.data.DataProviderStrategy
+import tech.harmonysoft.oss.cucumber.input.CommonCucumberInputHelper
 import tech.harmonysoft.oss.mongo.config.TestMongoConfigProvider
 import tech.harmonysoft.oss.mongo.constant.Mongo
+import tech.harmonysoft.oss.mongo.fixture.MongoTestFixture
+import tech.harmonysoft.oss.test.binding.DynamicBindingContext
 import tech.harmonysoft.oss.test.util.VerificationUtil
 import javax.inject.Inject
 
@@ -22,6 +26,8 @@ class MongoStepDefinitions {
     private val allDocumentsFilter = BasicDBObject()
 
     @Inject private lateinit var configProvider: TestMongoConfigProvider
+    @Inject private lateinit var bindingContext: DynamicBindingContext
+    @Inject private lateinit var cucumberInputHelper: CommonCucumberInputHelper
     @Inject private lateinit var logger: Logger
 
     private val client: MongoClient by lazy {
@@ -42,7 +48,7 @@ class MongoStepDefinitions {
         }
     }
 
-    @Given("^mongo ([^\\s]+) collection has the following documents?$")
+    @Given("^mongo ([^\\s]+) collection has the following documents?:$")
     fun ensureDocumentExists(collection: String, data: DataTable) {
         for (documentData in data.asMaps()) {
             ensureDocumentExists(collection, documentData)
@@ -60,20 +66,47 @@ class MongoStepDefinitions {
         )
     }
 
-    @Given("^mongo ([^\\s]+) collection should have the following documents?$")
-    fun verifyDocumentsExist(collection: String, data: DataTable) {
-        for (expected in data.asMaps()) {
-            verifyDocumentExists(collection, expected)
+    @Given("^mongo ([^\\s]+) collection should have the following documents?:$")
+    fun verifyDocumentsExist(collectionName: String, data: DataTable) {
+        val records = cucumberInputHelper.parse(MongoTestFixture.TYPE, Unit, data)
+        VerificationUtil.verifyConditionHappens {
+            val collection = client.getDatabase(configProvider.data.db).getCollection(collectionName)
+            val documents = collection
+                .find(Mongo.Filter.ALL)
+                .projection(Projections.include((records.first().data.keys + records.first().toBind.keys).toList()))
+                .toList()
+                .map { it.toMap() }
+
+            for (record in records) {
+                val result = VerificationUtil.find(
+                    expected = record.data,
+                    candidates = documents,
+                    keys = record.data.keys,
+                    retrievalStrategy = DataProviderStrategy.fromMap(),
+                )
+                if (!result.success) {
+                    return@verifyConditionHappens result.mapError()
+                }
+                val matched = result.successValue
+                for ((column, key) in record.toBind) {
+                    bindingContext.storeBinding(key, matched[column])
+                }
+            }
+            ProcessingResult.success()
         }
     }
 
-    fun verifyDocumentExists(collectionName: String, data: Map<String, Any>) {
+    fun verifyDocumentExists(
+        collectionName: String,
+        data: Map<String, Any>,
+        additionalProjection: Set<String>
+    ): Map<String, Any?> {
         val collection = client.getDatabase(configProvider.data.db).getCollection(collectionName)
         val documents = collection
             .find(Mongo.Filter.ALL)
-            .projection(Projections.include(data.keys.toList()))
+            .projection(Projections.include((data.keys + additionalProjection).toList()))
             .toList()
             .map { it.toMap() }
-        VerificationUtil.verifyContains(data, documents, data.keys, DataProviderStrategy.fromMap())
+        return VerificationUtil.verifyContains(data, documents, data.keys, DataProviderStrategy.fromMap())
     }
 }

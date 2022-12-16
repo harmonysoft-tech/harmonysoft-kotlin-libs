@@ -3,6 +3,6 @@ plugins {
 }
 
 dependencies {
-    api(project(":harmonysoft-mongo"))
+    api(project(":harmonysoft-mongo-test"))
     api(project(":harmonysoft-common-cucumber"))
 }
