@@ -161,11 +161,16 @@ class MockHttpServerStepDefinitions {
 
     @Given("^the following mock HTTP response is returned:$")
     fun configureResponse(response: String) {
+        configureResponseWithCode(200, response)
+    }
+
+    @Given("^the following mock HTTP response with code (\\d+) is returned:$")
+    fun configureResponseWithCode(code: Int, response: String) {
         val condition = activeExpectationInfo.dynamicRequestConditionRef.getAndSet(null)
                         ?: DynamicRequestCondition.MATCH_ALL
         activeExpectationInfo.responseProviders += ConditionalResponseProvider(
             condition = condition,
-            response = HttpResponse.response().withStatusCode(200).withBody(response)
+            response = HttpResponse.response().withStatusCode(code).withBody(response)
         )
     }
 
