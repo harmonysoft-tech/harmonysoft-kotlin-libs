@@ -1,3 +1,10 @@
+## v1.34.0 released on 16 Dec 2022 UTC
+  * 7d8bad7991281fa2938f649d22c5b47dba38245f added ability to bind mongo documents to dynamic keys
+  * cd9d7173959896d5586a07ecccf558e528665a90 added ability to provide custom response code in mock http call
+  * 0d0cceff155fa3b5ade65a18949c7ede4df0ee80 added ability to find target element among given candidates
+  * 1dcf219f992d6eeac4ae9474fc6902ead6a19585 cucumber input parser now expands meta values
+  * 0b200205c725f8a3dccd192adf66fa57fd1fde1d kafka cucumber support
+  * c9e68287c0fd74a2e7088f5a296392219785ff89 added ability to match json response without failing
 ## v1.33.0 released on 15 Dec 2022 UTC
   * ba721add621e6fc19d017419ac092608aea9f4bd VerificationUtil.verifyContains() now returns found candidate
   * 7402c2b2cdd41799a009e8c35c524e527b326cdb gradle-release-paperwork plugin is upgraded to 1.7
