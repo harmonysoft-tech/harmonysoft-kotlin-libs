@@ -21,6 +21,6 @@ import tech.harmonysoft.oss.test.binding.DynamicBindingKey
  * This class represents a single cucumber record with separated 'known values' and 'values to bind'.
  */
 data class CucumberRecord(
-    val data: Map<String, String>,
+    val data: Map<String, String?>,
     val toBind: Map<String, DynamicBindingKey>
 )
