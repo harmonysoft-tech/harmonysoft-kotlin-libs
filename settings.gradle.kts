@@ -31,4 +31,7 @@ include("harmonysoft-sql")
 include("harmonysoft-micrometer")
 include("harmonysoft-micrometer-influxdb")
 
+include("harmonysoft-kafka-test")
+include("harmonysoft-kafka-cucumber")
+
 include("harmonysoft-default-implementations")
