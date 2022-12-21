@@ -1,3 +1,5 @@
+## v1.35.0 released on 21 Dec 2022 UTC
+  * 7822a14403e08c53c579ed493bfbf5a141746f1f printing complete response in case of JSON response mismatch in tests
 ## v1.34.0 released on 16 Dec 2022 UTC
   * 7d8bad7991281fa2938f649d22c5b47dba38245f added ability to bind mongo documents to dynamic keys
   * cd9d7173959896d5586a07ecccf558e528665a90 added ability to provide custom response code in mock http call
