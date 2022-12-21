@@ -237,7 +237,8 @@ class HttpStepDefinitions {
         } else {
             ProcessingResult.failure(
                 "found ${errors.size} error(s) on expected JSON content comparison" +
-                errors.joinToString(prefix = "\n  *) ", separator = "\n  *) ")
+                errors.joinToString(prefix = "\n  *) ", separator = "\n  *) ") +
+                "\ncomplete response:\n$rawActual"
             )
         }
     }
