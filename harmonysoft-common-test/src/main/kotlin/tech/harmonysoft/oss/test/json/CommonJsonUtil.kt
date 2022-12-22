@@ -142,15 +142,16 @@ object CommonJsonUtil {
                         "unexpected entry(-ies) found at path '$path' - expected ${expected.size} " +
                         "elements but got ${actual.size} ($expected VS $actual)"
                     )
-                }
-                expected.flatMapIndexed { i: Int, expectedValue: Any? ->
-                    expectedValue ?: fail("I can't happen, path: $path, index: $i")
-                    actual[i]?.let {
-                        compareAndBind(expectedValue, it, "$path[$i]", context, strict)
-                    } ?: listOf(
-                        "mismatch at path '$path[$i]' - expected to find a " +
-                        "${expectedValue::class.qualifiedName} '$expectedValue' but got null"
-                    )
+                } else {
+                    expected.flatMapIndexed { i: Int, expectedValue: Any? ->
+                        expectedValue ?: fail("I can't happen, path: $path, index: $i")
+                        actual[i]?.let {
+                            compareAndBind(expectedValue, it, "$path[$i]", context, strict)
+                        } ?: listOf(
+                            "mismatch at path '$path[$i]' - expected to find a " +
+                            "${expectedValue::class.qualifiedName} '$expectedValue' but got null"
+                        )
+                    }
                 }
             }
 
