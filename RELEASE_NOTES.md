@@ -1,3 +1,5 @@
+## v1.37.0 released on 22 Dec 2022 UTC
+  * b2b57634a8a80600ea4fe4f64f8343f40639ce24 avoid IndexOutOfBoundsException during JSON arrays comparison in test
 ## v1.36.0 released on 22 Dec 2022 UTC
   * 484d731882bedf8cfbc228d5a3df9b48d957d202 JSON test comparison doesn't fail eagerly now but returns all problems instead
 ## v1.35.0 released on 21 Dec 2022 UTC
