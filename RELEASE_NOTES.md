@@ -1,3 +1,5 @@
+## v1.36.0 released on 22 Dec 2022 UTC
+  * 484d731882bedf8cfbc228d5a3df9b48d957d202 JSON test comparison doesn't fail eagerly now but returns all problems instead
 ## v1.35.0 released on 21 Dec 2022 UTC
   * 7822a14403e08c53c579ed493bfbf5a141746f1f printing complete response in case of JSON response mismatch in tests
 ## v1.34.0 released on 16 Dec 2022 UTC
