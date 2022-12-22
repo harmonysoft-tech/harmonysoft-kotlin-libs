@@ -103,8 +103,10 @@ object CommonJsonUtil {
         strict: Boolean = true
     ): Collection<String> {
         if (expected::class != actual::class) {
-            fail("expected an instance of ${expected::class.qualifiedName} ($expected) at path '$path' " +
-                 "but got and instance of ${actual::class.qualifiedName} ($actual")
+            return listOf(
+                "expected an instance of ${expected::class.qualifiedName} ($expected) at path '$path' " +
+                "but got and instance of ${actual::class.qualifiedName} ($actual"
+            )
         }
         return when {
             expected is Map<*, *> -> {
@@ -136,17 +138,19 @@ object CommonJsonUtil {
             expected is List<*> -> {
                 val actualList = actual as List<*>
                 if (expected.size != actualList.size) {
-                    fail(
-                        "unexpected entry(-ies) found at path '$path' - expected ${expected.size} elements but "
-                        + "got ${actual.size} ($expected VS $actual)")
+                    listOf(
+                        "unexpected entry(-ies) found at path '$path' - expected ${expected.size} " +
+                        "elements but got ${actual.size} ($expected VS $actual)"
+                    )
                 }
                 expected.flatMapIndexed { i: Int, expectedValue: Any? ->
                     expectedValue ?: fail("I can't happen, path: $path, index: $i")
                     actual[i]?.let {
                         compareAndBind(expectedValue, it, "$path[$i]", context, strict)
-                    } ?: fail(
-                        "mismatch at path '$path[$i]' - expected to find a "
-                        + "${expectedValue::class.qualifiedName} '$expectedValue' but got null")
+                    } ?: listOf(
+                        "mismatch at path '$path[$i]' - expected to find a " +
+                        "${expectedValue::class.qualifiedName} '$expectedValue' but got null"
+                    )
                 }
             }
 
