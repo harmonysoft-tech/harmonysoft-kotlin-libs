@@ -111,28 +111,30 @@ object CommonJsonUtil {
         return when {
             expected is Map<*, *> -> {
                 val actualMap = actual as Map<*, *>
+                val errors = mutableListOf<String>()
                 if (strict) {
-                    val missingKeys = actualMap.keys.toSet() - expected.keys
-                    if (missingKeys.isNotEmpty()) {
-                        fail("unexpected data is found at paths ${missingKeys.joinToString { "$path.$it" }}"
-                             + missingKeys.joinToString { "$it: ${actual[it]}" })
+                    val excessiveKeys = actualMap.keys.toSet() - expected.keys
+                    if (excessiveKeys.isNotEmpty()) {
+                        errors += "unexpected data is found at paths ${excessiveKeys.joinToString { "$path.$it" }}" +
+                                  excessiveKeys.joinToString { "$it: ${actual[it]}" }
                     }
                 }
-                expected.entries.flatMap { (key, value) ->
+                for ((key, value) in expected) {
                     if (value == NOT_SET_MARKER) {
                         actualMap[key]?.let {
-                            fail("expected that no value is set at path $path.$key but there is a value of "
-                                 + "type ${it::class.simpleName}: $it")
+                            errors += ("expected that no value is set at path $path.$key but there is a value of "
+                                       + "type ${it::class.simpleName}: $it")
                         }
-                        emptyList()
                     } else {
                         actualMap[key]?.let {
-                            compareAndBind(value as Any, it, "$path.$key", context, strict)
-                        } ?: fail(
-                            "mismatch at path '$path.$key' - expected to find a ${value?.javaClass?.name} "
-                            + "value but got null")
+                            errors += compareAndBind(value as Any, it, "$path.$key", context, strict)
+                        } ?: run {
+                            errors += "mismatch at path '$path.$key' - expected to find a ${value?.javaClass?.name} " +
+                                      "value but got null"
+                        }
                     }
                 }
+                errors
             }
 
             expected is List<*> -> {
