@@ -1,3 +1,5 @@
+## v1.38.0 released on 23 Dec 2022 UTC
+  * 9beddc7f92d315987a2807217b76ce6668df1f99 allow replacing mock HTTP response providers
 ## v1.37.0 released on 22 Dec 2022 UTC
   * b2b57634a8a80600ea4fe4f64f8343f40639ce24 avoid IndexOutOfBoundsException during JSON arrays comparison in test
 ## v1.36.0 released on 22 Dec 2022 UTC
