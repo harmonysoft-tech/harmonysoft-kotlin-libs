@@ -91,7 +91,7 @@ class MockHttpServerStepDefinitions {
             activeExpectationInfoRef.set(it)
             return
         }
-        val info = ExpectationInfo()
+        val info = ExpectationInfo(request)
         mockRef.get().`when`(request).withId(info.expectationId).respond { req ->
             info.responseProviders.mapFirstNotNull { responseProvider ->
                 responseProvider.maybeRespond(req)
@@ -168,13 +168,29 @@ class MockHttpServerStepDefinitions {
     fun configureResponseWithCode(code: Int, response: String) {
         val condition = activeExpectationInfo.dynamicRequestConditionRef.getAndSet(null)
                         ?: DynamicRequestCondition.MATCH_ALL
-        activeExpectationInfo.responseProviders += ConditionalResponseProvider(
+        val newResponseProvider = ConditionalResponseProvider(
             condition = condition,
             response = HttpResponse.response().withStatusCode(code).withBody(response)
         )
+        // there is a possible case that we stub some default behavior in Background cucumber section
+        // but want to define a specific behavior later on in Scenario. Then we need to replace
+        // previous response provider by a new one. This code allows to do that
+        activeExpectationInfo.responseProviders.removeIf {
+            (it !is ConditionalResponseProvider || it.condition == condition).apply {
+                if (this) {
+                    logger.info(
+                        "Replacing mock HTTP response provider for {}: {} -> {}",
+                        activeExpectationInfo.request, it, newResponseProvider
+                    )
+                }
+            }
+        }
+        activeExpectationInfo.responseProviders += newResponseProvider
     }
 
-    class ExpectationInfo {
+    class ExpectationInfo(
+        val request: HttpRequest
+    ) {
 
         val expectationId = UUID.randomUUID().toString()
         val responseProviders = CopyOnWriteArrayList<ResponseProvider>()
