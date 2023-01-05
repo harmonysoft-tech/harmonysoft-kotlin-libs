@@ -11,6 +11,8 @@ import org.slf4j.Logger
 import tech.harmonysoft.oss.common.collection.mapFirstNotNull
 import tech.harmonysoft.oss.http.server.mock.request.ExpectedRequestConfigurer
 import tech.harmonysoft.oss.http.server.mock.request.condition.DynamicRequestCondition
+import tech.harmonysoft.oss.http.server.mock.request.condition.JsonBodyPathToMatcherCondition
+import tech.harmonysoft.oss.http.server.mock.request.condition.ParameterName2ValueCondition
 import tech.harmonysoft.oss.http.server.mock.response.ConditionalResponseProvider
 import tech.harmonysoft.oss.http.server.mock.response.ResponseProvider
 import tech.harmonysoft.oss.jackson.JsonHelper
@@ -113,23 +115,7 @@ class MockHttpServerStepDefinitions {
     }
 
     fun setJsonRequestBodyCondition(path2matcher: Map<String, Matcher>) {
-        addCondition(object : DynamicRequestCondition {
-
-            override fun matches(request: HttpRequest): Boolean {
-                val byPath = jsonHelper.byPath(request.bodyAsJsonOrXmlString)
-                return path2matcher.all { (path, matcher) ->
-                    byPath[path]?.let { actualValue ->
-                        matcher.matches(actualValue.toString())
-                    } ?: false
-                }
-            }
-
-            override fun toString(): String {
-                return "target JSON request has the following values: ${path2matcher.entries.joinToString {
-                    "a value at path '${it.key}' ${it.value}"
-                }}"
-            }
-        })
+        addCondition(JsonBodyPathToMatcherCondition(path2matcher, jsonHelper))
     }
 
     @Given("^mock HTTP request has the following query parameters?:$")
@@ -139,23 +125,18 @@ class MockHttpServerStepDefinitions {
     }
 
     fun setRequestParameterCondition(parameterName2value: Map<String, String>) {
-        addCondition(object : DynamicRequestCondition {
-            override fun matches(request: HttpRequest): Boolean {
-                return parameterName2value.all { (name, value) ->
-                    request.hasQueryStringParameter(name, value)
-                }
-            }
-
-            override fun toString(): String {
-                return "request has the following query parameters: ${parameterName2value.entries.joinToString {
-                    "${it.key}=${it.value}"
-                }}"
-            }
-        })
+        addCondition(ParameterName2ValueCondition(parameterName2value))
     }
 
     fun addCondition(condition: DynamicRequestCondition) {
         val current = activeExpectationInfo.dynamicRequestConditionRef.get()
+        // there is a possible case that we stub common condition-based call by default and later
+        // on overwrite it in tests. We want to drop the common one to replace by the given one then
+        activeExpectationInfo.responseProviders.removeIf {
+            (it is ConditionalResponseProvider && it.condition == condition).apply {
+                logger.info("Dropping mock HTTP response provider {} because it's being replaced by a new one", it)
+            }
+        }
         activeExpectationInfo.dynamicRequestConditionRef.set(current?.and(condition) ?: condition)
     }
 
@@ -194,7 +175,7 @@ class MockHttpServerStepDefinitions {
 
         val expectationId = UUID.randomUUID().toString()
         val responseProviders = CopyOnWriteArrayList<ResponseProvider>()
-        val dynamicRequestConditionRef = AtomicReference<DynamicRequestCondition>()
+        val dynamicRequestConditionRef = AtomicReference<DynamicRequestCondition?>()
     }
 
     companion object {

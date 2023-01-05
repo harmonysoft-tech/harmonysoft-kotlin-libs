@@ -13,7 +13,7 @@ class HasTextMatcherFactory : MatcherFactory {
         return Impl(criteria)
     }
 
-    class Impl(
+    data class Impl(
         private val targetText: String
     ) : Matcher {
 

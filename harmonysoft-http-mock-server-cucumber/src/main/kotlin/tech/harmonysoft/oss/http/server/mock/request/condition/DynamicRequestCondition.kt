@@ -7,17 +7,7 @@ fun interface DynamicRequestCondition {
     fun matches(request: HttpRequest): Boolean
 
     fun and(condition: DynamicRequestCondition): DynamicRequestCondition {
-        val original = this
-        return object : DynamicRequestCondition {
-
-            override fun matches(request: HttpRequest): Boolean {
-                return original.matches(request) && condition.matches(request)
-            }
-
-            override fun toString(): String {
-                return "$original and $condition"
-            }
-        }
+        return AndDynamicRequestCondition(this, condition)
     }
 
     companion object {
