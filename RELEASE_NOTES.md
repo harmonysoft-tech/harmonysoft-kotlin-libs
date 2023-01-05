@@ -1,3 +1,5 @@
+## v1.40.0 released on 05 Jan 2023 UTC
+  * 83968f030b357062c21e5823247b4437d5045b1a allow replacing conditional mock HTTP response providers
 ## v1.39.0 released on 23 Dec 2022 UTC
   * 98d44c935ad91d5fe054c8fee44292a20c92d715 reporting all mismatches from JSON maps comparison in tests
 ## v1.38.0 released on 23 Dec 2022 UTC
