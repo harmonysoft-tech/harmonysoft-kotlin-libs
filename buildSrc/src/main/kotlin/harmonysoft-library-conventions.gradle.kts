@@ -47,6 +47,28 @@ tasks.test {
     useJUnitPlatform()
 }
 
+val cucumber by configurations.creating {
+    extendsFrom(configurations.testImplementation.get())
+}
+
+tasks.register("cucumber") {
+    dependsOn("assemble", "testClasses")
+    doLast {
+        javaexec {
+            mainClass.set("io.cucumber.core.cli.Main")
+            classpath(configurations.getByName("cucumber"), sourceSets.main.get().output, sourceSets.test.get().output)
+            // debug = true
+            args = listOf(
+                "--plugin", "pretty",
+                "--plugin", "html:build/report/cucumber-report.html",
+                "--glue", "com.jago.cucumber.glue",
+                "--glue", "tech.harmonysoft.oss.cucumber.glue",
+                "classpath:feature"
+            )
+        }
+    }
+}
+
 tasks.dokkaJavadoc.configure {
     outputDirectory.set(buildDir.resolve("dokkaJavadoc"))
     dokkaSourceSets {

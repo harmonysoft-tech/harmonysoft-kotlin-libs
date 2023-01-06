@@ -35,4 +35,8 @@ include("harmonysoft-micrometer-influxdb")
 include("harmonysoft-kafka-test")
 include("harmonysoft-kafka-cucumber")
 
+include("harmonysoft-slf4j-spring")
+
 include("harmonysoft-default-implementations")
+
+include("internal-cucumber")

@@ -131,13 +131,6 @@ class MockHttpServerStepDefinitions {
 
     fun addCondition(condition: DynamicRequestCondition) {
         val current = activeExpectationInfo.dynamicRequestConditionRef.get()
-        // there is a possible case that we stub common condition-based call by default and later
-        // on overwrite it in tests. We want to drop the common one to replace by the given one then
-        activeExpectationInfo.responseProviders.removeIf {
-            (it is ConditionalResponseProvider && it.condition == condition).apply {
-                logger.info("Dropping mock HTTP response provider {} because it's being replaced by a new one", it)
-            }
-        }
         activeExpectationInfo.dynamicRequestConditionRef.set(current?.and(condition) ?: condition)
     }
 
@@ -167,7 +160,12 @@ class MockHttpServerStepDefinitions {
                 }
             }
         }
-        activeExpectationInfo.responseProviders += newResponseProvider
+        // we add new provider as the first one in assumption that use-case for multiple providers is as below:
+        //  * common generic stub is defined by default (e.g. in cucumber 'Background' section)
+        //  * specific provider is defined in test
+        // This way specific provider's condition would be tried first and generic provider would be called
+        // only as a fallback
+        activeExpectationInfo.responseProviders.add(0, newResponseProvider)
     }
 
     class ExpectationInfo(

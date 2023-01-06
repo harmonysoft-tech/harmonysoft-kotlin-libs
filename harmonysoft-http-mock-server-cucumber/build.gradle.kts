@@ -8,4 +8,7 @@ dependencies {
     api("org.mock-server:mockserver-netty:5.14.0") {
         exclude(group = "com.fasterxml.jackson.core")
     }
+
+    testImplementation(project(":harmonysoft-http-client-apache-cucumber"))
+    testImplementation(project(":internal-cucumber"))
 }
