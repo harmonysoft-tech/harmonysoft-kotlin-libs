@@ -1,4 +1,4 @@
-package tech.harmonysoft.oss.cucumber.glue
+package tech.harmonysoft.oss.http.server.mock.config
 
 import tech.harmonysoft.oss.inpertio.client.ConfigProvider
 
