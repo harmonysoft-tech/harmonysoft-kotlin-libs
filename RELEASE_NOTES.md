@@ -1,3 +1,7 @@
+## v1.41.0 released on 06 Jan 2023 UTC
+  * 20c7da0ea0f309ed6e608641a4a2c39054f15ded corrected mock HTTP response providers overwriting logic; added cucumber tests for mock HTTP
+  * 6216bc6c12f28d1c9bd5f9d2e62b0771b4ac751a minor refactoring
+  * 6156ff49b9b615da544a13bc706b3fd51c7d7cf8 HttpStepDefinitions -> HttpClientStepDefinitions
 ## v1.40.0 released on 05 Jan 2023 UTC
   * 83968f030b357062c21e5823247b4437d5045b1a allow replacing conditional mock HTTP response providers
 ## v1.39.0 released on 23 Dec 2022 UTC
