@@ -29,7 +29,7 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicReference
 import javax.inject.Inject
 
-class HttpStepDefinitions {
+class HttpClientStepDefinitions {
 
     private val responses = ConcurrentHashMap<String/* http method */, MutableList<ResponseEntry>>()
     private val defaultHostName = AtomicReference(DEFAULT_HOST_NAME)
