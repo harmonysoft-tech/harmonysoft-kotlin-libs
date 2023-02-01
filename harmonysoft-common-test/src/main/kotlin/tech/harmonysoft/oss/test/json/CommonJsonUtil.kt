@@ -109,53 +109,9 @@ object CommonJsonUtil {
             )
         }
         return when {
-            expected is Map<*, *> -> {
-                val actualMap = actual as Map<*, *>
-                val errors = mutableListOf<String>()
-                if (strict) {
-                    val excessiveKeys = actualMap.keys.toSet() - expected.keys
-                    if (excessiveKeys.isNotEmpty()) {
-                        errors += "unexpected data is found at paths ${excessiveKeys.joinToString { "$path.$it" }}" +
-                                  excessiveKeys.joinToString { "$it: ${actual[it]}" }
-                    }
-                }
-                for ((key, value) in expected) {
-                    if (value == NOT_SET_MARKER) {
-                        actualMap[key]?.let {
-                            errors += ("expected that no value is set at path $path.$key but there is a value of "
-                                       + "type ${it::class.simpleName}: $it")
-                        }
-                    } else {
-                        actualMap[key]?.let {
-                            errors += compareAndBind(value as Any, it, "$path.$key", context, strict)
-                        } ?: run {
-                            errors += "mismatch at path '$path.$key' - expected to find a ${value?.javaClass?.name} " +
-                                      "value but got null"
-                        }
-                    }
-                }
-                errors
-            }
+            expected is Map<*, *> -> compareAndBindMap(expected, actual, path, context, strict)
 
-            expected is List<*> -> {
-                val actualList = actual as List<*>
-                if (expected.size != actualList.size) {
-                    listOf(
-                        "unexpected entry(-ies) found at path '$path' - expected ${expected.size} " +
-                        "elements but got ${actual.size} ($expected VS $actual)"
-                    )
-                } else {
-                    expected.flatMapIndexed { i: Int, expectedValue: Any? ->
-                        expectedValue ?: fail("I can't happen, path: $path, index: $i")
-                        actual[i]?.let {
-                            compareAndBind(expectedValue, it, "$path[$i]", context, strict)
-                        } ?: listOf(
-                            "mismatch at path '$path[$i]' - expected to find a " +
-                            "${expectedValue::class.qualifiedName} '$expectedValue' but got null"
-                        )
-                    }
-                }
-            }
+            expected is List<*> -> compareAndBindList(expected, actual, path, context, strict)
 
             expected is String && expected.startsWith(DYNAMIC_VALUE_PREFIX) -> {
                 context.storeBinding(
@@ -170,6 +126,113 @@ object CommonJsonUtil {
             } else {
                 listOf("mismatch at path '$path' - expected a ${expected::class.qualifiedName} '$expected' but got "
                        + "${actual::class.qualifiedName} '$actual'")
+            }
+        }
+    }
+
+    fun compareAndBindMap(
+        expected: Map<*, *>,
+        actual: Any,
+        path: String,
+        context: DynamicBindingContext,
+        strict: Boolean
+    ): Collection<String> {
+        if (actual !is Map<*, *>) {
+            return listOf("expected to find a map at path $path but found ${actual::class.simpleName}: $actual")
+        }
+
+        val errors = mutableListOf<String>()
+        if (strict) {
+            val excessiveKeys = actual.keys.toSet() - expected.keys
+            if (excessiveKeys.isNotEmpty()) {
+                errors += "unexpected data is found at paths ${excessiveKeys.joinToString { "$path.$it" }}" +
+                          excessiveKeys.joinToString { "$it: ${actual[it]}" }
+            }
+        }
+        for ((key, value) in expected) {
+            if (value == NOT_SET_MARKER) {
+                actual[key]?.let {
+                    errors += ("expected that no value is set at path $path.$key but there is a value of "
+                               + "type ${it::class.simpleName}: $it")
+                }
+            } else {
+                actual[key]?.let {
+                    errors += compareAndBind(value as Any, it, "$path.$key", context, strict)
+                } ?: run {
+                    errors += "mismatch at path '$path.$key' - expected to find a ${value?.javaClass?.name} " +
+                              "value but got null"
+                }
+            }
+        }
+        return errors
+    }
+
+    fun compareAndBindList(
+        expected: List<*>,
+        actual: Any,
+        path: String,
+        context: DynamicBindingContext,
+        strict: Boolean
+    ): Collection<String> {
+        if (actual !is List<*>) {
+            return listOf("expected to find a list at path $path but found ${actual::class.simpleName}: $actual")
+        }
+        return if (strict) {
+            compareAndBindListInStrictMode(expected, actual, path, context)
+        } else {
+            compareAndBindListInNonStrictMode(expected, actual, path, context)
+        }
+    }
+
+    fun compareAndBindListInStrictMode(
+        expected: List<*>,
+        actual: List<*>,
+        path: String,
+        context: DynamicBindingContext,
+    ): Collection<String> {
+        return if (expected.size != actual.size) {
+            listOf(
+                "unexpected entry(-ies) found at path '$path' - expected ${expected.size} " +
+                "elements but got ${actual.size} ($expected VS $actual)"
+            )
+        } else {
+            expected.flatMapIndexed { i: Int, expectedValue: Any? ->
+                expectedValue ?: fail("I can't happen, path: $path, index: $i")
+                actual[i]?.let {
+                    compareAndBind(expectedValue, it, "$path[$i]", context, true)
+                } ?: listOf(
+                    "mismatch at path '$path[$i]' - expected to find a " +
+                    "${expectedValue::class.qualifiedName} '$expectedValue' but got null"
+                )
+            }
+        }
+    }
+
+    fun compareAndBindListInNonStrictMode(
+        expected: List<*>,
+        actual: List<*>,
+        path: String,
+        context: DynamicBindingContext,
+    ): Collection<String> {
+        val remainingCandidates = actual.toMutableList()
+        return expected.flatMap { expectedElement ->
+            expectedElement ?: fail("I can't happen")
+            var matched = false
+            for (candidate in remainingCandidates) {
+                val errors = compareAndBind(expectedElement as Any, candidate as Any, path, context, false)
+                if (errors.isEmpty()) {
+                    matched = true
+                    remainingCandidates.remove(candidate)
+                    break
+                }
+            }
+            if (matched) {
+                emptyList()
+            } else {
+                listOf(
+                    "mismatch at path '$path' - expected to find a " +
+                    "${expectedElement::class.qualifiedName} '$expectedElement' but got null"
+                )
             }
         }
     }

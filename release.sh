@@ -15,5 +15,5 @@ function execute {
 }
 
 execute "./gradlew build"
-execute "./gradlew :harmonysoft-http-mock-server-cucumber:cucumber"
+execute "./gradlew :internal-http-test:cucumber"
 execute "./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository"

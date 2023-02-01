@@ -1,0 +1,1 @@
+It's convenient to use `harmonysoft-http-mock-server-cucumber` for testing `harmonysoft-http-client-apache-cucumber` and vice versa. However, we can't just add corresponding dependencies in the modules because that would be a circular dependency loop. That's why we introduce this module and put all http tests here.

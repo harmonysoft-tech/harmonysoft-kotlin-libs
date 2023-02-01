@@ -40,3 +40,4 @@ include("harmonysoft-slf4j-spring")
 include("harmonysoft-default-implementations")
 
 include("internal-cucumber")
+include("internal-http-test")
