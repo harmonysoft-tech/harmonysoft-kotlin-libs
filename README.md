@@ -4,7 +4,7 @@ Miscellaneous Kotlin JVM utility, cover many areas from configs management to te
 
 ## Acknowledgments
 
-<img width=64 src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/IntelliJ_IDEA_Icon.svg/1024px-IntelliJ_IDEA_Icon.svg.png?20200803071016"/>
+<img width="128" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/IntelliJ_IDEA_Icon.svg/1024px-IntelliJ_IDEA_Icon.svg.png?20200803071016"/>
 
 [JetBrains](https://www.jetbrains.com/) helps open source projects by offering free licenses to their awesome products.
 
