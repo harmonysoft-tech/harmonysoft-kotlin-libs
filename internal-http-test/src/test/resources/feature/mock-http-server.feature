@@ -157,3 +157,26 @@ Feature: Mock HTTP server tests
       """
       second
       """
+
+  Scenario: Partial JSON call verification
+
+    Given dynamic key path is bound to value one/two
+
+    When HTTP POST request to /context/one/two/three is made with JSON body:
+      """
+      {
+        "key1": "value1",
+        "key2": "value2",
+        "key3": "value3"
+      }
+      """
+
+    Then the following POST request for path /context/<bound:path>/three with at least this JSON data is received by mock HTTP server:
+      """
+      {
+        "key1": "value1",
+        "key2": <bind:key2Value>
+      }
+      """
+
+    And dynamic key key2Value should have value value2

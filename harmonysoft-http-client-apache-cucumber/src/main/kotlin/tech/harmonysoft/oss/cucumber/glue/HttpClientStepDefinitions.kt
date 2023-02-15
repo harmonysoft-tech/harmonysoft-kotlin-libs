@@ -222,9 +222,9 @@ class HttpClientStepDefinitions {
             context = Any(),
             data = CommonJsonUtil.prepareDynamicMarkers(expectedJson)
         )
-        val expected = parseJson(prepared)
+        val expected = jsonParser.parseJson(prepared)
         val rawActual = String(getLastResponse(httpMethod).body)
-        val actual = parseJson(rawActual)
+        val actual = jsonParser.parseJson(rawActual)
         val errors = CommonJsonUtil.compareAndBind(
             expected = expected,
             actual = actual,
@@ -247,19 +247,6 @@ class HttpClientStepDefinitions {
         return responses[httpMethod]?.last()?.response ?: fail(
             "no HTTP $httpMethod response is found"
         )
-    }
-
-    fun parseJson(json: String): Any {
-        // it might be a regular json or json array, that's why we try to parse it as a map first and fallback to list
-        return try {
-            jsonParser.parse(json, Map::class)
-        } catch (_: Exception) {
-            try {
-                jsonParser.parse(json, List::class)
-            } catch (_: Exception) {
-                fail("can't parse JSON from \n'$json'")
-            }
-        }
     }
 
     companion object {

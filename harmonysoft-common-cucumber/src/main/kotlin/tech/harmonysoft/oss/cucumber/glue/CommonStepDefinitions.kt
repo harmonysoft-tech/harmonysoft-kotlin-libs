@@ -4,6 +4,7 @@ import io.cucumber.java.After
 import io.cucumber.java.Before
 import io.cucumber.java.Scenario
 import io.cucumber.java.en.Given
+import io.cucumber.java.en.Then
 import org.slf4j.LoggerFactory
 import tech.harmonysoft.oss.common.time.util.DateTimeHelper
 import tech.harmonysoft.oss.test.TestAware
@@ -16,6 +17,9 @@ import java.time.ZoneId
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import tech.harmonysoft.oss.test.binding.DynamicBindingContext
+import tech.harmonysoft.oss.test.binding.DynamicBindingKey
+import tech.harmonysoft.oss.test.util.TestUtil.fail
 
 class CommonStepDefinitions {
 
@@ -26,6 +30,7 @@ class CommonStepDefinitions {
     @Inject private lateinit var dateTimeHelper: DateTimeHelper
     @Inject private lateinit var contentManager: TestContentManager
     @Inject private lateinit var fixtureDataHelper: FixtureDataHelper
+    @Inject private lateinit var bindingContext: DynamicBindingContext
 
     @Before
     fun logScenarioStart(scenario: Scenario) {
@@ -115,8 +120,21 @@ class CommonStepDefinitions {
         contentManager.setContent(name, data.toByteArray())
     }
 
-    @Given("meta-value <([^>]+)> is excluded from auto expansion")
+    @Given("^meta-value <([^>]+)> is excluded from auto expansion$")
     fun excludeMetaValueFromExpansion(metaValue: String) {
         fixtureDataHelper.excludeMetaValueFromExpansion(metaValue)
+    }
+
+    @Given("^dynamic key ([^\\s]+) is bound to value ([^\\s]+)$")
+    fun bindDynamicValue(key: String, value: String) {
+        bindingContext.storeBinding(DynamicBindingKey(key), value)
+    }
+
+    @Then("^dynamic key ([^\\s]+) should have value ([^\\s]+)$")
+    fun verifyDynamicValue(key: String, expected: String) {
+        val actual = bindingContext.getBinding(DynamicBindingKey((key)))
+        if (actual != expected) {
+            fail("expected dynamic key '$key' to have value '$expected' but it has value '$actual' instead")
+        }
     }
 }
