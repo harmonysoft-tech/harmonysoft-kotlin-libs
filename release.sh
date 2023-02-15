@@ -14,6 +14,6 @@ function execute {
   fi
 }
 
-execute "./gradlew build"
+execute "./gradlew clean build"
 execute "./gradlew :internal-http-test:cucumber"
 execute "./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository"
