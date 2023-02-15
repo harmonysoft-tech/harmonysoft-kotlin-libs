@@ -1,3 +1,12 @@
+## v1.42.0 released on 15 Feb 2023 UTC
+  * 0d5a235269b773fd090511c8f8f1621252c61312 added cucumber step for verifying that mock HTTP server was called with particular JSON
+  * ed29e36b88725ca640c108ff365d1630123b23b2 added open-source acknowledgements into README
+  * b1920ac7bfe6f999b3bff1bc00f7fe0cca503a18 added open-source acknowledgements into README
+  * 8ea3c3b203f7cab886be31521801a81ac27e0a97 added open-source acknowledgements into README
+  * 7ab436c099fc3c74116f798ecf3942a054782c87 added open-source acknowledgements into README
+  * 20edd71af9c9416a0f9f39270f06ac215fa02997 added open-source acknowledgements into README
+  * 88f05c864591f352691f1d623cbbd2e27dceaa6b added open-source acknowledgements into README
+  * 3fb94c3c470c08d745338ceb2692c52b26c55ae2 added cucumber tests to verify exposed step definitions; repackaging
 ## v1.41.0 released on 06 Jan 2023 UTC
   * 20c7da0ea0f309ed6e608641a4a2c39054f15ded corrected mock HTTP response providers overwriting logic; added cucumber tests for mock HTTP
   * 6216bc6c12f28d1c9bd5f9d2e62b0771b4ac751a minor refactoring
