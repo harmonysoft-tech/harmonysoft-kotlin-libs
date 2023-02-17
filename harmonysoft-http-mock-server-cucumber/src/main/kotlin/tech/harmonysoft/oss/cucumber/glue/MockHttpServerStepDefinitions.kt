@@ -54,6 +54,7 @@ class MockHttpServerStepDefinitions {
 
     @Before
     fun startIfNecessary() {
+        kotlin.runCatching {  }
         if (mockRef.get() != null) {
             return
         }

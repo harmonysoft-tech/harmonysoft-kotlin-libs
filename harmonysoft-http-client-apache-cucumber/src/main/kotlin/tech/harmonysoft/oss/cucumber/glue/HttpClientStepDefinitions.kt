@@ -243,6 +243,22 @@ class HttpClientStepDefinitions {
         }
     }
 
+    @Then("^last HTTP ([^\\s]+) request returns JSON which does not have the following data:$")
+    fun verifyNegativeJsonResponse(httpMethod: String, negativeJson: String) {
+        val result = matchJsonResponse(httpMethod, negativeJson, false)
+        if (result.success) {
+            fail("""
+                expected that last HTTP $httpMethod returns a JSON which doesn't have the following data:
+                
+                $negativeJson
+                
+                But this expectation fails. Full response:
+                
+                ${String(getLastResponse(httpMethod).body)}
+            """.trimIndent())
+        }
+    }
+
     private fun getLastResponse(httpMethod: String): HttpResponse<ByteArray> {
         return responses[httpMethod]?.last()?.response ?: fail(
             "no HTTP $httpMethod response is found"
