@@ -1,3 +1,6 @@
+## v1.43.0 released on 17 Feb 2023 UTC
+  * caa945b18c3c083e54706edea29dda9010a2dfc6 added ability to verify that HTTP JSON response doesn't have particular data
+  * 06516c37860d76164f910bdb15d5e2f7ba8131f2 do clean build on release
 ## v1.42.0 released on 15 Feb 2023 UTC
   * 0d5a235269b773fd090511c8f8f1621252c61312 added cucumber step for verifying that mock HTTP server was called with particular JSON
   * ed29e36b88725ca640c108ff365d1630123b23b2 added open-source acknowledgements into README
