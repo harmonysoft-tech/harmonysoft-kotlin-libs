@@ -1,3 +1,5 @@
+## v1.45.0 released on 20 Feb 2023 UTC
+  * 7ba20290e9f5203b73369cb07e1d277158fa669d corrected error indentation in lists verification failure
 ## v1.44.0 released on 20 Feb 2023 UTC
   * 747ec6282528f7181b687f9f915455855b9252e1 exposing HTTP responses in HttpClientStepDefinitions
 ## v1.43.0 released on 17 Feb 2023 UTC
