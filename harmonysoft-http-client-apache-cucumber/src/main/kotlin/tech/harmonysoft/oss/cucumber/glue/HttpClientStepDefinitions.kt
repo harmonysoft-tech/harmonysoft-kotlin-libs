@@ -259,7 +259,7 @@ class HttpClientStepDefinitions {
         }
     }
 
-    private fun getLastResponse(httpMethod: String): HttpResponse<ByteArray> {
+    fun getLastResponse(httpMethod: String): HttpResponse<ByteArray> {
         return responses[httpMethod]?.last()?.response ?: fail(
             "no HTTP $httpMethod response is found"
         )
