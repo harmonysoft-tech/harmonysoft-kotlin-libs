@@ -6,6 +6,7 @@ import tech.harmonysoft.oss.common.data.DataProviderStrategy
 import tech.harmonysoft.oss.common.util.ObjectUtil
 import tech.harmonysoft.oss.test.util.TestUtil.fail
 import java.util.concurrent.TimeUnit
+import tech.harmonysoft.oss.common.string.util.StringUtil
 
 object VerificationUtil {
 
@@ -193,8 +194,8 @@ ${it.size} unexpected record(s) are found:
         } else {
             ProcessingResult.failure("""
 found ${errors.size} error(s):
-  *) ${errors.joinToString("\n  *)")}
-            """.trimIndent())
+  *) ${errors.joinToString("\n  *) ") { StringUtil.prependIndentExceptFirstLine(it, "  ") }}
+""".trimIndent().trim())
         }
     }
 
@@ -218,10 +219,10 @@ found ${errors.size} error(s):
         } else {
             ProcessingResult.failure("""
 found ${mismatches.size} mismatch(es) in a data record:
-  *) ${mismatches.joinToString("\n    *) ")}
-expected data: $expected
-actual data: $actual
-            """.trimIndent())
+  ${mismatches.mapIndexed { i, mismatch -> "${i + 1}) $mismatch"}.joinToString("\n  ")}
+  * expected data: $expected
+  * actual data: $actual
+""".trimIndent().trim())
         }
     }
 

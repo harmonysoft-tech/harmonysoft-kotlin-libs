@@ -76,4 +76,19 @@ object StringUtil {
     fun toSingleLine(s: String): String {
         return s.trimIndent().trim().replace(LINE_FEED_REGEX, " ")
     }
+
+    /**
+     * Works as kotlin [prependIndent] except that the first line is excluded from the processing
+     */
+    fun prependIndentExceptFirstLine(s: String, indent: String): String {
+        var firstLineProcessed = false
+        return s.lines().joinToString("\n") {
+            if (firstLineProcessed) {
+                indent + it
+            } else {
+                firstLineProcessed = true
+                it
+            }
+        }
+    }
 }
