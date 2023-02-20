@@ -1,3 +1,5 @@
+## v1.44.0 released on 20 Feb 2023 UTC
+  * 747ec6282528f7181b687f9f915455855b9252e1 exposing HTTP responses in HttpClientStepDefinitions
 ## v1.43.0 released on 17 Feb 2023 UTC
   * caa945b18c3c083e54706edea29dda9010a2dfc6 added ability to verify that HTTP JSON response doesn't have particular data
   * 06516c37860d76164f910bdb15d5e2f7ba8131f2 do clean build on release
