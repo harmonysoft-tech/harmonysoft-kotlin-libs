@@ -194,7 +194,7 @@ class MockHttpServerStepDefinitions {
             data = CommonJsonUtil.prepareDynamicMarkers(expectedRawJson)
         )
         val expected = jsonParser.parseJson(prepared)
-        for (candidateBody in candidateBodies) {
+        val bodiesWithErrors = candidateBodies.map { candidateBody ->
             val candidate = jsonParser.parseJson(candidateBody)
             val errors = CommonJsonUtil.compareAndBind(
                 expected = expected,
@@ -206,12 +206,19 @@ class MockHttpServerStepDefinitions {
             if (errors.isEmpty()) {
                 return
             }
+            candidateBody to errors
         }
         fail(
             "can't find HTTP $httpMethod request to path $expandedPath with at least the following JSON body:" +
             "\n$expectedRawJson" +
             "\n\n${candidateBodies.size} request(s) with the same method and path are found:\n"
-            + candidateBodies.joinToString("\n")
+            + bodiesWithErrors.joinToString("\n-------------------------------------------------\n") {
+                """
+                    ${it.first}
+                    ${it.second} error(s):
+                    * ${it.second.joinToString("\n* ")}
+                """.trimIndent()
+            }
         )
     }
 
