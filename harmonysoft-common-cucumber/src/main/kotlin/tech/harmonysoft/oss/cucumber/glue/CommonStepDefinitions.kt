@@ -125,7 +125,7 @@ class CommonStepDefinitions {
         fixtureDataHelper.excludeMetaValueFromExpansion(metaValue)
     }
 
-    @Given("^dynamic key ([^\\s]+) is bound to value ([^\\s]+)$")
+    @Given("^dynamic key ([^\\s]+) is bound to value '([^']+)'$")
     fun bindDynamicValue(key: String, value: String) {
         bindingContext.storeBinding(DynamicBindingKey(key), value)
     }

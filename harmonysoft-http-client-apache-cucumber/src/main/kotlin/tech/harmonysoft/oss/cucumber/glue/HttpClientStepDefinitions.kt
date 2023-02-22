@@ -3,7 +3,17 @@ package tech.harmonysoft.oss.cucumber.glue
 import io.cucumber.java.After
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
-import org.apache.hc.client5.http.classic.methods.*
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.atomic.AtomicReference
+import javax.inject.Inject
+import org.apache.hc.client5.http.classic.methods.HttpDelete
+import org.apache.hc.client5.http.classic.methods.HttpGet
+import org.apache.hc.client5.http.classic.methods.HttpHead
+import org.apache.hc.client5.http.classic.methods.HttpOptions
+import org.apache.hc.client5.http.classic.methods.HttpPatch
+import org.apache.hc.client5.http.classic.methods.HttpPost
+import org.apache.hc.client5.http.classic.methods.HttpPut
+import org.apache.hc.client5.http.classic.methods.HttpUriRequestBase
 import org.apache.hc.client5.http.entity.mime.ByteArrayBody
 import org.apache.hc.client5.http.entity.mime.ContentBody
 import org.apache.hc.client5.http.entity.mime.MultipartEntityBuilder
@@ -16,18 +26,15 @@ import tech.harmonysoft.oss.common.ProcessingResult
 import tech.harmonysoft.oss.common.collection.CollectionInitializer
 import tech.harmonysoft.oss.http.client.TestHttpClient
 import tech.harmonysoft.oss.http.client.cucumber.DefaultWebPortProvider
+import tech.harmonysoft.oss.http.client.fixture.HttpClientTestFixture
 import tech.harmonysoft.oss.http.client.response.HttpResponse
 import tech.harmonysoft.oss.http.client.response.HttpResponseConverter
 import tech.harmonysoft.oss.json.JsonParser
 import tech.harmonysoft.oss.test.binding.DynamicBindingContext
 import tech.harmonysoft.oss.test.content.TestContentManager
-import tech.harmonysoft.oss.test.fixture.CommonTestFixture
 import tech.harmonysoft.oss.test.fixture.FixtureDataHelper
 import tech.harmonysoft.oss.test.json.CommonJsonUtil
 import tech.harmonysoft.oss.test.util.TestUtil.fail
-import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.atomic.AtomicReference
-import javax.inject.Inject
 
 class HttpClientStepDefinitions {
 
@@ -164,7 +171,7 @@ class HttpClientStepDefinitions {
         } else {
             "http://$defaultHostName:${defaultPortProvider.port}$urlOrPath"
         }
-        return fixtureDataHelper.maybeExpandMetaValues(CommonTestFixture.TYPE, Unit, url) ?: url
+        return fixtureDataHelper.maybeExpandMetaValues(HttpClientTestFixture.TYPE, Unit, url) ?: url
     }
 
     private fun onResponse(url: String, method: String, response: HttpResponse<ByteArray>) {
@@ -184,7 +191,8 @@ class HttpClientStepDefinitions {
 
     @Then("^last HTTP ([^\\s]+) request returns the following:$")
     fun verifyLastSuccessfulResponse(httpMethod: String, expectedResponse: String) {
-        assertThat(String(getLastResponse(httpMethod).body)).isEqualTo(expectedResponse)
+        val expected = fixtureDataHelper.prepareTestData(HttpClientTestFixture.TYPE, Unit, expectedResponse)
+        assertThat(String(getLastResponse(httpMethod).body)).isEqualTo(expected)
     }
 
     @Then("^last HTTP ([^\\s]+) request finished by status code (\\d+)$")
@@ -218,8 +226,8 @@ class HttpClientStepDefinitions {
         strict: Boolean
     ): ProcessingResult<Unit, String> {
         val prepared = fixtureDataHelper.prepareTestData(
-            type = CommonTestFixture.TYPE,
-            context = Any(),
+            type = HttpClientTestFixture.TYPE,
+            context = Unit,
             data = CommonJsonUtil.prepareDynamicMarkers(expectedJson)
         )
         val expected = jsonParser.parseJson(prepared)

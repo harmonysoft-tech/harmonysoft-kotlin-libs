@@ -160,7 +160,7 @@ Feature: Mock HTTP server tests
 
   Scenario: Partial JSON call verification
 
-    Given dynamic key path is bound to value one/two
+    Given dynamic key path is bound to value 'one/two'
 
     When HTTP POST request to /context/one/two/three is made with JSON body:
       """
