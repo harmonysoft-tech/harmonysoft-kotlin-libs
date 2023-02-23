@@ -1,3 +1,6 @@
+## v1.47.0 released on 23 Feb 2023 UTC
+  * 313ca01640888cae424551cb265b6f5df300bd69 added mongo cucumber tests setup
+  * 94ace14b80d7e341d8c3b074ebb8003c13c187ec enriching expected JSON data in HTTP client response cucumber step
 ## v1.46.0 released on 21 Feb 2023 UTC
   * 644ffbea1bbb3faf39f34f0f5cc68524f17c15e2 provide fine-grained mismatches in mock HTTP call expectations
 ## v1.45.0 released on 20 Feb 2023 UTC
