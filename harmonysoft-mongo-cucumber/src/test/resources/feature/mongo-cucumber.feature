@@ -19,5 +19,5 @@ Feature: Mongo cucumber glue tests
       | <int(10)> |
 
     Then mongo test collection should have the following document:
-      | key1 |
-      | 10   |
+      | key1      |
+      | <int(10)> |
