@@ -15,7 +15,7 @@ class CommonFixtureMetaValueMapper(
 
     override val type = CommonTestFixture.TYPE
 
-    override fun map(context: Any, metaValue: String): ProcessingResult<String?, Unit> {
+    override fun map(context: Any, metaValue: String): ProcessingResult<Any?, Unit> {
         return when (metaValue) {
             "time-zone" -> success(clockProvider.data.zone.id)
             "uuid" -> success(UUID.randomUUID().toString())

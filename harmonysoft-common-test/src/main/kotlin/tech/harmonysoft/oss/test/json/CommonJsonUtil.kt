@@ -219,7 +219,7 @@ object CommonJsonUtil {
             expectedElement ?: fail("I can't happen")
             var matched = false
             for (candidate in remainingCandidates) {
-                val errors = compareAndBind(expectedElement as Any, candidate as Any, path, context, false)
+                val errors = compareAndBind(expectedElement, candidate as Any, path, context, false)
                 if (errors.isEmpty()) {
                     matched = true
                     remainingCandidates.remove(candidate)

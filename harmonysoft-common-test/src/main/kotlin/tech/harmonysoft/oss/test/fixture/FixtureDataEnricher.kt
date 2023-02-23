@@ -17,5 +17,5 @@ interface FixtureDataEnricher<T : Any> {
      */
     val type: FixtureType<T>
 
-    fun enrich(context: T, data: Map<String, String?>): Map<String, String?>
+    fun enrich(context: T, data: Map<String, Any?>): Map<String, Any?>
 }

@@ -18,5 +18,5 @@ interface FixtureMetaValueMapper<T : Any> {
      */
     val type: FixtureType<T>
 
-    fun map(context: T, metaValue: String): ProcessingResult<String?, Unit>
+    fun map(context: T, metaValue: String): ProcessingResult<Any?, Unit>
 }

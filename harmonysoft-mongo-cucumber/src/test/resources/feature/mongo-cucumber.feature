@@ -11,3 +11,13 @@ Feature: Mongo cucumber glue tests
       | some-key    | value2 |
 
     Then dynamic key 'some-key' should have value 'value1'
+
+  Scenario: Int value in mongo document
+
+    When mongo test collection has the following document:
+      | key1      |
+      | <int(10)> |
+
+    Then mongo test collection should have the following document:
+      | key1 |
+      | 10   |

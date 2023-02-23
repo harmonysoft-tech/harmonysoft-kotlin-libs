@@ -184,7 +184,7 @@ class MockHttpServerStepDefinitions {
 
     @Then("^the following ([^\\s]+) request for path ([^\\s]+) with at least this JSON data is received by mock HTTP server:$")
     fun verifyRequestReceived(httpMethod: String, path: String, expectedRawJson: String) {
-        val expandedPath = fixtureDataHelper.prepareTestData(MockHttpServerPathTestFixture.TYPE, Unit, path)
+        val expandedPath = fixtureDataHelper.prepareTestData(MockHttpServerPathTestFixture.TYPE, Unit, path).toString()
         val candidateBodies = mockRef.get().retrieveRecordedRequests(
             HttpRequest.request(expandedPath).withMethod(httpMethod)
         ).map { it.body.value as String }
@@ -192,7 +192,7 @@ class MockHttpServerStepDefinitions {
             type = CommonTestFixture.TYPE,
             context = Any(),
             data = CommonJsonUtil.prepareDynamicMarkers(expectedRawJson)
-        )
+        ).toString()
         val expected = jsonParser.parseJson(prepared)
         val bodiesWithErrors = candidateBodies.map { candidateBody ->
             val candidate = jsonParser.parseJson(candidateBody)

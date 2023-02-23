@@ -26,5 +26,5 @@ interface FixtureMetaFunction {
      * For example, if this meta function handles cases like `toUtc(2022-03-13 12:00:00)`, it would receive
      * `2022-03-13 12:00:00` as a parameter in this method
      */
-    fun applyFunction(value: String): String?
+    fun applyFunction(value: String): Any?
 }

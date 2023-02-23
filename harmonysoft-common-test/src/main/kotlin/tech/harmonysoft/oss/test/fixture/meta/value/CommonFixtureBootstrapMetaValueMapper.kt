@@ -1,5 +1,6 @@
 package tech.harmonysoft.oss.test.fixture.meta.value
 
+import java.nio.file.Files
 import tech.harmonysoft.oss.common.ProcessingResult
 import tech.harmonysoft.oss.common.ProcessingResult.Companion.failure
 import tech.harmonysoft.oss.common.ProcessingResult.Companion.success
@@ -7,8 +8,6 @@ import tech.harmonysoft.oss.common.host.HostInfo
 import tech.harmonysoft.oss.common.meta.MetaValueMapper
 import tech.harmonysoft.oss.test.fixture.CommonTestFixture
 import tech.harmonysoft.oss.test.util.NetworkUtil
-import java.net.ServerSocket
-import java.nio.file.Files
 
 class CommonFixtureBootstrapMetaValueMapper(
     private val hostInfo: HostInfo
@@ -16,11 +15,11 @@ class CommonFixtureBootstrapMetaValueMapper(
 
     override val type = CommonTestFixture.TYPE
 
-    override fun map(context: Any, metaValue: String): ProcessingResult<String?, Unit> {
+    override fun map(context: Any, metaValue: String): ProcessingResult<Any?, Unit> {
         return map(metaValue)
     }
 
-    override fun map(metaValue: String): ProcessingResult<String?, Unit> {
+    override fun map(metaValue: String): ProcessingResult<Any?, Unit> {
         return when (metaValue) {
             "random-dir-path" -> success(Files.createTempDirectory("").toFile().apply {
                 deleteOnExit()

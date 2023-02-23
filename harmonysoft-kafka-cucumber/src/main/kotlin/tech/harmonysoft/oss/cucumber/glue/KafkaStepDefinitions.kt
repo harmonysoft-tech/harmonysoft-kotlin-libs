@@ -40,7 +40,7 @@ class KafkaStepDefinitions {
                 type = KafkaTestFixture.TYPE,
                 context = KafkaFixtureContext(topic),
                 data = message
-            )
+            ).toString()
             it.send(ProducerRecord(topic, withExpandedMetaData))
         }
     }

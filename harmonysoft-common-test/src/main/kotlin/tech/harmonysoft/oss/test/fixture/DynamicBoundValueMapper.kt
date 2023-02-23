@@ -43,7 +43,7 @@ class DynamicBoundValueMapper(
 
     override val type = CommonTestFixture.TYPE
 
-    override fun map(context: Any, metaValue: String): ProcessingResult<String?, Unit> {
+    override fun map(context: Any, metaValue: String): ProcessingResult<Any?, Unit> {
         return DYNAMIC_BOUND_VALUE_REGEX.matchEntire(metaValue)?.let {
             val key = it.groupValues[1]
             bindingContext.getBinding(DynamicBindingKey(key))

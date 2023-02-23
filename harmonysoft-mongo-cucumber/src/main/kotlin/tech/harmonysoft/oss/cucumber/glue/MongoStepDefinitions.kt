@@ -18,6 +18,7 @@ import tech.harmonysoft.oss.mongo.config.TestMongoConfigProvider
 import tech.harmonysoft.oss.mongo.constant.Mongo
 import tech.harmonysoft.oss.mongo.fixture.MongoTestFixture
 import tech.harmonysoft.oss.test.binding.DynamicBindingContext
+import tech.harmonysoft.oss.test.fixture.FixtureDataHelper
 import tech.harmonysoft.oss.test.util.VerificationUtil
 
 class MongoStepDefinitions {
@@ -27,6 +28,7 @@ class MongoStepDefinitions {
     @Inject private lateinit var configProvider: TestMongoConfigProvider
     @Inject private lateinit var bindingContext: DynamicBindingContext
     @Inject private lateinit var cucumberInputHelper: CommonCucumberInputHelper
+    @Inject private lateinit var fixtureDataHelper: FixtureDataHelper
     @Inject private lateinit var logger: Logger
 
     private val client: MongoClient by lazy {
@@ -49,12 +51,15 @@ class MongoStepDefinitions {
 
     @Given("^mongo ([^\\s]+) collection has the following documents?:$")
     fun ensureDocumentExists(collection: String, data: DataTable) {
-        for (documentData in data.asMaps()) {
+        val enrichedData = data.asMaps().map { map ->
+            fixtureDataHelper.prepareTestData(MongoTestFixture.TYPE, Unit, map)
+        }
+        for (documentData in enrichedData) {
             ensureDocumentExists(collection, documentData)
         }
     }
 
-    fun ensureDocumentExists(collection: String, data: Map<String, Any>) {
+    fun ensureDocumentExists(collection: String, data: Map<String, Any?>) {
         val filter = BasicDBObject().apply {
             for ((key, value) in data) {
                 this[key] = value

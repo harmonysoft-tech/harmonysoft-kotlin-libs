@@ -21,17 +21,17 @@ object MetaValueUtil {
         }.toSet()
     }
 
-    fun expand(raw: String, mappers: Collection<MetaValueMapper>): String? {
+    fun expand(raw: String, mappers: Collection<MetaValueMapper>): Any? {
         return expand(raw, mappers, FailedMetaValueExpansionCallback.LOG_INFO)
     }
 
-    fun expand(raw: String, mappers: Collection<MetaValueMapper>, fallback: FailedMetaValueExpansionCallback): String? {
+    fun expand(raw: String, mappers: Collection<MetaValueMapper>, fallback: FailedMetaValueExpansionCallback): Any? {
         val metaValues = extractMetaValues(raw)
         if (metaValues.isEmpty()) {
             return raw
         }
 
-        return metaValues.fold(raw) { result, metaValue ->
+        return metaValues.fold(raw as Any) { result, metaValue ->
             val remapped = mappers.map {
                 it.map(metaValue)
             }.firstOrNull { it.success }
@@ -41,7 +41,11 @@ object MetaValueUtil {
             } else {
                 remapped.successValue?.let {
                     logger.info("expanding meta-value <{}> as '{}'", metaValue, it)
-                    result.replace("<$metaValue>", it)
+                    if (result == "<$metaValue>") {
+                        it
+                    } else {
+                        result.toString().replace("<$metaValue>", it.toString())
+                    }
                 } ?: return null
             }
         }

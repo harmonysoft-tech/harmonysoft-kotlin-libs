@@ -171,7 +171,7 @@ class HttpClientStepDefinitions {
         } else {
             "http://$defaultHostName:${defaultPortProvider.port}$urlOrPath"
         }
-        return fixtureDataHelper.maybeExpandMetaValues(HttpClientTestFixture.TYPE, Unit, url) ?: url
+        return (fixtureDataHelper.maybeExpandMetaValues(HttpClientTestFixture.TYPE, Unit, url) ?: url).toString()
     }
 
     private fun onResponse(url: String, method: String, response: HttpResponse<ByteArray>) {
@@ -229,7 +229,7 @@ class HttpClientStepDefinitions {
             type = HttpClientTestFixture.TYPE,
             context = Unit,
             data = CommonJsonUtil.prepareDynamicMarkers(expectedJson)
-        )
+        ).toString()
         val expected = jsonParser.parseJson(prepared)
         val rawActual = String(getLastResponse(httpMethod).body)
         val actual = jsonParser.parseJson(rawActual)

@@ -59,7 +59,7 @@ class FixtureDataHelper (
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun <T : Any> maybeExpandMetaValues(type: FixtureType<T>, context: T, input: String): String? {
+    fun <T : Any> maybeExpandMetaValues(type: FixtureType<T>, context: T, input: String): Any? {
         val metaValues = MetaValueUtil.extractMetaValues(input) - excludedMetaValues
         if (metaValues.isEmpty()) {
             return input
@@ -76,7 +76,7 @@ class FixtureDataHelper (
             return input
         }
 
-        return metaValues.fold(input) { currentInput, metaValue ->
+        return metaValues.fold(input as Any) { currentInput, metaValue ->
             val remappedResult = mappers.map {
                 it.map(context as Any, metaValue)
             }.firstOrNull { it.success }
@@ -91,12 +91,16 @@ class FixtureDataHelper (
                 currentInput
             } else {
                 logger.info("Expanding meta-value <{}> as '{}'", metaValue, remapped)
-                currentInput.replace("<$metaValue>", remapped)
+                if (currentInput == "<$metaValue>") {
+                    remapped
+                } else {
+                    currentInput.toString().replace("<$metaValue>", remapped.toString())
+                }
             }
         }
     }
 
-    fun maybeExpandFunctions(input: String): String? {
+    fun maybeExpandFunctions(input: String): Any? {
         return FUNCTION_PATTERN.matchEntire(input)?.let {
             if (it.groupValues.size == 3) {
                 functionsByName[it.groupValues[1]]?.applyFunction(it.groupValues[2]) ?: fail(
@@ -111,7 +115,7 @@ class FixtureDataHelper (
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun <T : Any> enrichTestData(type: FixtureType<T>, context: T, data: Map<String, String?>): Map<String, String?> {
+    fun <T : Any> enrichTestData(type: FixtureType<T>, context: T, data: Map<String, Any?>): Map<String, Any?> {
         return enrichersByType[type as FixtureType<Any>]?.fold(data) { dataToUse, enricher ->
             enricher.enrich(context as Any, dataToUse)
         } ?: data
@@ -121,15 +125,19 @@ class FixtureDataHelper (
         type: FixtureType<T>,
         context: T,
         data: Collection<Map<String, String>>
-    ): Collection<Map<String, String?>> {
+    ): Collection<Map<String, Any?>> {
         return data.map { prepareTestData(type, context, it) }
     }
 
-    fun <T : Any> prepareTestData(type: FixtureType<T>, context: T, data: Map<String, String>): Map<String, String?> {
-        return enrichTestData(type, context, data.mapValues { maybeExpandMetaValues(type, context, it.value) })
+    fun <T : Any> prepareTestData(type: FixtureType<T>, context: T, data: Map<String, String?>): Map<String, Any?> {
+        return enrichTestData(type, context, data.mapValues { e ->
+            e.value?.let {
+                maybeExpandMetaValues(type, context, it)
+            }
+        })
     }
 
-    fun <T : Any> prepareTestData(type: FixtureType<T>, context: T, data: String): String {
+    fun <T : Any> prepareTestData(type: FixtureType<T>, context: T, data: String): Any {
         val key = "temp"
         val prepared = prepareTestData(type, context, mapOf(key to data))
         return prepared[key] ?: fail("magic: $prepared")
