@@ -179,4 +179,4 @@ Feature: Mock HTTP server tests
       }
       """
 
-    And dynamic key key2Value should have value value2
+    And dynamic key 'key2Value' should have value 'value2'

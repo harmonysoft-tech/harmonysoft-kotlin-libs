@@ -130,7 +130,7 @@ class CommonStepDefinitions {
         bindingContext.storeBinding(DynamicBindingKey(key), value)
     }
 
-    @Then("^dynamic key ([^\\s]+) should have value ([^\\s]+)$")
+    @Then("^dynamic key '([^']+)' should have value '([^']+)'$")
     fun verifyDynamicValue(key: String, expected: String) {
         val actual = bindingContext.getBinding(DynamicBindingKey((key)))
         if (actual != expected) {

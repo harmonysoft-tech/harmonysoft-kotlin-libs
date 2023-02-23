@@ -3,13 +3,13 @@ package tech.harmonysoft.oss.cucumber.glue
 import com.mongodb.BasicDBObject
 import com.mongodb.client.MongoClient
 import com.mongodb.client.MongoClients
-import com.mongodb.client.model.Filters
 import com.mongodb.client.model.Projections
 import com.mongodb.client.model.UpdateOptions
 import com.mongodb.client.model.Updates
 import io.cucumber.datatable.DataTable
 import io.cucumber.java.After
 import io.cucumber.java.en.Given
+import javax.inject.Inject
 import org.slf4j.Logger
 import tech.harmonysoft.oss.common.ProcessingResult
 import tech.harmonysoft.oss.common.data.DataProviderStrategy
@@ -19,7 +19,6 @@ import tech.harmonysoft.oss.mongo.constant.Mongo
 import tech.harmonysoft.oss.mongo.fixture.MongoTestFixture
 import tech.harmonysoft.oss.test.binding.DynamicBindingContext
 import tech.harmonysoft.oss.test.util.VerificationUtil
-import javax.inject.Inject
 
 class MongoStepDefinitions {
 
@@ -56,9 +55,11 @@ class MongoStepDefinitions {
     }
 
     fun ensureDocumentExists(collection: String, data: Map<String, Any>) {
-        val filter = Filters.and(data.map {
-            Filters.eq(it.key, it.value)
-        })
+        val filter = BasicDBObject().apply {
+            for ((key, value) in data) {
+                this[key] = value
+            }
+        }
         client.getDatabase(configProvider.data.db).getCollection(collection).updateOne(
             filter,
             Updates.set("dummy", "dummy"),
