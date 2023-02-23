@@ -1,3 +1,5 @@
+## v1.49.0 released on 23 Feb 2023 UTC
+  * 06008bb648c75421cbb50f958973fe5d8c00c503 corrected mongo test
 ## v1.48.0 released on 23 Feb 2023 UTC
   * acdf78844bb48fa727be31655d4aaf0931ec531a meta values and meta functions can produce values of any type now
 ## v1.47.0 released on 23 Feb 2023 UTC
