@@ -1,3 +1,5 @@
+## v1.50.0 released on 12 Apr 2023 UTC
+  * bb5d038d22c472aa2dba7818ff7975e1603326de exposed mongo client
 ## v1.49.0 released on 23 Feb 2023 UTC
   * 06008bb648c75421cbb50f958973fe5d8c00c503 corrected mongo test
 ## v1.48.0 released on 23 Feb 2023 UTC
