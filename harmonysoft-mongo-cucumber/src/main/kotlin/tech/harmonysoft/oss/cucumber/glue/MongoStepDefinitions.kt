@@ -31,7 +31,7 @@ class MongoStepDefinitions {
     @Inject private lateinit var fixtureDataHelper: FixtureDataHelper
     @Inject private lateinit var logger: Logger
 
-    private val client: MongoClient by lazy {
+    val client: MongoClient by lazy {
         val config = configProvider.data
         val auth = config.credential?.let {
             "${it.login}:${it.password}@"
