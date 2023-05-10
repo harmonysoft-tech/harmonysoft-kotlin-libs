@@ -1,3 +1,5 @@
+## v1.51.0 released on 10 May 2023 UTC
+  * 7ac87a9819d7d45a9dc57ebb600cb540e1e7170a 1. Don't store dynamic bindings for JSON mismatches 2. Allow to constraint mock HTTP server request by partial JSON body match
 ## v1.50.0 released on 12 Apr 2023 UTC
   * bb5d038d22c472aa2dba7818ff7975e1603326de exposed mongo client
 ## v1.49.0 released on 23 Feb 2023 UTC
