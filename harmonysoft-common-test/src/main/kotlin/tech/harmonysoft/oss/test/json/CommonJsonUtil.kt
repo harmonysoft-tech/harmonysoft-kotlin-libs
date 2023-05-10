@@ -1,8 +1,8 @@
 package tech.harmonysoft.oss.test.json
 
-import tech.harmonysoft.oss.test.binding.DynamicBindingContext
 import tech.harmonysoft.oss.test.binding.DynamicBindingKey
 import tech.harmonysoft.oss.test.binding.DynamicBindingUtil.TO_BIND_REGEX
+import tech.harmonysoft.oss.test.match.TestMatchResult
 import tech.harmonysoft.oss.test.util.TestUtil.fail
 
 object CommonJsonUtil {
@@ -98,34 +98,37 @@ object CommonJsonUtil {
     fun compareAndBind(
         expected: Any,
         actual: Any,
-        path: String,
-        context: DynamicBindingContext,
+        path: String = "<root>",
         strict: Boolean = true
-    ): Collection<String> {
+    ): TestMatchResult {
         if (expected::class != actual::class) {
-            return listOf(
-                "expected an instance of ${expected::class.qualifiedName} ($expected) at path '$path' " +
-                "but got and instance of ${actual::class.qualifiedName} ($actual"
+            return TestMatchResult(
+                errors = listOf(
+                    "expected an instance of ${expected::class.qualifiedName} ($expected) at path '$path' " +
+                    "but got and instance of ${actual::class.qualifiedName} ($actual"
+                ),
+                boundDynamicValues = emptyMap()
             )
         }
         return when {
-            expected is Map<*, *> -> compareAndBindMap(expected, actual, path, context, strict)
+            expected is Map<*, *> -> compareAndBindMap(expected, actual, path, strict)
 
-            expected is List<*> -> compareAndBindList(expected, actual, path, context, strict)
+            expected is List<*> -> compareAndBindList(expected, actual, path, strict)
 
             expected is String && expected.startsWith(DYNAMIC_VALUE_PREFIX) -> {
-                context.storeBinding(
-                    key = DynamicBindingKey(expected.substring(DYNAMIC_VALUE_PREFIX.length)),
-                    value = actual
-                )
-                emptyList()
+                TestMatchResult(emptyList(), mapOf(
+                    DynamicBindingKey(expected.substring(DYNAMIC_VALUE_PREFIX.length)) to actual
+                ))
             }
 
             else -> if (expected == actual) {
-                emptyList()
+                TestMatchResult(emptyList(), emptyMap())
             } else {
-                listOf("mismatch at path '$path' - expected a ${expected::class.qualifiedName} '$expected' but got "
-                       + "${actual::class.qualifiedName} '$actual'")
+                TestMatchResult(
+                    errors = listOf("mismatch at path '$path' - expected a ${expected::class.qualifiedName} "
+                                    + "'$expected' but got ${actual::class.qualifiedName} '$actual'"),
+                    boundDynamicValues = emptyMap()
+                )
             }
         }
     }
@@ -134,14 +137,17 @@ object CommonJsonUtil {
         expected: Map<*, *>,
         actual: Any,
         path: String,
-        context: DynamicBindingContext,
         strict: Boolean
-    ): Collection<String> {
+    ): TestMatchResult {
         if (actual !is Map<*, *>) {
-            return listOf("expected to find a map at path $path but found ${actual::class.simpleName}: $actual")
+            return TestMatchResult(
+                errors = listOf("expected to find a map at path $path but found ${actual::class.simpleName}: $actual"),
+                boundDynamicValues = emptyMap()
+            )
         }
 
         val errors = mutableListOf<String>()
+        val dynamicBindings = mutableMapOf<DynamicBindingKey, Any?>()
         if (strict) {
             val excessiveKeys = actual.keys.toSet() - expected.keys
             if (excessiveKeys.isNotEmpty()) {
@@ -157,83 +163,93 @@ object CommonJsonUtil {
                 }
             } else {
                 actual[key]?.let {
-                    errors += compareAndBind(value as Any, it, "$path.$key", context, strict)
+                    val result = compareAndBind(value as Any, it, "$path.$key", strict)
+                    errors += result.errors
+                    dynamicBindings += result.boundDynamicValues
                 } ?: run {
                     errors += "mismatch at path '$path.$key' - expected to find a ${value?.javaClass?.name} " +
                               "value but got null"
                 }
             }
         }
-        return errors
+        return TestMatchResult(errors, dynamicBindings)
     }
 
     fun compareAndBindList(
         expected: List<*>,
         actual: Any,
         path: String,
-        context: DynamicBindingContext,
         strict: Boolean
-    ): Collection<String> {
+    ): TestMatchResult {
         if (actual !is List<*>) {
-            return listOf("expected to find a list at path $path but found ${actual::class.simpleName}: $actual")
+            return TestMatchResult(
+                errors = listOf("expected to find a list at path $path but found ${actual::class.simpleName}: $actual"),
+                boundDynamicValues = emptyMap()
+            )
         }
         return if (strict) {
-            compareAndBindListInStrictMode(expected, actual, path, context)
+            compareAndBindListInStrictMode(expected, actual, path)
         } else {
-            compareAndBindListInNonStrictMode(expected, actual, path, context)
+            compareAndBindListInNonStrictMode(expected, actual, path)
         }
     }
 
     fun compareAndBindListInStrictMode(
         expected: List<*>,
         actual: List<*>,
-        path: String,
-        context: DynamicBindingContext,
-    ): Collection<String> {
+        path: String
+    ): TestMatchResult {
         return if (expected.size != actual.size) {
-            listOf(
-                "unexpected entry(-ies) found at path '$path' - expected ${expected.size} " +
-                "elements but got ${actual.size} ($expected VS $actual)"
+            TestMatchResult(
+                errors = listOf(
+                    "unexpected entry(-ies) found at path '$path' - expected ${expected.size} " +
+                    "elements but got ${actual.size} ($expected VS $actual)"
+                ),
+                boundDynamicValues = emptyMap()
             )
         } else {
-            expected.flatMapIndexed { i: Int, expectedValue: Any? ->
+            val errors = mutableListOf<String>()
+            val dynamicBindings = mutableMapOf<DynamicBindingKey, Any?>()
+            expected.forEachIndexed { i: Int, expectedValue: Any? ->
                 expectedValue ?: fail("I can't happen, path: $path, index: $i")
                 actual[i]?.let {
-                    compareAndBind(expectedValue, it, "$path[$i]", context, true)
-                } ?: listOf(
-                    "mismatch at path '$path[$i]' - expected to find a " +
-                    "${expectedValue::class.qualifiedName} '$expectedValue' but got null"
-                )
+                    val result = compareAndBind(expectedValue, it, "$path[$i]", true)
+                    errors += result.errors
+                    dynamicBindings += result.boundDynamicValues
+                } ?: run {
+                    errors += "mismatch at path '$path[$i]' - expected to find a " +
+                              "${expectedValue::class.qualifiedName} '$expectedValue' but got null"
+                }
             }
+            TestMatchResult(errors, dynamicBindings)
         }
     }
 
     fun compareAndBindListInNonStrictMode(
         expected: List<*>,
         actual: List<*>,
-        path: String,
-        context: DynamicBindingContext,
-    ): Collection<String> {
+        path: String
+    ): TestMatchResult {
+        val errors = mutableListOf<String>()
+        val dynamicBindings = mutableMapOf<DynamicBindingKey, Any?>()
         val remainingCandidates = actual.toMutableList()
-        return expected.flatMap { expectedElement ->
+        for (expectedElement in expected) {
             expectedElement ?: fail("I can't happen")
             var matched = false
             for (candidate in remainingCandidates) {
-                val errors = compareAndBind(expectedElement, candidate as Any, path, context, false)
-                if (errors.isEmpty()) {
+                val result = compareAndBind(expectedElement, candidate as Any, path, false)
+                if (result.errors.isEmpty()) {
                     matched = true
                     remainingCandidates.remove(candidate)
+                    dynamicBindings += result.boundDynamicValues
                     break
                 }
             }
-            if (matched) {
-                emptyList()
-            } else {
-                listOf(
-                    "mismatch at path '$path' - expected to find a " +
-                    "${expectedElement::class.qualifiedName} '$expectedElement' but got null"
-                )
+            if (!matched) {
+                errors += "mismatch at path '$path' - expected to find a " +
+                          "${expectedElement::class.qualifiedName} '$expectedElement' but got null"
             }
         }
+        return TestMatchResult(errors, dynamicBindings)
     }
 }

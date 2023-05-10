@@ -233,19 +233,18 @@ class HttpClientStepDefinitions {
         val expected = jsonParser.parseJson(prepared)
         val rawActual = String(getLastResponse(httpMethod).body)
         val actual = jsonParser.parseJson(rawActual)
-        val errors = CommonJsonUtil.compareAndBind(
+        val result = CommonJsonUtil.compareAndBind(
             expected = expected,
             actual = actual,
-            path = "<root>",
-            context = dynamicContext,
             strict = strict
         )
-        return if (errors.isEmpty()) {
+        return if (result.errors.isEmpty()) {
+            dynamicContext.storeBindings(result.boundDynamicValues)
             ProcessingResult.success()
         } else {
             ProcessingResult.failure(
-                "found ${errors.size} error(s) on expected JSON content comparison" +
-                errors.joinToString(prefix = "\n  *) ", separator = "\n  *) ") +
+                "found ${result.errors.size} error(s) on expected JSON content comparison" +
+                result.errors.joinToString(prefix = "\n  *) ", separator = "\n  *) ") +
                 "\ncomplete response:\n$rawActual"
             )
         }

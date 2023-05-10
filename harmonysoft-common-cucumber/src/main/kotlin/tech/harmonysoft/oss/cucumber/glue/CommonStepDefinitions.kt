@@ -137,4 +137,13 @@ class CommonStepDefinitions {
             fail("expected dynamic key '$key' to have value '$expected' but it has value '$actual' instead")
         }
     }
+
+    @Then("^dynamic key '([^']+)' is not set'$")
+    fun verifyDynamicValueIsNotSet(key: String) {
+        val dynamicKey = DynamicBindingKey(key)
+        val bound = bindingContext.hasBindingFor(dynamicKey)
+        if (bound) {
+            fail("expected that dynamic key '$key' is not set but it has value '${bindingContext.getBinding(dynamicKey)}'")
+        }
+    }
 }

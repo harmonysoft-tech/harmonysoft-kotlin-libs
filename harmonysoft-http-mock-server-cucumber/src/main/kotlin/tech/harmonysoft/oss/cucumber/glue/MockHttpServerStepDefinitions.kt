@@ -22,6 +22,7 @@ import tech.harmonysoft.oss.http.server.mock.request.ExpectedRequestConfigurer
 import tech.harmonysoft.oss.http.server.mock.request.condition.DynamicRequestCondition
 import tech.harmonysoft.oss.http.server.mock.request.condition.JsonBodyPathToMatcherCondition
 import tech.harmonysoft.oss.http.server.mock.request.condition.ParameterName2ValueCondition
+import tech.harmonysoft.oss.http.server.mock.request.condition.PartialJsonMatchCondition
 import tech.harmonysoft.oss.http.server.mock.response.ConditionalResponseProvider
 import tech.harmonysoft.oss.http.server.mock.response.ResponseProvider
 import tech.harmonysoft.oss.jackson.JsonHelper
@@ -148,6 +149,17 @@ class MockHttpServerStepDefinitions {
         activeExpectationInfo.dynamicRequestConditionRef.set(current?.and(condition) ?: condition)
     }
 
+    @Given("^mock HTTP request body is a JSON with at least the following data:$")
+    fun setPartialJsonMatchCondition(rawExpected: String) {
+        val prepared = fixtureDataHelper.prepareTestData(
+            type = MockHttpServerPathTestFixture.TYPE,
+            context = Unit,
+            data = CommonJsonUtil.prepareDynamicMarkers(rawExpected)
+        ).toString()
+        val parsedExpected = jsonParser.parseJson(prepared)
+        addCondition(PartialJsonMatchCondition(parsedExpected, jsonParser, dynamicContext))
+    }
+
     @Given("^the following mock HTTP response is returned:$")
     fun configureResponse(response: String) {
         configureResponseWithCode(200, response)
@@ -196,17 +208,16 @@ class MockHttpServerStepDefinitions {
         val expected = jsonParser.parseJson(prepared)
         val bodiesWithErrors = candidateBodies.map { candidateBody ->
             val candidate = jsonParser.parseJson(candidateBody)
-            val errors = CommonJsonUtil.compareAndBind(
+            val result = CommonJsonUtil.compareAndBind(
                 expected = expected,
                 actual = candidate,
-                path = "<root>",
-                context = dynamicContext,
                 strict = false
             )
-            if (errors.isEmpty()) {
+            if (result.errors.isEmpty()) {
+                dynamicContext.storeBindings(result.boundDynamicValues)
                 return
             }
-            candidateBody to errors
+            candidateBody to result.errors
         }
         fail(
             "can't find HTTP $httpMethod request to path $expandedPath with at least the following JSON body:" +

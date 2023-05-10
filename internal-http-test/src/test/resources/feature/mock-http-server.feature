@@ -180,3 +180,114 @@ Feature: Mock HTTP server tests
       """
 
     And dynamic key 'key2Value' should have value 'value2'
+
+  Scenario: Partial match and complete mismatch with dynamic bindings
+
+    Given the following HTTP request is received by mock server:
+      | method | path  |
+      | POST   | /test |
+
+    And the following mock HTTP response is returned:
+      """
+      common-response
+      """
+
+    And the following HTTP request is received by mock server:
+      | method | path  |
+      | POST   | /test |
+
+    And mock HTTP request body is a JSON with at least the following data:
+      """
+      {
+        "key1": <bind:key1>,
+        "key2": 2
+      }
+      """
+
+    And the following mock HTTP response is returned:
+      """
+      specific-response
+      """
+
+    When HTTP POST request to /test is made with JSON body:
+      """
+      {
+        "key1": "id1",
+        "key2": 3
+      }
+      """
+
+    Then last HTTP POST request returns the following:
+      """
+      common-response
+      """
+
+    And dynamic key 'key1' is not set'
+
+  Scenario: Request JSON array match
+
+    Given the following HTTP request is received by mock server:
+      | method | path  |
+      | POST   | /test |
+
+    And the following mock HTTP response is returned:
+      """
+      common-response
+      """
+
+    And the following HTTP request is received by mock server:
+      | method | path  |
+      | POST   | /test |
+
+    And mock HTTP request body is a JSON with at least the following data:
+      """
+      [
+        {
+          "id": <bind:id1>,
+          "param": 1
+        },
+        {
+          "id": <bind:id2>,
+          "param": 2
+        }
+      ]
+      """
+
+    And the following mock HTTP response is returned:
+      """
+      specific-response
+      """
+
+    When HTTP POST request to /test is made with JSON body:
+      """
+      [
+        {
+          "id": "id1",
+          "param": 1
+        },
+        {
+          "id": "id2",
+          "param": 2
+        }
+      ]
+      """
+
+    Then last HTTP POST request returns the following:
+      """
+      specific-response
+      """
+
+    And HTTP POST request to /test is made with JSON body:
+      """
+      [
+        {
+          "id": "id2",
+          "param": 2
+        }
+      ]
+      """
+
+    And last HTTP POST request returns the following:
+      """
+      common-response
+      """
