@@ -1,3 +1,5 @@
+## v1.53.0 released on 12 May 2023 UTC
+  * fbb48929d5500ba4241ed741214a58eddb4cd456 toString() for PartialJsonMatchCondition
 ## v1.52.0 released on 12 May 2023 UTC
   * 913817f743081a3daacfff1977c73716cba6d7f3 correct binding regex
 ## v1.51.0 released on 10 May 2023 UTC
