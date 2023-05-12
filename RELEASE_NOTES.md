@@ -1,3 +1,5 @@
+## v1.52.0 released on 12 May 2023 UTC
+  * 913817f743081a3daacfff1977c73716cba6d7f3 correct binding regex
 ## v1.51.0 released on 10 May 2023 UTC
   * 7ac87a9819d7d45a9dc57ebb600cb540e1e7170a 1. Don't store dynamic bindings for JSON mismatches 2. Allow to constraint mock HTTP server request by partial JSON body match
 ## v1.50.0 released on 12 Apr 2023 UTC
