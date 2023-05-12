@@ -157,7 +157,7 @@ class MockHttpServerStepDefinitions {
             data = CommonJsonUtil.prepareDynamicMarkers(rawExpected)
         ).toString()
         val parsedExpected = jsonParser.parseJson(prepared)
-        addCondition(PartialJsonMatchCondition(parsedExpected, jsonParser, dynamicContext))
+        addCondition(PartialJsonMatchCondition(rawExpected, parsedExpected, jsonParser, dynamicContext))
     }
 
     @Given("^the following mock HTTP response is returned:$")

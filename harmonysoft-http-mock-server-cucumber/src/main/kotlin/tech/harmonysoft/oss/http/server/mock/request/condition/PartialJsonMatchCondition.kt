@@ -6,6 +6,7 @@ import tech.harmonysoft.oss.test.binding.DynamicBindingContext
 import tech.harmonysoft.oss.test.json.CommonJsonUtil
 
 class PartialJsonMatchCondition(
+    private val expectedRawJson: String,
     private val expectedParsedJson: Any,
     private val jsonParser: JsonParser,
     private val context: DynamicBindingContext
@@ -24,5 +25,9 @@ class PartialJsonMatchCondition(
         } else {
             false
         }
+    }
+
+    override fun toString(): String {
+        return expectedRawJson
     }
 }
