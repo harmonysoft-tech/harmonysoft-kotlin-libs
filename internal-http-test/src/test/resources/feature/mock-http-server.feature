@@ -291,3 +291,12 @@ Feature: Mock HTTP server tests
       """
       common-response
       """
+
+  Scenario: Negative HTTP call verification
+
+    When HTTP POST request to /test is made with JSON body:
+    """
+    {}
+    """
+
+    Then no HTTP GET call to /test is made

@@ -233,6 +233,21 @@ class MockHttpServerStepDefinitions {
         )
     }
 
+    @Then("^no HTTP ([^\\s]+) call to ([^\\s]+) is made$")
+    fun verifyNoCallIsMade(method: String, path: String) {
+        val expandedPath = fixtureDataHelper.prepareTestData(MockHttpServerPathTestFixture.TYPE, Unit, path).toString()
+        val requests = mockRef.get().retrieveRecordedRequests(
+            HttpRequest.request(expandedPath).withMethod(method)
+        )
+        if (requests.isNotEmpty()) {
+            fail(
+                "expected that no HTTP $method requests to $path are done but there were "
+                + "${requests.size} request(s): \n"
+                + requests.joinToString("\n---------------\n")
+            )
+        }
+    }
+
     class ExpectationInfo(
         val request: HttpRequest
     ) {
