@@ -1,3 +1,5 @@
+## v1.54.0 released on 15 May 2023 UTC
+  * 0f09138027e15ea26235602fcc0dd67ecb96c1e4 Added ability to verify that no HTTP request to target path and HTTP method is made
 ## v1.53.0 released on 12 May 2023 UTC
   * fbb48929d5500ba4241ed741214a58eddb4cd456 toString() for PartialJsonMatchCondition
 ## v1.52.0 released on 12 May 2023 UTC
