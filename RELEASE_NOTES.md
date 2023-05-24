@@ -1,3 +1,5 @@
+## v1.56.0 released on 24 May 2023 UTC
+  * dd83785d8506ba6c612f66e83267ce245bc5e387 correct projection setup during mongo documents existence verification
 ## v1.55.0 released on 24 May 2023 UTC
   * 858567a23d27b2fe339cee5ca78ad8b2061f4b2e move common mongo test functionality from mongo-cucumber into mongo-test
 ## v1.54.0 released on 15 May 2023 UTC
