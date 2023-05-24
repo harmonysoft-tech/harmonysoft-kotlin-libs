@@ -74,7 +74,7 @@ class TestMongoManager(
 
     fun verifyDocumentsExist(collectionName: String, input: List<Map<String, String>>) {
         val records = inputHelper.parse(MongoTestFixture.TYPE, Unit, input)
-        val projection = input.flatMap { it.keys }.toSet().toList()
+        val projection = records.flatMap { it.data.keys + it.toBind.keys }.toSet().toList()
         VerificationUtil.verifyConditionHappens {
             val collection = client.getDatabase(configProvider.data.db).getCollection(collectionName)
             val documents = collection
