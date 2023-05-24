@@ -1,4 +1,4 @@
-package tech.harmonysoft.oss.cucumber.input
+package tech.harmonysoft.oss.test.input
 
 import tech.harmonysoft.oss.test.binding.DynamicBindingKey
 
@@ -20,7 +20,7 @@ import tech.harmonysoft.oss.test.binding.DynamicBindingKey
  *
  * This class represents a single cucumber record with separated 'known values' and 'values to bind'.
  */
-data class CucumberRecord(
+data class TestInputRecord(
     val data: Map<String, Any?>,
     val toBind: Map<String, DynamicBindingKey>
 )

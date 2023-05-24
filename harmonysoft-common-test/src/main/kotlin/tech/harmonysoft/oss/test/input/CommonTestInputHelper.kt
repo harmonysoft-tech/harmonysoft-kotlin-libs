@@ -1,19 +1,22 @@
-package tech.harmonysoft.oss.cucumber.input
+package tech.harmonysoft.oss.test.input
 
-import io.cucumber.datatable.DataTable
+import javax.inject.Named
 import tech.harmonysoft.oss.test.binding.DynamicBindingKey
 import tech.harmonysoft.oss.test.binding.DynamicBindingUtil
 import tech.harmonysoft.oss.test.fixture.FixtureDataHelper
 import tech.harmonysoft.oss.test.fixture.FixtureType
-import javax.inject.Named
 
 @Named
-class CommonCucumberInputHelper(
+class CommonTestInputHelper(
     private val fixtureHelper: FixtureDataHelper
 ) {
 
-    fun <T : Any> parse(fixtureType: FixtureType<T>, fixtureContext: T, dataTable: DataTable): List<CucumberRecord> {
-        return dataTable.asMaps().map { rawRow ->
+    fun <T : Any> parse(
+        fixtureType: FixtureType<T>,
+        fixtureContext: T,
+        input: List<Map<String, String>>
+    ): List<TestInputRecord> {
+        return input.map { rawRow ->
             val data = mutableMapOf<String, String>()
             val toBind = mutableMapOf<String, DynamicBindingKey>()
             for ((column, value) in rawRow) {
@@ -23,7 +26,7 @@ class CommonCucumberInputHelper(
                     data[column] = value
                 }
             }
-            CucumberRecord(
+            TestInputRecord(
                 data = fixtureHelper.prepareTestData(fixtureType, fixtureContext, data),
                 toBind = toBind
             )
