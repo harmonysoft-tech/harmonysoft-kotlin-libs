@@ -1,3 +1,5 @@
+## v1.57.0 released on 26 May 2023 UTC
+  * 7c72cced2ab81c9aafccf2d73ff681dfcbc96a4f move common functionality form kafka-cucumber to kafka-test
 ## v1.56.0 released on 24 May 2023 UTC
   * dd83785d8506ba6c612f66e83267ce245bc5e387 correct projection setup during mongo documents existence verification
 ## v1.55.0 released on 24 May 2023 UTC
