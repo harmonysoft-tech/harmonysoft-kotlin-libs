@@ -1,3 +1,5 @@
+## v1.59.0 released on 09 Jun 2023 UTC
+  * bb00fbcbf95b5f78f1b88c8ee33d6a284bff99fc fix tests
 ## v1.58.0 released on 09 Jun 2023 UTC
   * 067ad0572351c43bb297bd780e58d0ed70dd0feb 1. Test environment infrastructure 2. Testcontainers-based kafka and mongo environment 3. Kafka cucumber steps are expanded
 ## v1.57.0 released on 26 May 2023 UTC
