@@ -1,4 +1,4 @@
-Feature: Mongo cucumber glue tests
+Feature: Mongo cucumber feature tests
 
   Scenario: Binding document property
 

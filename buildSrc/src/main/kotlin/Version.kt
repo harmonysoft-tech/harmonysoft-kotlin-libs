@@ -21,4 +21,5 @@ object Version {
     const val JUNIT = "5.8.2"
     const val MOCKITO_KOTLIN = "4.0.0"
     const val CUCUMBER = "7.4.1"
+    const val TEST_CONTAINERS = "1.18.3"
 }

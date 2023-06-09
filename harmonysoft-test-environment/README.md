@@ -1,0 +1,1 @@
+Common infrastructure for setting up local environment like kafka, mongo, etc

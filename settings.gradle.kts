@@ -23,6 +23,7 @@ include("harmonysoft-http-mock-server-cucumber")
 include("harmonysoft-mongo")
 include("harmonysoft-mongo-test")
 include("harmonysoft-mongo-cucumber")
+include("harmonysoft-mongo-environment-testcontainers")
 
 include("harmonysoft-json-api")
 include("harmonysoft-jackson")
@@ -41,3 +42,8 @@ include("harmonysoft-default-implementations")
 
 include("internal-cucumber")
 include("internal-http-test")
+
+include("harmonysoft-test-environment")
+include("harmonysoft-test-environment-cucumber")
+include("harmonysoft-kafka-environment")
+include("harmonysoft-kafka-environment-testcontainers")

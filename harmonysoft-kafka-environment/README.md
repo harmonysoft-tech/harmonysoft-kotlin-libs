@@ -1,0 +1,1 @@
+Common logic for local kafka environment. We can re-use it for, say, [testcontainers](https://www.testcontainers.org/)-based implementation, kubernetes-based implementation, etc

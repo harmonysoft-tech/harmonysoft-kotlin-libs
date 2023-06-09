@@ -2,6 +2,7 @@ package tech.harmonysoft.oss.common.collection
 
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.CopyOnWriteArrayList
 
 /**
  * Quite often many lambda objects are generated during frequent calls like [getOrPut]:
@@ -32,6 +33,7 @@ object CollectionInitializer {
     private val MUTABLE_MAP: () -> MutableMap<Any, Any> = { mutableMapOf() }
     private val CONCURRENT_HASH_SET: () -> MutableSet<Any> = { Collections.newSetFromMap(ConcurrentHashMap()) }
     private val CONCURRENT_HASH_MAP: () -> ConcurrentHashMap<Any, Any> = { ConcurrentHashMap() }
+    private val COPY_ON_WRITE_ARRAY_LIST: () -> CopyOnWriteArrayList<Any> = { CopyOnWriteArrayList() }
 
     fun <T> stack(): () -> Stack<T> = STACK as () -> Stack<T>
     fun <T> mutableList(): () -> MutableList<T> = MUTABLE_LIST as () -> MutableList<T>
@@ -39,4 +41,5 @@ object CollectionInitializer {
     fun <K, V> mutableMap(): () -> MutableMap<K, V> = MUTABLE_MAP as () -> MutableMap<K, V>
     fun <T> concurrentHashSet(): () -> MutableSet<T> = CONCURRENT_HASH_SET as () -> MutableSet<T>
     fun <K, V> concurrentHashMap(): () -> ConcurrentHashMap<K, V> = CONCURRENT_HASH_MAP as () -> ConcurrentHashMap<K, V>
+    fun <K, V> copyOnWriteArrayList(): () -> ConcurrentHashMap<K, V> = COPY_ON_WRITE_ARRAY_LIST as () -> ConcurrentHashMap<K, V>
 }

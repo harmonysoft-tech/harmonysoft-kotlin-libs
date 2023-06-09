@@ -1,15 +1,20 @@
 package tech.harmonysoft.oss.mongo.service
 
 import com.mongodb.BasicDBObject
+import com.mongodb.ConnectionString
+import com.mongodb.MongoClientSettings
 import com.mongodb.client.MongoClient
 import com.mongodb.client.MongoClients
 import com.mongodb.client.model.Projections
 import com.mongodb.client.model.UpdateOptions
 import com.mongodb.client.model.Updates
+import java.util.concurrent.TimeUnit
 import javax.inject.Named
+import org.junit.jupiter.api.AfterEach
 import org.slf4j.Logger
 import tech.harmonysoft.oss.common.ProcessingResult
 import tech.harmonysoft.oss.common.data.DataProviderStrategy
+import tech.harmonysoft.oss.mongo.config.TestMongoConfig
 import tech.harmonysoft.oss.mongo.config.TestMongoConfigProvider
 import tech.harmonysoft.oss.mongo.constant.Mongo
 import tech.harmonysoft.oss.mongo.fixture.MongoTestFixture
@@ -30,13 +35,10 @@ class TestMongoManager(
     private val allDocumentsFilter = BasicDBObject()
 
     val client: MongoClient by lazy {
-        val config = configProvider.data
-        val auth = config.credential?.let {
-            "${it.login}:${it.password}@"
-        } ?: ""
-        MongoClients.create("mongodb://$auth${config.host}:${config.port}/${config.db}")
+        getClient(configProvider.data)
     }
 
+    @AfterEach
     fun cleanUpData() {
         val db = client.getDatabase(configProvider.data.db)
         for (collectionName in db.listCollectionNames()) {
@@ -44,6 +46,26 @@ class TestMongoManager(
             val result = db.getCollection(collectionName).deleteMany(allDocumentsFilter)
             logger.info("Deleted {} document(s) in mongo collection {}", result.deletedCount, collectionName)
         }
+    }
+
+    fun getClient(config: TestMongoConfig): MongoClient {
+        val auth = config.credential?.let {
+            "${it.login}:${it.password}@"
+        } ?: ""
+        val connectionString = "mongodb://$auth${config.host}:${config.port}/${config.db}"
+        val timeoutMs = 100
+        val settings = MongoClientSettings
+            .builder()
+            .applyToSocketSettings {
+                it.connectTimeout(timeoutMs, TimeUnit.MILLISECONDS)
+                it.readTimeout(timeoutMs, TimeUnit.MILLISECONDS)
+            }
+            .applyToClusterSettings {
+                it.serverSelectionTimeout(timeoutMs.toLong(), TimeUnit.MILLISECONDS)
+            }
+            .applyConnectionString(ConnectionString(connectionString))
+            .build()
+        return MongoClients.create(settings)
     }
 
     /**

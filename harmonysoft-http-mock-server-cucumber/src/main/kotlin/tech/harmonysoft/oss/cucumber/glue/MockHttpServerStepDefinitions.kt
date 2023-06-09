@@ -26,7 +26,7 @@ import tech.harmonysoft.oss.http.server.mock.request.condition.PartialJsonMatchC
 import tech.harmonysoft.oss.http.server.mock.response.ConditionalResponseProvider
 import tech.harmonysoft.oss.http.server.mock.response.ResponseProvider
 import tech.harmonysoft.oss.jackson.JsonHelper
-import tech.harmonysoft.oss.json.JsonParser
+import tech.harmonysoft.oss.json.JsonApi
 import tech.harmonysoft.oss.test.binding.DynamicBindingContext
 import tech.harmonysoft.oss.test.fixture.CommonTestFixture
 import tech.harmonysoft.oss.test.fixture.FixtureDataHelper
@@ -46,7 +46,7 @@ class MockHttpServerStepDefinitions {
 
     @Inject private lateinit var configProvider: Optional<MockHttpServerConfigProvider>
     @Inject private lateinit var requestConfigurers: Collection<ExpectedRequestConfigurer>
-    @Inject private lateinit var jsonParser: JsonParser
+    @Inject private lateinit var jsonApi: JsonApi
     @Inject private lateinit var jsonHelper: JsonHelper
     @Inject private lateinit var fixtureDataHelper: FixtureDataHelper
     @Inject private lateinit var matchersFactory: MatchersFactory
@@ -156,8 +156,8 @@ class MockHttpServerStepDefinitions {
             context = Unit,
             data = CommonJsonUtil.prepareDynamicMarkers(rawExpected)
         ).toString()
-        val parsedExpected = jsonParser.parseJson(prepared)
-        addCondition(PartialJsonMatchCondition(rawExpected, parsedExpected, jsonParser, dynamicContext))
+        val parsedExpected = jsonApi.parseJson(prepared)
+        addCondition(PartialJsonMatchCondition(rawExpected, parsedExpected, jsonApi, dynamicContext))
     }
 
     @Given("^the following mock HTTP response is returned:$")
@@ -205,9 +205,9 @@ class MockHttpServerStepDefinitions {
             context = Any(),
             data = CommonJsonUtil.prepareDynamicMarkers(expectedRawJson)
         ).toString()
-        val expected = jsonParser.parseJson(prepared)
+        val expected = jsonApi.parseJson(prepared)
         val bodiesWithErrors = candidateBodies.map { candidateBody ->
-            val candidate = jsonParser.parseJson(candidateBody)
+            val candidate = jsonApi.parseJson(candidateBody)
             val result = CommonJsonUtil.compareAndBind(
                 expected = expected,
                 actual = candidate,

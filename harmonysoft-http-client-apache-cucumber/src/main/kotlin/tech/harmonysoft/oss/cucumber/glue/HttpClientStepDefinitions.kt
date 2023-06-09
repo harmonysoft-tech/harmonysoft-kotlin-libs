@@ -29,7 +29,7 @@ import tech.harmonysoft.oss.http.client.cucumber.DefaultWebPortProvider
 import tech.harmonysoft.oss.http.client.fixture.HttpClientTestFixture
 import tech.harmonysoft.oss.http.client.response.HttpResponse
 import tech.harmonysoft.oss.http.client.response.HttpResponseConverter
-import tech.harmonysoft.oss.json.JsonParser
+import tech.harmonysoft.oss.json.JsonApi
 import tech.harmonysoft.oss.test.binding.DynamicBindingContext
 import tech.harmonysoft.oss.test.content.TestContentManager
 import tech.harmonysoft.oss.test.fixture.FixtureDataHelper
@@ -46,7 +46,7 @@ class HttpClientStepDefinitions {
     @Inject private lateinit var fixtureDataHelper: FixtureDataHelper
     @Inject private lateinit var httpClient: TestHttpClient
     @Inject private lateinit var contentManager: TestContentManager
-    @Inject private lateinit var jsonParser: JsonParser
+    @Inject private lateinit var jsonApi: JsonApi
     @Inject private lateinit var dynamicContext: DynamicBindingContext
 
     private val requestBuilders = mapOf<String, (String) -> HttpUriRequestBase> (
@@ -230,9 +230,9 @@ class HttpClientStepDefinitions {
             context = Unit,
             data = CommonJsonUtil.prepareDynamicMarkers(expectedJson)
         ).toString()
-        val expected = jsonParser.parseJson(prepared)
+        val expected = jsonApi.parseJson(prepared)
         val rawActual = String(getLastResponse(httpMethod).body)
-        val actual = jsonParser.parseJson(rawActual)
+        val actual = jsonApi.parseJson(rawActual)
         val result = CommonJsonUtil.compareAndBind(
             expected = expected,
             actual = actual,

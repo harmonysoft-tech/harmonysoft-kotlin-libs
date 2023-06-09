@@ -1,6 +1,8 @@
 package tech.harmonysoft.oss.cucumber.glue
 
+import io.cucumber.java.After
 import io.cucumber.java.en.Given
+import io.cucumber.java.en.Then
 import javax.inject.Inject
 import tech.harmonysoft.oss.kafka.service.TestKafkaManager
 
@@ -8,8 +10,43 @@ class KafkaStepDefinitions {
 
     @Inject private lateinit var kafka: TestKafkaManager
 
-    @Given("^the following kafka message is sent to topic ([^\\s]+):$")
+    @After
+    fun tearDown() {
+        kafka.clean()
+    }
+
+    @Given("^kafka topic '$([^']+)' exists$")
+    fun createTopicIfNecessary(name: String) {
+        kafka.ensureTopicExists(name)
+    }
+
+    @Given("^kafka topic '([^']+)' is subscribed$")
+    fun subscribe(topic: String) {
+        kafka.subscribe(topic)
+    }
+
+    @Given("^the following kafka message is sent to topic '([^']+)':$")
     fun sendMessage(topic: String, message: String) {
         kafka.sendMessage(topic, message)
+    }
+
+    @Then("^the following message is received in kafka topic '([^']+)':$")
+    fun verifyMessageIsReceived(topic: String, expected: String) {
+        kafka.verifyMessageIsReceived(expected, topic)
+    }
+
+    @Then("^the following JSON message is received in kafka topic '([^']+)':$")
+    fun verifyJsonMessageIsReceived(topic: String, expectedJson: String) {
+        kafka.verifyJsonMessageIsReceived(expectedJson, topic)
+    }
+
+    @Then("^the following message is not received in kafka topic '([^']+)':$")
+    fun verifyNoMessageIsReceived(topic: String, expected: String) {
+        kafka.verifyMessageIsNotReceived(expected, topic)
+    }
+
+    @Then("^the following JSON message is not received in kafka topic '([^']+)':$")
+    fun verifyNoJsonMessageIsReceived(topic: String, expected: String) {
+        kafka.verifyJsonMessageIsNotReceived(expected, topic)
     }
 }

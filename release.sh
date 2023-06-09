@@ -17,4 +17,5 @@ function execute {
 execute "./gradlew clean build"
 execute "./gradlew :internal-http-test:cucumber"
 execute "./gradlew :harmonysoft-mongo-cucumber:cucumber"
+execute "./gradlew :harmonysoft-kafka-cucumber:cucumber"
 execute "./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository"
