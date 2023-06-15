@@ -3,9 +3,8 @@ package tech.harmonysoft.oss.environment.mongo.testcontainers
 import com.mongodb.client.MongoClient
 import java.util.Optional
 import javax.inject.Named
-import org.junit.jupiter.api.fail
 import org.testcontainers.containers.BindMode
-import org.testcontainers.containers.MongoDBContainer
+import org.testcontainers.containers.GenericContainer
 import org.testcontainers.utility.DockerImageName
 import tech.harmonysoft.oss.environment.TestContext
 import tech.harmonysoft.oss.environment.TestEnvironment
@@ -41,26 +40,21 @@ class MongoTestcontainersEnvironment(
     }
 
     override fun start(context: TestContext): TestMongoConfig {
-        val container = MongoDBContainer(DockerImageName.parse("mongo:4.4.21"))
-            .withEnv(
-                mapOf(
+        val container = GenericContainer(DockerImageName.parse("mongo:6.0.3"))
+            .withEnv(mapOf(
+                    "MONGO_INITDB_ROOT_USERNAME" to "root",
+                    "MONGO_INITDB_ROOT_PASSWORD" to "root",
                     "MONGO_INITDB_DATABASE" to ext.db,
                     "MONGO_NON_ROOT_USERNAME" to ext.credential.login,
                     "MONGO_NON_ROOT_PASSWORD" to ext.credential.password
-                )
-            )
+            ))
             .withClasspathResourceMapping(
                 "/harmonysoft/environment/testcontainers/mongo",
                 "/docker-entrypoint-initdb.d",
                 BindMode.READ_ONLY
-            )
+            ).withExposedPorts(27017)
         container.start()
-        val connectionString = container.connectionString
-        val i = connectionString.lastIndexOf(":")
-        if (i <= 0) {
-            fail("can not extract mongo port from connection string '$connectionString'")
-        }
-        val port = connectionString.substring(i + 1).toInt()
+        val port = container.getMappedPort(27017)
         return TestMongoConfig(
             host = "127.0.0.1",
             port = port,
