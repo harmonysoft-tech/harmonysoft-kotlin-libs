@@ -1,3 +1,7 @@
+## v1.60.0 released on 15 Jun 2023 UTC
+  * 2e6807e28896ebfbdc3e2d14f9239ce3410e5fe9 extract common mongo environment setup into common module
+  * 1d48fed637a7adabb7b528e93be41b5488d53339 rename refactoring
+  * 1fc2bc146acdc4f00a09aa0ecff0e035bf40a3db corrected mongo user creation in test environment
 ## v1.59.0 released on 09 Jun 2023 UTC
   * bb00fbcbf95b5f78f1b88c8ee33d6a284bff99fc fix tests
 ## v1.58.0 released on 09 Jun 2023 UTC
