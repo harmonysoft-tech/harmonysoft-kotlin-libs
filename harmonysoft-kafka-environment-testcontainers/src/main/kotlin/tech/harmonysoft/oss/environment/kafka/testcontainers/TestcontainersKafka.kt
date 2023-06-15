@@ -5,13 +5,12 @@ import org.slf4j.Logger
 import org.testcontainers.containers.KafkaContainer
 import org.testcontainers.utility.DockerImageName
 import tech.harmonysoft.oss.common.environment.EnvironmentUtil
-import tech.harmonysoft.oss.environment.kafka.KafkaTestEnvironment
 import tech.harmonysoft.oss.environment.kafka.spi.KafkaEnvironmentSpi
 import tech.harmonysoft.oss.kafka.config.TestKafkaConfig
 import tech.harmonysoft.oss.test.util.TestUtil
 
 @Named
-class TestcontainersKafkaStarter(
+class TestcontainersKafka(
     private val logger: Logger
 ) : KafkaEnvironmentSpi {
 
@@ -22,10 +21,10 @@ class TestcontainersKafkaStarter(
             // here we dynamically choose an image depending on the current environment
             return if (EnvironmentUtil.APPLE_SILICON) {
                 logger.info("detected current environment as apple silicon, using corresponding ARM kafka image")
-                "confluentinc/cp-kafka:${KafkaTestEnvironment.IMAGE_VERSION}.arm64"
+                "confluentinc/cp-kafka:${IMAGE_VERSION}.arm64"
             } else {
                 logger.info("detected current environment as non-apple silicon, using regular kafka image")
-                "confluentinc/cp-kafka:${KafkaTestEnvironment.IMAGE_VERSION}"
+                "confluentinc/cp-kafka:${IMAGE_VERSION}"
             }
         }
 
@@ -42,5 +41,10 @@ class TestcontainersKafkaStarter(
             TestUtil.fail("unsupported kafka bootstrap servers format - '$bootstrapServers'")
         }
         return TestKafkaConfig("127.0.0.1", bootstrapServers.substring(i + 1).toInt())
+    }
+
+    companion object {
+
+        const val IMAGE_VERSION = "7.4.0"
     }
 }

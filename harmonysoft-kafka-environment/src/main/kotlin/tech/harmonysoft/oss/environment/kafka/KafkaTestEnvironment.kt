@@ -58,9 +58,4 @@ class KafkaTestEnvironment(
     override fun start(context: TestContext): TestKafkaConfig {
         return starter.start()
     }
-
-    companion object {
-
-        const val IMAGE_VERSION = "7.4.0"
-    }
 }

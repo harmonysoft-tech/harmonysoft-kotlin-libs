@@ -23,6 +23,7 @@ include("harmonysoft-http-mock-server-cucumber")
 include("harmonysoft-mongo")
 include("harmonysoft-mongo-test")
 include("harmonysoft-mongo-cucumber")
+include("harmonysoft-mongo-environment")
 include("harmonysoft-mongo-environment-testcontainers")
 
 include("harmonysoft-json-api")
@@ -35,6 +36,8 @@ include("harmonysoft-micrometer-influxdb")
 
 include("harmonysoft-kafka-test")
 include("harmonysoft-kafka-cucumber")
+include("harmonysoft-kafka-environment")
+include("harmonysoft-kafka-environment-testcontainers")
 
 include("harmonysoft-slf4j-spring")
 
@@ -45,5 +48,3 @@ include("internal-http-test")
 
 include("harmonysoft-test-environment")
 include("harmonysoft-test-environment-cucumber")
-include("harmonysoft-kafka-environment")
-include("harmonysoft-kafka-environment-testcontainers")
