@@ -12,7 +12,7 @@ import tech.harmonysoft.oss.kafka.config.TestKafkaConfig
 import tech.harmonysoft.oss.kafka.service.TestKafkaManager
 
 @Named
-class KafkaTestcontainersEnvironment(
+class KafkaTestEnvironment(
     private val kafkaManager: TestKafkaManager,
     private val starter: KafkaEnvironmentSpi
 ) : TestEnvironment<TestKafkaConfig> {

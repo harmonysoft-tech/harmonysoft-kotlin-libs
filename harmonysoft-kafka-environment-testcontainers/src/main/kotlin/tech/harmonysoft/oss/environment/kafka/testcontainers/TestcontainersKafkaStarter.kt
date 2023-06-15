@@ -5,7 +5,7 @@ import org.slf4j.Logger
 import org.testcontainers.containers.KafkaContainer
 import org.testcontainers.utility.DockerImageName
 import tech.harmonysoft.oss.common.environment.EnvironmentUtil
-import tech.harmonysoft.oss.environment.kafka.KafkaTestcontainersEnvironment
+import tech.harmonysoft.oss.environment.kafka.KafkaTestEnvironment
 import tech.harmonysoft.oss.environment.kafka.spi.KafkaEnvironmentSpi
 import tech.harmonysoft.oss.kafka.config.TestKafkaConfig
 import tech.harmonysoft.oss.test.util.TestUtil
@@ -22,10 +22,10 @@ class TestcontainersKafkaStarter(
             // here we dynamically choose an image depending on the current environment
             return if (EnvironmentUtil.APPLE_SILICON) {
                 logger.info("detected current environment as apple silicon, using corresponding ARM kafka image")
-                "confluentinc/cp-kafka:${KafkaTestcontainersEnvironment.IMAGE_VERSION}.arm64"
+                "confluentinc/cp-kafka:${KafkaTestEnvironment.IMAGE_VERSION}.arm64"
             } else {
                 logger.info("detected current environment as non-apple silicon, using regular kafka image")
-                "confluentinc/cp-kafka:${KafkaTestcontainersEnvironment.IMAGE_VERSION}"
+                "confluentinc/cp-kafka:${KafkaTestEnvironment.IMAGE_VERSION}"
             }
         }
 
