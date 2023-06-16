@@ -1,3 +1,6 @@
+## v1.66.0 released on 16 Jun 2023 UTC
+  * 524d787acdbdbd1bed47711da52f83fd3318c064 expose test context
+  * 3fefb0e23e99c43252bc60aaffdcf27bd8e00f21 manual version bump
 ## v1.65.0 released on 16 Jun 2023 UTC
   * 223c4dffaf858116d25ed7568007eef16df09123 adapt testcontainers environments to the changed api
 ## v1.64.0 released on 16 Jun 2023 UTC
