@@ -1,3 +1,5 @@
+## v1.67.0 released on 16 Jun 2023 UTC
+  * 0497708128dd3073d74d87f5d6e79eafdfcbf96e removed duplicate constant
 ## v1.66.0 released on 16 Jun 2023 UTC
   * 524d787acdbdbd1bed47711da52f83fd3318c064 expose test context
   * 3fefb0e23e99c43252bc60aaffdcf27bd8e00f21 manual version bump
