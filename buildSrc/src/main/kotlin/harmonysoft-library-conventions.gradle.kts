@@ -142,3 +142,7 @@ if (System.getenv("CI_ENV").isNullOrBlank()) {
         sign(publishing.publications["main"])
     }
 }
+
+if (project.name.startsWith("internal")) {
+    project.tasks.withType<PublishToMavenRepository>().configureEach { this.enabled = false }
+}
