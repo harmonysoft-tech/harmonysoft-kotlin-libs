@@ -5,6 +5,7 @@ import org.slf4j.Logger
 import org.testcontainers.containers.KafkaContainer
 import org.testcontainers.utility.DockerImageName
 import tech.harmonysoft.oss.common.environment.EnvironmentUtil
+import tech.harmonysoft.oss.environment.TestContext
 import tech.harmonysoft.oss.environment.kafka.spi.KafkaEnvironmentSpi
 import tech.harmonysoft.oss.kafka.config.TestKafkaConfig
 import tech.harmonysoft.oss.test.util.TestUtil
@@ -30,7 +31,7 @@ class TestcontainersKafka(
 
     override val environmentId = "kafka-testcontainers"
 
-    override fun start(): TestKafkaConfig {
+    override fun start(context: TestContext): TestKafkaConfig {
         val container = KafkaContainer(DockerImageName.parse(imageToUse))
         logger.info("starting kafka container")
         container.start()

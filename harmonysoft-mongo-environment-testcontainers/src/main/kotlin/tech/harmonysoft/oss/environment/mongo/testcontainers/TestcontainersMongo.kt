@@ -5,6 +5,7 @@ import javax.inject.Named
 import org.testcontainers.containers.BindMode
 import org.testcontainers.containers.GenericContainer
 import org.testcontainers.utility.DockerImageName
+import tech.harmonysoft.oss.environment.TestContext
 import tech.harmonysoft.oss.environment.mongo.spi.MongoEnvironmentSpi
 import tech.harmonysoft.oss.mongo.config.TestMongoConfig
 
@@ -17,7 +18,7 @@ class TestcontainersMongo(
 
     override val environmentId = "mongo-testcontainers"
 
-    override fun start(): TestMongoConfig {
+    override fun start(context: TestContext): TestMongoConfig {
         val container = GenericContainer(DockerImageName.parse("mongo:6.0.3"))
             .withEnv(mapOf(
                 "MONGO_INITDB_ROOT_USERNAME" to "root",
