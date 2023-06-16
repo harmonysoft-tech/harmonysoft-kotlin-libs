@@ -32,7 +32,7 @@ class TestEnvironmentManager(
 
     @BeforeEach
     fun startIfNecessary() {
-        mixin.beforeStart()
+        mixin.beforeStart(testContext)
         for (environment in environments) {
             startIfNecessary(environment)
         }
