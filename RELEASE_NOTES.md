@@ -1,3 +1,5 @@
+## v1.62.0 released on 16 Jun 2023 UTC
+  * 66cd592fac317e2a1f285c531dbe2fa5ffe4a6d5 expose test context to test environment mixin
 ## v1.61.0 released on 16 Jun 2023 UTC
   * 56c1959fa85af9d13280e1acfc7fd16cde95fb71 added test environment extension point
   * 4864dc7e56c3b3015371d621b76c239b11108641 don't publish internal modules to maven central
