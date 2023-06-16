@@ -6,6 +6,7 @@ import org.testcontainers.containers.BindMode
 import org.testcontainers.containers.GenericContainer
 import org.testcontainers.utility.DockerImageName
 import tech.harmonysoft.oss.environment.TestContext
+import tech.harmonysoft.oss.environment.mongo.MongoConfigExtension
 import tech.harmonysoft.oss.environment.mongo.spi.MongoEnvironmentSpi
 import tech.harmonysoft.oss.mongo.config.TestMongoConfig
 

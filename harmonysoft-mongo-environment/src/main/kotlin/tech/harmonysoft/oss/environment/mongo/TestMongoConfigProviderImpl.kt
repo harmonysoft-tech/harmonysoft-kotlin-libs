@@ -1,9 +1,8 @@
-package tech.harmonysoft.oss.environment.mongo.testcontainers
+package tech.harmonysoft.oss.environment.mongo
 
 import javax.inject.Named
 import org.springframework.beans.factory.ObjectProvider
 import tech.harmonysoft.oss.environment.TestEnvironmentManager
-import tech.harmonysoft.oss.environment.mongo.MongoTestEnvironment
 import tech.harmonysoft.oss.mongo.config.TestMongoConfig
 import tech.harmonysoft.oss.mongo.config.TestMongoConfigProvider
 

@@ -1,4 +1,4 @@
-package tech.harmonysoft.oss.environment.mongo.testcontainers
+package tech.harmonysoft.oss.environment.mongo
 
 import tech.harmonysoft.oss.common.auth.model.Credential
 
