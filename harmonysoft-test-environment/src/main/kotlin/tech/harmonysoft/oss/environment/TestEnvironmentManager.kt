@@ -8,6 +8,7 @@ import javax.inject.Named
 import org.junit.jupiter.api.BeforeEach
 import org.slf4j.Logger
 import tech.harmonysoft.oss.common.ProcessingResult
+import tech.harmonysoft.oss.environment.ext.TestEnvironmentManagerMixin
 import tech.harmonysoft.oss.json.JsonApi
 import tech.harmonysoft.oss.test.util.TestUtil
 import tech.harmonysoft.oss.test.util.VerificationUtil
@@ -17,7 +18,8 @@ class TestEnvironmentManager(
     private val json: JsonApi,
     private val logger: Logger,
     environments: Optional<Collection<TestEnvironment<*>>>,
-    environmentInfoProvider: Optional<EnvironmentInfoProvider>
+    environmentInfoProvider: Optional<EnvironmentInfoProvider>,
+    mixin: Optional<TestEnvironmentManagerMixin>
 ) {
 
     private val environments = environments.orElse(emptyList())
@@ -26,9 +28,11 @@ class TestEnvironmentManager(
         executionId = environmentInfoProvider.orElse(EnvironmentInfoProvider.Default).executionId
     )
     private val environmentConfigs = ConcurrentHashMap<String, Any>()
+    private val mixin = mixin.orElse(TestEnvironmentManagerMixin.NoOp)
 
     @BeforeEach
     fun startIfNecessary() {
+        mixin.beforeStart()
         for (environment in environments) {
             startIfNecessary(environment)
         }
