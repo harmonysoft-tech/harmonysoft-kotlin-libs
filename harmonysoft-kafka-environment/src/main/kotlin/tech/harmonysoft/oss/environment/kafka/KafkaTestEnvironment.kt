@@ -56,6 +56,6 @@ class KafkaTestEnvironment(
     }
 
     override fun start(context: TestContext): TestKafkaConfig {
-        return starter.start()
+        return starter.start(context)
     }
 }

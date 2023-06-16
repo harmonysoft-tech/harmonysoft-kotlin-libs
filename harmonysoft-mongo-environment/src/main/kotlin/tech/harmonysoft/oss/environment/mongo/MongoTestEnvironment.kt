@@ -35,6 +35,6 @@ class MongoTestEnvironment(
     }
 
     override fun start(context: TestContext): TestMongoConfig {
-        return spi.start()
+        return spi.start(context)
     }
 }
