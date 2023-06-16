@@ -23,12 +23,13 @@ class TestEnvironmentManager(
 ) {
 
     private val environments = environments.orElse(emptyList())
-    private val testContext = TestContext(
+    private val environmentConfigs = ConcurrentHashMap<String, Any>()
+    private val mixin = mixin.orElse(TestEnvironmentManagerMixin.NoOp)
+
+    val testContext = TestContext(
         rootDir = Files.createTempDirectory("test").toFile().apply { deleteOnExit() },
         executionId = environmentInfoProvider.orElse(EnvironmentInfoProvider.Default).executionId
     )
-    private val environmentConfigs = ConcurrentHashMap<String, Any>()
-    private val mixin = mixin.orElse(TestEnvironmentManagerMixin.NoOp)
 
     @BeforeEach
     fun startIfNecessary() {
