@@ -1,3 +1,5 @@
+## v1.63.0 released on 16 Jun 2023 UTC
+  * 4802fe0fe97d9098e91c709a60fc8b4889fbec03 expose test context to kafka and mongo starters
 ## v1.62.0 released on 16 Jun 2023 UTC
   * 66cd592fac317e2a1f285c531dbe2fa5ffe4a6d5 expose test context to test environment mixin
 ## v1.61.0 released on 16 Jun 2023 UTC
