@@ -4,10 +4,10 @@ import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.ComponentScan
-import tech.harmonysoft.oss.common.environment.EnvironmentUtil.HARMONYSOFT_ROOT_PACKAGE
+import tech.harmonysoft.oss.common.util.CommonConstants.ROOT_LIBRARY_PACKAGE
 
 @SpringBootApplication
-@ComponentScan(HARMONYSOFT_ROOT_PACKAGE)
+@ComponentScan(ROOT_LIBRARY_PACKAGE)
 open class TestEnvironmentStarter {
     companion object {
 
