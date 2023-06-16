@@ -1,3 +1,5 @@
+## v1.65.0 released on 16 Jun 2023 UTC
+  * 223c4dffaf858116d25ed7568007eef16df09123 adapt testcontainers environments to the changed api
 ## v1.64.0 released on 16 Jun 2023 UTC
   * 383ea45662a591d060b34d51e1f66a95d14361e2 add utility TestContext.prepareDirectory() method
 ## v1.63.0 released on 16 Jun 2023 UTC
