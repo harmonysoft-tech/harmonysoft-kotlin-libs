@@ -1,3 +1,6 @@
+## v1.61.0 released on 16 Jun 2023 UTC
+  * 56c1959fa85af9d13280e1acfc7fd16cde95fb71 added test environment extension point
+  * 4864dc7e56c3b3015371d621b76c239b11108641 don't publish internal modules to maven central
 ## v1.60.0 released on 15 Jun 2023 UTC
   * 2e6807e28896ebfbdc3e2d14f9239ce3410e5fe9 extract common mongo environment setup into common module
   * 1d48fed637a7adabb7b528e93be41b5488d53339 rename refactoring
