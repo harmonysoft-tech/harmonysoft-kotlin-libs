@@ -1,3 +1,5 @@
+## v1.64.0 released on 16 Jun 2023 UTC
+  * 383ea45662a591d060b34d51e1f66a95d14361e2 add utility TestContext.prepareDirectory() method
 ## v1.63.0 released on 16 Jun 2023 UTC
   * 4802fe0fe97d9098e91c709a60fc8b4889fbec03 expose test context to kafka and mongo starters
 ## v1.62.0 released on 16 Jun 2023 UTC
