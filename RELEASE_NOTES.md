@@ -1,3 +1,5 @@
+## v1.69.0 released on 18 Jun 2023 UTC
+  * c082b888c741e3254c8058d54a5f93932c1707d2 more test environment extension points
 ## v1.68.0 released on 16 Jun 2023 UTC
   * 0fdf8067417162a240152bfd3c9a2987a865755b move more common mongo stuff into common mongo-environment module
 ## v1.67.0 released on 16 Jun 2023 UTC
