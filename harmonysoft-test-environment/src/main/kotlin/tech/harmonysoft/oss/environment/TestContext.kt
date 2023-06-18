@@ -8,6 +8,8 @@ data class TestContext(
     val executionId: String
 ) {
 
+    val default = executionId == EnvironmentInfoProvider.Default.executionId
+
     fun prepareDirectory(path: String): File {
         val result = File(rootDir, path)
         if (result.isDirectory) {
