@@ -37,6 +37,7 @@ class TestEnvironmentManager(
         for (environment in environments) {
             startIfNecessary(environment)
         }
+        mixin.afterStart(testContext)
     }
 
     fun <T : Any> startIfNecessary(environment: TestEnvironment<T>): T {
