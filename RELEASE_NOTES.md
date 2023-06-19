@@ -1,3 +1,5 @@
+## v1.71.0 released on 19 Jun 2023 UTC
+  * 3155a868c2b8ad903343617b65af4ae234ab68a9 Added Sequence.mapFirstNotNull()
 ## v1.70.0 released on 19 Jun 2023 UTC
   * e44343a753adbc1538c5a1d8bf6f02262235c28e calling TestEnvironmentManagerMixin.afterStart() callback
 ## v1.69.0 released on 18 Jun 2023 UTC
