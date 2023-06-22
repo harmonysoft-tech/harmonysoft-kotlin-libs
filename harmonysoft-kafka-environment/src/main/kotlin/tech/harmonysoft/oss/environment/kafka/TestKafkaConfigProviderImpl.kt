@@ -1,9 +1,8 @@
-package tech.harmonysoft.oss.environment.kafka.config
+package tech.harmonysoft.oss.environment.kafka
 
 import javax.inject.Named
 import org.springframework.beans.factory.ObjectProvider
 import tech.harmonysoft.oss.environment.TestEnvironmentManager
-import tech.harmonysoft.oss.environment.kafka.KafkaTestEnvironment
 import tech.harmonysoft.oss.kafka.config.TestKafkaConfig
 import tech.harmonysoft.oss.kafka.config.TestKafkaConfigProvider
 
