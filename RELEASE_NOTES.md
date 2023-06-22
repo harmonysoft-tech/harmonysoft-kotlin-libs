@@ -1,3 +1,5 @@
+## v1.72.0 released on 22 Jun 2023 UTC
+  * 1f24ee7d79a5e4bf6d6bc06da4d4944c4e46c335 share TestKafkaConfigProviderImpl for everybody
 ## v1.71.0 released on 19 Jun 2023 UTC
   * 3155a868c2b8ad903343617b65af4ae234ab68a9 Added Sequence.mapFirstNotNull()
 ## v1.70.0 released on 19 Jun 2023 UTC
