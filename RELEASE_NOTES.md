@@ -1,3 +1,5 @@
+## v1.73.0 released on 26 Jun 2023 UTC
+  * ce06802cb4cd3fc7fe9f5ec462df1398cad98095 minor improvements into test framework
 ## v1.72.0 released on 22 Jun 2023 UTC
   * 1f24ee7d79a5e4bf6d6bc06da4d4944c4e46c335 share TestKafkaConfigProviderImpl for everybody
 ## v1.71.0 released on 19 Jun 2023 UTC
