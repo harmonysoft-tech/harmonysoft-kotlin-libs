@@ -46,7 +46,7 @@ class TestEnvironmentManager(
         }
         logger.info("starting '{}' test environment", environment.id)
         val config = environment.start(testContext)
-        logger.info("started '{}' environment verifying if it looks good, config: {}", environment.id, config)
+        logger.info("started '{}' environment, verifying if it looks good, config: {}", environment.id, config)
         VerificationUtil.verifyConditionHappens {
             if (environment.isRunning(config)) {
                 ProcessingResult.success()
