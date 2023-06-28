@@ -1,3 +1,5 @@
+## v1.74.0 released on 28 Jun 2023 UTC
+  * 9e646dab6a772991d6d65137431fa4ebfc9b9b54 better logging
 ## v1.73.0 released on 26 Jun 2023 UTC
   * ce06802cb4cd3fc7fe9f5ec462df1398cad98095 minor improvements into test framework
 ## v1.72.0 released on 22 Jun 2023 UTC
