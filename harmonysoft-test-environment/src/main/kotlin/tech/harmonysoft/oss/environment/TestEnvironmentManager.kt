@@ -8,6 +8,7 @@ import javax.inject.Named
 import org.junit.jupiter.api.BeforeEach
 import org.slf4j.Logger
 import tech.harmonysoft.oss.common.ProcessingResult
+import tech.harmonysoft.oss.common.string.util.isNotBlankEffective
 import tech.harmonysoft.oss.environment.ext.TestEnvironmentManagerMixin
 import tech.harmonysoft.oss.json.JsonApi
 import tech.harmonysoft.oss.test.util.TestUtil
@@ -25,6 +26,11 @@ class TestEnvironmentManager(
     private val environments = environments.orElse(emptyList())
     private val environmentConfigs = ConcurrentHashMap<String, Any>()
     private val mixin = mixin.orElse(TestEnvironmentManagerMixin.NoOp)
+    private val environmentStartTimeTtlSeconds =
+        System.getProperty("tech.harmonysoft.test.environment.startup.ttl.second")
+            ?.takeIf { it.isNotBlankEffective() }
+            ?.toLong()
+        ?: 60
 
     val testContext = TestContext(
         rootDir = Files.createTempDirectory("test").toFile().apply { deleteOnExit() },
@@ -47,7 +53,10 @@ class TestEnvironmentManager(
         logger.info("starting '{}' test environment", environment.id)
         val config = environment.start(testContext)
         logger.info("started '{}' environment, verifying if it looks good, config: {}", environment.id, config)
-        VerificationUtil.verifyConditionHappens("${environment.id} is running") {
+        VerificationUtil.verifyConditionHappens(
+            description = "${environment.id} is running",
+            checkTtlSeconds = environmentStartTimeTtlSeconds
+        ) {
             if (environment.isRunning(config)) {
                 ProcessingResult.success()
             } else {
