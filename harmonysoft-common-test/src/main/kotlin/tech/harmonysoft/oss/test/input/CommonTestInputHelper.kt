@@ -14,6 +14,18 @@ class CommonTestInputHelper(
     fun <T : Any> parse(
         fixtureType: FixtureType<T>,
         fixtureContext: T,
+        input: Map<String, String>
+    ): TestInputRecord {
+        return parse(
+            fixtureType = fixtureType,
+            fixtureContext = fixtureContext,
+            input = listOf(input)
+        ).first()
+    }
+
+    fun <T : Any> parse(
+        fixtureType: FixtureType<T>,
+        fixtureContext: T,
         input: List<Map<String, String>>
     ): List<TestInputRecord> {
         return input.map { rawRow ->

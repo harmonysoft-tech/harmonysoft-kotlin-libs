@@ -10,10 +10,13 @@ import com.mongodb.client.model.UpdateOptions
 import com.mongodb.client.model.Updates
 import java.util.concurrent.TimeUnit
 import javax.inject.Named
+import org.bson.types.ObjectId
 import org.junit.jupiter.api.AfterEach
 import org.slf4j.Logger
+import org.springframework.util.ObjectUtils
 import tech.harmonysoft.oss.common.ProcessingResult
 import tech.harmonysoft.oss.common.data.DataProviderStrategy
+import tech.harmonysoft.oss.common.util.ObjectUtil
 import tech.harmonysoft.oss.mongo.config.TestMongoConfig
 import tech.harmonysoft.oss.mongo.config.TestMongoConfigProvider
 import tech.harmonysoft.oss.mongo.constant.Mongo
@@ -81,9 +84,9 @@ class TestMongoManager(
      * Checks if target collection contains a document with given data and inserts it in case of absence
      */
     fun ensureDocumentExists(collection: String, data: Map<String, String>) {
-        val enrichedData = fixtureDataHelper.prepareTestData(MongoTestFixture.TYPE, Unit, data)
+        val record = inputHelper.parse(MongoTestFixture.TYPE, Unit, data)
         val filter = BasicDBObject().apply {
-            for ((key, value) in enrichedData) {
+            for ((key, value) in record.data) {
                 this[key] = value
             }
         }
@@ -92,6 +95,7 @@ class TestMongoManager(
             Updates.set("dummy", "dummy"),
             UpdateOptions().upsert(true)
         )
+        verifyDocumentsExist(collection, listOf(data))
     }
 
     fun verifyDocumentsExist(collectionName: String, input: List<Map<String, String>>) {
@@ -111,16 +115,28 @@ class TestMongoManager(
                     candidates = documents,
                     keys = record.data.keys,
                     retrievalStrategy = DataProviderStrategy.fromMap(),
+                    equalityChecker = { _, o1, o2 ->
+                        ObjectUtil.areEqual(normalizeValue(o1), normalizeValue(o2))
+                    }
                 )
                 if (!result.success) {
                     return@verifyConditionHappens result.mapError()
                 }
                 val matched = result.successValue
                 for ((column, key) in record.toBind) {
-                    bindingContext.storeBinding(key, matched[column])
+                    bindingContext.storeBinding(key, normalizeValue(matched[column]))
                 }
             }
             ProcessingResult.success()
+        }
+    }
+
+    fun normalizeValue(v: Any?): Any? {
+        return v?.let {
+            when (it) {
+                is ObjectId -> it.toString()
+                else -> it
+            }
         }
     }
 }

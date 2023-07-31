@@ -1,6 +1,6 @@
 Feature: Mongo cucumber feature tests
 
-  Scenario: Binding document property
+  Scenario: Binding document property on lookup
 
     Given mongo test collection has the following document:
       | key1   | key2   |
@@ -21,3 +21,13 @@ Feature: Mongo cucumber feature tests
     Then mongo test collection should have the following document:
       | key1      |
       | <int(10)> |
+
+  Scenario: Bind document property on insertion
+
+    When mongo test collection has the following document:
+      | <bind:_id> | key1   |
+      | id1        | value1 |
+
+    Then mongo test collection should have the following document:
+      | _id         | key1   |
+      | <bound:id1> | value1 |
