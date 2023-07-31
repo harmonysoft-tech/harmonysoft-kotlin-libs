@@ -1,3 +1,5 @@
+## v1.76.0 released on 31 Jul 2023 UTC
+  * 59425dc5b9bc8403067120071f26d58cd7fd89b4 allow to bind mongo property name on document insertion
 ## v1.75.0 released on 10 Jul 2023 UTC
   * c73eef324fc458d2987ff731c5d4f7676d9c6ca0 use bigger test environment startup tll
 ## v1.74.0 released on 28 Jun 2023 UTC
