@@ -1,3 +1,5 @@
+## v1.77.0 released on 21 Aug 2023 UTC
+  * 1a344e2f48d85bef14b0dbed116dc4ce42ec76f6 add yaml jackson ObjectMapper
 ## v1.76.0 released on 31 Jul 2023 UTC
   * 59425dc5b9bc8403067120071f26d58cd7fd89b4 allow to bind mongo property name on document insertion
 ## v1.75.0 released on 10 Jul 2023 UTC
