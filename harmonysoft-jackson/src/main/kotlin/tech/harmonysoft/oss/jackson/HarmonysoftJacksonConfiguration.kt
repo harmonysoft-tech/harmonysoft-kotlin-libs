@@ -1,6 +1,7 @@
 package tech.harmonysoft.oss.jackson
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import org.springframework.context.annotation.Bean
@@ -14,6 +15,14 @@ open class HarmonysoftJacksonConfiguration {
     @Bean
     open fun jsonObjectMapper(extensions: Optional<Collection<ObjectMapperConfigurationExtension>>): ObjectMapper {
         return ObjectMapper().apply {
+            configure(this, extensions.orElse(emptyList()))
+        }
+    }
+
+    @Yaml
+    @Bean
+    open fun yamlObjectMapper(extensions: Optional<Collection<ObjectMapperConfigurationExtension>>): ObjectMapper {
+        return ObjectMapper(YAMLFactory()).apply {
             configure(this, extensions.orElse(emptyList()))
         }
     }
