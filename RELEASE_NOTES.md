@@ -1,3 +1,5 @@
+## v1.78.0 released on 22 Aug 2023 UTC
+  * 4fdd52575b02477a1db11976c03abde970472131 moved json and yaml ObjectMappers from spring context into a wrapper class
 ## v1.77.0 released on 21 Aug 2023 UTC
   * 1a344e2f48d85bef14b0dbed116dc4ce42ec76f6 add yaml jackson ObjectMapper
 ## v1.76.0 released on 31 Jul 2023 UTC
