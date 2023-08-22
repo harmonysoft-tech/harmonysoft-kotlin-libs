@@ -1,15 +1,14 @@
 package tech.harmonysoft.oss.jackson
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import javax.inject.Named
 
 @Named
 class JsonHelper(
-    @Json private val mapper: ObjectMapper
+    private val mappers: HarmonysoftJacksonMappers
 ) {
 
     fun byPath(json: String): Map<String, Any> {
-        val asMap = mapper.readValue(json, Map::class.java)
+        val asMap = mappers.json.readValue(json, Map::class.java)
         val result = mutableMapOf<String, Any>()
         for ((key, value) in asMap) {
             if (value is Map<*, *> || value is Collection<*>) {
