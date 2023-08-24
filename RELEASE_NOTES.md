@@ -1,3 +1,5 @@
+## v1.79.0 released on 24 Aug 2023 UTC
+  * 23e73bbc12bc7ead1e17cb3e154930458da06fb3 extracted utility function to wait for target condition to happen
 ## v1.78.0 released on 22 Aug 2023 UTC
   * 4fdd52575b02477a1db11976c03abde970472131 moved json and yaml ObjectMappers from spring context into a wrapper class
 ## v1.77.0 released on 21 Aug 2023 UTC
