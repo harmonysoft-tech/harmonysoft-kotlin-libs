@@ -3,10 +3,9 @@ package tech.harmonysoft.oss.test.util
 import org.slf4j.LoggerFactory
 import tech.harmonysoft.oss.common.ProcessingResult
 import tech.harmonysoft.oss.common.data.DataProviderStrategy
+import tech.harmonysoft.oss.common.string.util.StringUtil
 import tech.harmonysoft.oss.common.util.ObjectUtil
 import tech.harmonysoft.oss.test.util.TestUtil.fail
-import java.util.concurrent.TimeUnit
-import tech.harmonysoft.oss.common.string.util.StringUtil
 
 object VerificationUtil {
 
@@ -35,22 +34,16 @@ object VerificationUtil {
         checkFrequencyMs: Long = POLLED_VERIFICATION_CHECK_FREQUENCY_MS,
         checker: () -> ProcessingResult<Unit, String>
     ) {
-        val endTimeMs = System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(checkTtlSeconds)
-        var error = "<not provided>"
-        logger.info("Starting timed verification for the target condition '{}' to happen", description)
-        while (System.currentTimeMillis() < endTimeMs) {
-            val result = checker()
-            if (result.success) {
-                logger.info("Verified that '{}' happened", description)
-                return
-            } else {
-                error = result.failureValue
-                Thread.sleep(checkFrequencyMs)
-            }
+        val result = TimedUtil.waitForCondition(
+            description = description,
+            ttlSeconds = checkTtlSeconds,
+            frequencyMs = checkFrequencyMs,
+            checker = checker
+        )
+        if (!result.success) {
+            fail("target condition '$description' is not observed within $checkTtlSeconds seconds. Last "
+                 + "verification failure error: '${result.failureValue}'")
         }
-
-        fail("target condition '$description' is not observed within $checkTtlSeconds seconds. Last "
-                + "verification failure error: '$error'")
     }
 
     /**
@@ -63,20 +56,25 @@ object VerificationUtil {
         checkFrequencyMs: Long = POLLED_VERIFICATION_CHECK_FREQUENCY_MS,
         checker: () -> ProcessingResult<Unit, String>
     ) {
-        val endTimeMs = System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(checkTtlSeconds)
-        logger.info("Starting timed verification for the unexpected condition '{}' not to happen", description)
-        while (System.currentTimeMillis() < endTimeMs) {
-            val result = checker()
-            if (result.success) {
-                if (System.currentTimeMillis() >= endTimeMs) {
-                    break
-                }
-                Thread.sleep(checkFrequencyMs)
+        val result = TimedUtil.waitForCondition(
+            description = description,
+            ttlSeconds = checkTtlSeconds,
+            frequencyMs = checkFrequencyMs
+        ) {
+            val checkResult = checker()
+            if (checkResult.success) {
+                // problem didn't happen, so, wait more to ensure that it doesn't happen within the
+                // target time period
+                ProcessingResult.failure("wait more")
             } else {
-                fail("unexpected condition is detected: '${result.failureValue}'")
+                ProcessingResult.success(checkResult.failureValue)
             }
         }
-        logger.info("Verified that condition '{}' didn't happen", description)
+        if (result.success) {
+            fail("problem condition '$description' is detected: '${result.successValue}'")
+        } else {
+            logger.info("verified that condition '{}' didn't happen", description)
+        }
     }
 
     fun <D, K> verifyTheSame(
