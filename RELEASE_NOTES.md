@@ -1,3 +1,5 @@
+## v1.80.0 released on 24 Aug 2023 UTC
+  * 35e378a05ef9b17a24cb534fa4d11bddb7da9122 split mock http server into test and cucumber parts
 ## v1.79.0 released on 24 Aug 2023 UTC
   * 23e73bbc12bc7ead1e17cb3e154930458da06fb3 extracted utility function to wait for target condition to happen
 ## v1.78.0 released on 22 Aug 2023 UTC
