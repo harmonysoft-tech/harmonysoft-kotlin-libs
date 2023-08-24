@@ -5,9 +5,7 @@ plugins {
 dependencies {
     api(project(":harmonysoft-common-cucumber"))
     api(project(":harmonysoft-jackson"))
-    api("org.mock-server:mockserver-netty:5.14.0") {
-        exclude(group = "com.fasterxml.jackson.core")
-    }
+    api(project(":harmonysoft-http-mock-server-test"))
 
     testImplementation(project(":harmonysoft-http-client-apache-cucumber"))
     testImplementation(project(":internal-cucumber"))
