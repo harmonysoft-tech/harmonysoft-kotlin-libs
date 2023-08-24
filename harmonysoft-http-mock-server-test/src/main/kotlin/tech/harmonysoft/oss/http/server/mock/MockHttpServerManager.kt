@@ -68,8 +68,10 @@ class MockHttpServerManager(
         for (info in expectations.values) {
             mockRef.get().clear(info.expectationId)
         }
+        expectations.clear()
         logger.info("Finished cleaning all mock HTTP server expectation rules")
         receivedRequests.clear()
+        activeExpectationInfoRef.set(null)
     }
 
     fun targetRequest(request: HttpRequest) {
