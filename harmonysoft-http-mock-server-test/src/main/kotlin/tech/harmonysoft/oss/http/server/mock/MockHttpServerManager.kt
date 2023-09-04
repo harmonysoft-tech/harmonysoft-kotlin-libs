@@ -49,9 +49,14 @@ class MockHttpServerManager(
         get() = activeExpectationInfoRef.get() ?: TestUtil.fail("no active mock HTTP request if defined")
 
     @BeforeEach
-    fun startIfNecessary() {
-        if (mockRef.get() != null) {
-            return
+    fun setUp() {
+        startIfNecessary()
+    }
+
+    fun startIfNecessary(): Int {
+        val clientAndServer = mockRef.get()
+        if (clientAndServer != null) {
+            return clientAndServer.localPort
         }
         val port = if (configProvider.isPresent) {
             configProvider.get().data.port
@@ -60,6 +65,7 @@ class MockHttpServerManager(
         }
         logger.info("Starting mock http server on port {}", port)
         mockRef.set(ClientAndServer.startClientAndServer(port))
+        return port
     }
 
     @AfterEach
