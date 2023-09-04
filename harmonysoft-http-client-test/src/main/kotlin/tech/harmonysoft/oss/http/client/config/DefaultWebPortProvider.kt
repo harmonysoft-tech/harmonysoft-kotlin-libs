@@ -1,4 +1,4 @@
-package tech.harmonysoft.oss.http.client.cucumber
+package tech.harmonysoft.oss.http.client.config
 
 interface DefaultWebPortProvider {
 

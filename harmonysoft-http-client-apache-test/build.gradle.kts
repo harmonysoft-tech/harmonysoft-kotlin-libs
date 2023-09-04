@@ -4,5 +4,5 @@ plugins {
 
 dependencies {
     api(project(":harmonysoft-http-client-apache"))
-    api(project(":harmonysoft-common-test"))
+    api(project(":harmonysoft-http-client-test"))
 }

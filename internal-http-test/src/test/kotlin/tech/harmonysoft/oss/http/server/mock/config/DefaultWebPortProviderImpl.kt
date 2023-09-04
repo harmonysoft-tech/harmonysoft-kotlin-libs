@@ -1,7 +1,7 @@
 package tech.harmonysoft.oss.http.server.mock.config
 
-import tech.harmonysoft.oss.http.client.cucumber.DefaultWebPortProvider
 import javax.inject.Named
+import tech.harmonysoft.oss.http.client.config.DefaultWebPortProvider
 
 @Named
 class DefaultWebPortProviderImpl(

@@ -3,6 +3,7 @@ package tech.harmonysoft.oss.http.client.cucumber
 import org.junit.jupiter.api.fail
 import java.util.concurrent.atomic.AtomicInteger
 import javax.inject.Named
+import tech.harmonysoft.oss.http.client.config.DefaultWebPortProvider
 
 @Named
 class SpringDefaultWebPortProvider : DefaultWebPortProvider {

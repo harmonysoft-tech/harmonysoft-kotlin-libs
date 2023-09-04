@@ -25,7 +25,7 @@ import org.assertj.core.api.Assertions.assertThat
 import tech.harmonysoft.oss.common.ProcessingResult
 import tech.harmonysoft.oss.common.collection.CollectionInitializer
 import tech.harmonysoft.oss.http.client.TestHttpClient
-import tech.harmonysoft.oss.http.client.cucumber.DefaultWebPortProvider
+import tech.harmonysoft.oss.http.client.config.DefaultWebPortProvider
 import tech.harmonysoft.oss.http.client.fixture.HttpClientTestFixture
 import tech.harmonysoft.oss.http.client.response.HttpResponse
 import tech.harmonysoft.oss.http.client.response.HttpResponseConverter

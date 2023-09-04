@@ -12,6 +12,7 @@ include("harmonysoft-event-bus-guava")
 include("harmonysoft-event-bus-spring")
 
 include("harmonysoft-http-client")
+include("harmonysoft-http-client-test")
 include("harmonysoft-http-client-apache")
 include("harmonysoft-http-client-apache-spring")
 include("harmonysoft-http-client-apache-test")
