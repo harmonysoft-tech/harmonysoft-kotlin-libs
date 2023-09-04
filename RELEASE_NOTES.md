@@ -1,3 +1,5 @@
+## v1.82.0 released on 04 Sep 2023 UTC
+  * e6ea2b9f72bccffd9f5c2d73ae7e62db2b5d85d1 introduced 'http-test' module
 ## v1.81.0 released on 04 Sep 2023 UTC
   * c80b469a36d2f2a21f8383bbf64455f28e193cbc split mock http server into test and cucumber parts
   * 5845aa190baec214d2a6146301e8a97fd16183ca split mock http server into test and cucumber parts
