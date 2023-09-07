@@ -9,6 +9,7 @@ import javax.inject.Named
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.mockserver.integration.ClientAndServer
+import org.mockserver.model.Header
 import org.mockserver.model.HttpRequest
 import org.mockserver.model.HttpResponse
 import org.slf4j.Logger
@@ -111,12 +112,15 @@ class MockHttpServerManager(
         activeExpectationInfo.dynamicRequestConditionRef.set(current?.and(condition) ?: condition)
     }
 
-    fun configureResponseWithCode(code: Int, response: String) {
+    fun configureResponseWithCode(code: Int, response: String, headers: Map<String, String> = emptyMap()) {
         val condition = activeExpectationInfo.dynamicRequestConditionRef.getAndSet(null)
                         ?: DynamicRequestCondition.MATCH_ALL
+        val parsedHeaders = headers.map { (key, value) ->
+            Header(key, value)
+        }
         val newResponseProvider = ConditionalResponseProvider(
             condition = condition,
-            response = HttpResponse.response().withStatusCode(code).withBody(response)
+            response = HttpResponse.response().withStatusCode(code).withBody(response).withHeaders(parsedHeaders)
         )
         // there is a possible case that we stub some default behavior in Background cucumber section
         // but want to define a specific behavior later on in Scenario. Then we need to replace
