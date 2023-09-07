@@ -1,3 +1,5 @@
+## v1.83.0 released on 07 Sep 2023 UTC
+  * 77cbe3ddff2491e277af15d4218b0ec49e76c96b added ability to configure http response headers in tests
 ## v1.82.0 released on 04 Sep 2023 UTC
   * e6ea2b9f72bccffd9f5c2d73ae7e62db2b5d85d1 introduced 'http-test' module
 ## v1.81.0 released on 04 Sep 2023 UTC
