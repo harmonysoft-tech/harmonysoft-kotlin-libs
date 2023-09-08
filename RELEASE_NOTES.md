@@ -1,3 +1,5 @@
+## v1.84.0 released on 08 Sep 2023 UTC
+  * 6ff29deb1a5d8899b7b29137df070559caa456a8 added ability to constraint HTTP response by particular count
 ## v1.83.0 released on 07 Sep 2023 UTC
   * 77cbe3ddff2491e277af15d4218b0ec49e76c96b added ability to configure http response headers in tests
 ## v1.82.0 released on 04 Sep 2023 UTC
