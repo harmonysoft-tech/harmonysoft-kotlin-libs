@@ -300,3 +300,36 @@ Feature: Mock HTTP server tests
     """
 
     Then no HTTP GET call to /test is made
+
+  Scenario: Multiple expectations for the same HTTP endpoint
+
+    Given the following HTTP request is received by mock server:
+      | method | path  |
+      | POST   | /test |
+
+    And the following mock HTTP response with code 400 is returned:
+      """
+      error
+      """
+
+    And the last mock HTTP response is provided 2 times
+
+    And the following mock HTTP response with code 200 is returned:
+      """
+      success
+      """
+
+    When HTTP POST request to /test is made
+
+    Then last HTTP POST request finished by status code 400
+
+    And HTTP POST request to /test is made
+
+    And last HTTP POST request finished by status code 400
+
+    And HTTP POST request to /test is made
+
+    And last HTTP POST request returns the following:
+      """
+      success
+      """

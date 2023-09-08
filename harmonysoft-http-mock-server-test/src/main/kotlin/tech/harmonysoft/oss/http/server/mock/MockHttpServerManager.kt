@@ -20,6 +20,7 @@ import tech.harmonysoft.oss.http.server.mock.request.condition.DynamicRequestCon
 import tech.harmonysoft.oss.http.server.mock.request.condition.JsonBodyPathToMatcherCondition
 import tech.harmonysoft.oss.http.server.mock.request.condition.ParameterName2ValueCondition
 import tech.harmonysoft.oss.http.server.mock.response.ConditionalResponseProvider
+import tech.harmonysoft.oss.http.server.mock.response.CountConstrainedResponseProvider
 import tech.harmonysoft.oss.http.server.mock.response.ResponseProvider
 import tech.harmonysoft.oss.jackson.JsonHelper
 import tech.harmonysoft.oss.json.JsonApi
@@ -48,6 +49,7 @@ class MockHttpServerManager(
     private val activeExpectationInfoRef = AtomicReference<ExpectationInfo?>()
     private val activeExpectationInfo: ExpectationInfo
         get() = activeExpectationInfoRef.get() ?: TestUtil.fail("no active mock HTTP request if defined")
+    private val lastResponseProviderRef = AtomicReference<ResponseProvider?>()
 
     @BeforeEach
     fun setUp() {
@@ -79,6 +81,7 @@ class MockHttpServerManager(
         logger.info("Finished cleaning all mock HTTP server expectation rules")
         receivedRequests.clear()
         activeExpectationInfoRef.set(null)
+        lastResponseProviderRef.set(null)
     }
 
     fun targetRequest(request: HttpRequest) {
@@ -112,6 +115,21 @@ class MockHttpServerManager(
         activeExpectationInfo.dynamicRequestConditionRef.set(current?.and(condition) ?: condition)
     }
 
+    fun restrictLastResponseByCount(count: Int) {
+        val lastResponseProvider = lastResponseProviderRef.get() ?: TestUtil.fail(
+            "can not configure the last HTTP response provider to act $count time(s) - no response provider "
+            + "is defined so far"
+        )
+        val i = activeExpectationInfo.responseProviders.indexOfFirst { it === lastResponseProvider }
+        if (i < 0) {
+            TestUtil.fail(
+                "something is very wrong - can not find the last response provider in the active expectation "
+                + "info ($lastResponseProvider)"
+            )
+        }
+        activeExpectationInfo.responseProviders[i] = CountConstrainedResponseProvider(lastResponseProvider, count)
+    }
+
     fun configureResponseWithCode(code: Int, response: String, headers: Map<String, String> = emptyMap()) {
         val condition = activeExpectationInfo.dynamicRequestConditionRef.getAndSet(null)
                         ?: DynamicRequestCondition.MATCH_ALL
@@ -126,7 +144,9 @@ class MockHttpServerManager(
         // but want to define a specific behavior later on in Scenario. Then we need to replace
         // previous response provider by a new one. This code allows to do that
         activeExpectationInfo.responseProviders.removeIf {
-            (it !is ConditionalResponseProvider || it.condition == condition).apply {
+            (it !is CountConstrainedResponseProvider
+             && (it !is ConditionalResponseProvider || it.condition == condition)
+            ).apply {
                 if (this) {
                     logger.info(
                         "Replacing mock HTTP response provider for {}: {} -> {}",
@@ -135,12 +155,29 @@ class MockHttpServerManager(
                 }
             }
         }
-        // we add new provider as the first one in assumption that use-case for multiple providers is as below:
-        //  * common generic stub is defined by default (e.g. in cucumber 'Background' section)
-        //  * specific provider is defined in test
-        // This way specific provider's condition would be tried first and generic provider would be called
-        // only as a fallback
-        activeExpectationInfo.responseProviders.add(0, newResponseProvider)
+
+        val i = activeExpectationInfo.responseProviders.indexOfLast {
+            it is CountConstrainedResponseProvider
+        }
+        if (i < 0) {
+            // we add new provider as the first one in assumption that use-case for multiple providers is as below:
+            //  * common generic stub is defined by default (e.g. in cucumber 'Background' section)
+            //  * specific provider is defined in test
+            // This way specific provider's condition would be tried first and generic provider would be called
+            // only as a fallback
+            activeExpectationInfo.responseProviders.add(0, newResponseProvider)
+        } else {
+            // we add the response provider after the last count-constrained provider
+            activeExpectationInfo.responseProviders.add(i + 1, newResponseProvider)
+        }
+
+        logger.info(
+            "{} HTTP response provider(s) are configured now: {}",
+            activeExpectationInfo.responseProviders.size,
+            activeExpectationInfo.responseProviders.joinToString()
+        )
+
+        lastResponseProviderRef.set(newResponseProvider)
     }
 
     fun verifyRequestReceived(httpMethod: String, path: String, expectedRawJson: String) {

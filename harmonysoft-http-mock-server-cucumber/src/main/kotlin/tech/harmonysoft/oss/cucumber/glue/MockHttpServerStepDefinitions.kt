@@ -99,6 +99,11 @@ class MockHttpServerStepDefinitions {
         manager.configureResponseWithCode(code, response)
     }
 
+    @Given("^the last mock HTTP response is provided (\\d+) times?$")
+    fun restrictLastResponseByCount(count: Int) {
+        manager.restrictLastResponseByCount(count)
+    }
+
     @Then("^the following ([^\\s]+) request for path ([^\\s]+) with at least this JSON data is received by mock HTTP server:$")
     fun verifyRequestReceived(httpMethod: String, path: String, expectedRawJson: String) {
         manager.verifyRequestReceived(httpMethod, path, expectedRawJson)
