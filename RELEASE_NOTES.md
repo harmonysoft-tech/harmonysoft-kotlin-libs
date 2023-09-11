@@ -1,3 +1,6 @@
+## v1.85.0 released on 11 Sep 2023 UTC
+  * cc58ef5faabeec82b696303d7639348834966318 support timed verification that target HTTP call is happened
+  * 69d0eb954caf34cb5c71ee392cb37292cbe9d405 support nested documents in mongo verifications
 ## v1.84.0 released on 08 Sep 2023 UTC
   * 6ff29deb1a5d8899b7b29137df070559caa456a8 added ability to constraint HTTP response by particular count
 ## v1.83.0 released on 07 Sep 2023 UTC
