@@ -13,8 +13,8 @@ import javax.inject.Named
 import org.bson.types.ObjectId
 import org.junit.jupiter.api.AfterEach
 import org.slf4j.Logger
-import org.springframework.util.ObjectUtils
 import tech.harmonysoft.oss.common.ProcessingResult
+import tech.harmonysoft.oss.common.collection.MapUtil
 import tech.harmonysoft.oss.common.data.DataProviderStrategy
 import tech.harmonysoft.oss.common.util.ObjectUtil
 import tech.harmonysoft.oss.mongo.config.TestMongoConfig
@@ -22,14 +22,12 @@ import tech.harmonysoft.oss.mongo.config.TestMongoConfigProvider
 import tech.harmonysoft.oss.mongo.constant.Mongo
 import tech.harmonysoft.oss.mongo.fixture.MongoTestFixture
 import tech.harmonysoft.oss.test.binding.DynamicBindingContext
-import tech.harmonysoft.oss.test.fixture.FixtureDataHelper
 import tech.harmonysoft.oss.test.input.CommonTestInputHelper
 import tech.harmonysoft.oss.test.util.VerificationUtil
 
 @Named
 class TestMongoManager(
     private val configProvider: TestMongoConfigProvider,
-    private val fixtureDataHelper: FixtureDataHelper,
     private val inputHelper: CommonTestInputHelper,
     private val bindingContext: DynamicBindingContext,
     private val logger: Logger
@@ -107,7 +105,7 @@ class TestMongoManager(
                 .find(Mongo.Filter.ALL)
                 .projection(Projections.include(projection))
                 .toList()
-                .map { it.toMap() }
+                .map { MapUtil.flatten(it) }
 
             for (record in records) {
                 val result = VerificationUtil.find(

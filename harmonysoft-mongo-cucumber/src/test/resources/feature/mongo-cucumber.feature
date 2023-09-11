@@ -31,3 +31,13 @@ Feature: Mongo cucumber feature tests
     Then mongo test collection should have the following document:
       | _id         | key1   |
       | <bound:id1> | value1 |
+
+  Scenario: Nested mongo documents
+
+    Given mongo test collection has the following document:
+      | data.key     | data.subData.key    |
+      | nested-value | nested-nested-value |
+
+    Then mongo test collection should have the following document:
+      | data.key     | data.subData.key    |
+      | nested-value | nested-nested-value |
