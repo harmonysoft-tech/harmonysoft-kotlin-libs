@@ -13,6 +13,7 @@ import org.mockserver.model.Header
 import org.mockserver.model.HttpRequest
 import org.mockserver.model.HttpResponse
 import org.slf4j.Logger
+import tech.harmonysoft.oss.common.ProcessingResult
 import tech.harmonysoft.oss.common.collection.mapFirstNotNull
 import tech.harmonysoft.oss.http.server.mock.config.MockHttpServerConfigProvider
 import tech.harmonysoft.oss.http.server.mock.fixture.MockHttpServerPathTestFixture
@@ -31,6 +32,7 @@ import tech.harmonysoft.oss.test.json.CommonJsonUtil
 import tech.harmonysoft.oss.test.matcher.Matcher
 import tech.harmonysoft.oss.test.util.NetworkUtil
 import tech.harmonysoft.oss.test.util.TestUtil
+import tech.harmonysoft.oss.test.util.VerificationUtil
 
 @Named
 class MockHttpServerManager(
@@ -182,40 +184,44 @@ class MockHttpServerManager(
 
     fun verifyRequestReceived(httpMethod: String, path: String, expectedRawJson: String) {
         val expandedPath = fixtureDataHelper.prepareTestData(MockHttpServerPathTestFixture.TYPE, Unit, path).toString()
-        val candidateBodies = mockRef.get().retrieveRecordedRequests(
-            HttpRequest.request(expandedPath).withMethod(httpMethod)
-        ).map { it.body.value as String }
         val prepared = fixtureDataHelper.prepareTestData(
             type = CommonTestFixture.TYPE,
             context = Any(),
             data = CommonJsonUtil.prepareDynamicMarkers(expectedRawJson)
         ).toString()
         val expected = jsonApi.parseJson(prepared)
-        val bodiesWithErrors = candidateBodies.map { candidateBody ->
-            val candidate = jsonApi.parseJson(candidateBody)
-            val result = CommonJsonUtil.compareAndBind(
-                expected = expected,
-                actual = candidate,
-                strict = false
-            )
-            if (result.errors.isEmpty()) {
-                dynamicContext.storeBindings(result.boundDynamicValues)
-                return
+
+        VerificationUtil.verifyConditionHappens {
+            val candidateBodies = mockRef.get().retrieveRecordedRequests(
+                HttpRequest.request(expandedPath).withMethod(httpMethod)
+            ).map { it.body.value as String }
+
+            val bodiesWithErrors = candidateBodies.map { candidateBody ->
+                val candidate = jsonApi.parseJson(candidateBody)
+                val result = CommonJsonUtil.compareAndBind(
+                    expected = expected,
+                    actual = candidate,
+                    strict = false
+                )
+                if (result.errors.isEmpty()) {
+                    dynamicContext.storeBindings(result.boundDynamicValues)
+                    return@verifyConditionHappens ProcessingResult.success()
+                }
+                candidateBody to result.errors
             }
-            candidateBody to result.errors
-        }
-        TestUtil.fail(
-            "can't find HTTP $httpMethod request to path $expandedPath with at least the following JSON body:" +
-            "\n$expectedRawJson" +
-            "\n\n${candidateBodies.size} request(s) with the same method and path are found:\n"
-            + bodiesWithErrors.joinToString("\n-------------------------------------------------\n") {
-                """
+            ProcessingResult.failure(
+                "can't find HTTP $httpMethod request to path $expandedPath with at least the following JSON body:" +
+                "\n$expectedRawJson" +
+                "\n\n${candidateBodies.size} request(s) with the same method and path are found:\n"
+                + bodiesWithErrors.joinToString("\n-------------------------------------------------\n") {
+                    """
                     ${it.first}
                     ${it.second} error(s):
                     * ${it.second.joinToString("\n* ")}
                 """.trimIndent()
-            }
-        )
+                }
+            )
+        }
     }
 
     fun verifyNoCallIsMade(method: String, path: String) {
