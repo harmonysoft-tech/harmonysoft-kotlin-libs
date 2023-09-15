@@ -32,12 +32,59 @@ Feature: Mongo cucumber feature tests
       | _id         | key1   |
       | <bound:id1> | value1 |
 
-  Scenario: Nested mongo documents
+  Scenario: Nested mongo documents with explicit tabular key-values
 
-    Given mongo test collection has the following document:
-      | data.key     | data.subData.key    |
-      | nested-value | nested-nested-value |
+    When mongo test collection has the following document:
+      | data.key     | data.subData.key    | data.nested.array[1] | data.nested.array[0] |
+      | nested-value | nested-nested-value | array-value2         | array-value1         |
 
     Then mongo test collection should have the following document:
-      | data.key     | data.subData.key    |
-      | nested-value | nested-nested-value |
+      | data.key     | data.subData.key    | data.nested.array[0] | data.nested.array[1] |
+      | nested-value | nested-nested-value | array-value1         | array-value2         |
+
+  Scenario: Nested mongo documents with JSON like setup
+
+    Given dynamic key some-value is bound to value 'array-value2'
+
+    When mongo test collection has the following JSON document:
+      """
+      {
+        "_id": <bind:id>,
+        "data": {
+          "key": "nested-value",
+          "subData": {
+            "key": "nested-nested-value"
+          },
+          "nested": {
+            "array": [ "array-value1", "<bound:some-value>" ]
+          }
+        }
+      }
+      """
+
+    Then mongo test collection should have the following document:
+      | _id        | data.key     | data.subData.key    | data.nested.array[0] | data.nested.array[1] |
+      | <bound:id> | nested-value | nested-nested-value | array-value1         | array-value2         |
+
+  Scenario: Verification for nested mongo documents with JSON like setup
+
+    When mongo test collection has the following document:
+      | data.key     | data.subData.key    | data.nested.array[1].subKey | data.nested.array[0] |
+      | nested-value | nested-nested-value | array-value2                | array-value1         |
+
+    Then mongo test collection should have a document with at least the following data:
+      """
+      {
+        "data": {
+          "key": "nested-value",
+          "nested": {
+            "array": [
+              "array-value1",
+              {
+                "subKey": "array-value2"
+              }
+            ]
+          }
+        }
+      }
+      """

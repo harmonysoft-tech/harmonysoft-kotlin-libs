@@ -3,6 +3,7 @@ plugins {
 }
 
 dependencies {
+    api(project(":harmonysoft-json-api"))
     api(project(":harmonysoft-mongo"))
     api(project(":harmonysoft-common-test"))
 }

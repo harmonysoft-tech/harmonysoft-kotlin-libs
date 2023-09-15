@@ -101,7 +101,10 @@ object CommonJsonUtil {
         path: String = "<root>",
         strict: Boolean = true
     ): TestMatchResult {
-        if (expected::class != actual::class) {
+        val classMatched = (expected is Map<*, *> && actual is Map<*, *>)
+                           || (expected is Collection<*> && actual is Collection<*>)
+                           || (expected::class == actual::class)
+        if (!classMatched) {
             return TestMatchResult(
                 errors = listOf(
                     "expected an instance of ${expected::class.qualifiedName} ($expected) at path '$path' " +
@@ -251,5 +254,33 @@ object CommonJsonUtil {
             }
         }
         return TestMatchResult(errors, dynamicBindings)
+    }
+
+    fun dropDynamicMarkers(parsedJson: Any): Any {
+        return when (parsedJson) {
+            is Map<*, *> -> parsedJson.mapNotNull { (k, v) ->
+                v?.takeIf {
+                    it !is String || !it.startsWith(DYNAMIC_VALUE_PREFIX)
+                }?.let {
+                    k to it
+                }
+            }.toMap()
+
+            is Collection<*> -> parsedJson.mapNotNull { value ->
+                value?.let {
+                    if (it is String) {
+                        if (it.startsWith(DYNAMIC_VALUE_PREFIX)) {
+                            null
+                        } else {
+                            it
+                        }
+                    } else {
+                        dropDynamicMarkers(it)
+                    }
+                }
+            }
+
+            else -> parsedJson
+        }
     }
 }
