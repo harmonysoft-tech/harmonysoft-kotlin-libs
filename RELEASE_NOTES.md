@@ -1,3 +1,6 @@
+## v1.86.0 released on 15 Sep 2023 UTC
+  * 658c6975c9c18528c1166ecaaf7ea7dc3460b0bc auto expanding dynamic/meta values in HTTP client JSON body
+  * a3db9bfd76646bae33cd29a2130d14d2ab2075ef added ability to create and verify mongo documents using json format
 ## v1.85.0 released on 11 Sep 2023 UTC
   * cc58ef5faabeec82b696303d7639348834966318 support timed verification that target HTTP call is happened
   * 69d0eb954caf34cb5c71ee392cb37292cbe9d405 support nested documents in mongo verifications
