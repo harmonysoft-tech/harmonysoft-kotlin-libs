@@ -112,7 +112,8 @@ class HttpClientStepDefinitions {
         val url = getFullUrl(urlOrPath)
         val headers = mapOf(HttpHeaders.CONTENT_TYPE to ContentType.APPLICATION_JSON.mimeType) + commonHeaders
         val request = getRequest(httpMethod, url)
-        request.entity = StringEntity(json)
+        val expandedJson = fixtureDataHelper.prepareTestData(HttpClientTestFixture.TYPE, Unit, json)
+        request.entity = StringEntity(expandedJson.toString())
         val response = httpClient.execute(request, HttpResponseConverter.BYTE_ARRAY, headers)
         onResponse(url, httpMethod, response)
     }

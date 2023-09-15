@@ -77,3 +77,21 @@ Feature: HTTP client tests
         "key1": "<bound:value>"
       }
       """
+
+  Scenario: Dynamic values in HTTP request body
+
+    Given dynamic key some-key is bound to value 'some-value'
+
+    When HTTP POST request to /test is made with JSON body:
+      """
+      {
+        "data": "<bound:some-key>"
+      }
+      """
+
+    Then the following POST request for path /test with at least this JSON data is received by mock HTTP server:
+      """
+      {
+        "data": "some-value"
+      }
+      """
