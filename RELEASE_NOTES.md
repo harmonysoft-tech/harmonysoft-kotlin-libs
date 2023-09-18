@@ -1,3 +1,5 @@
+## v1.87.0 released on 18 Sep 2023 UTC
+  * 78345737d1864b50026261ace4424bc693f41e18 support int values in json mongo test setup
 ## v1.86.0 released on 15 Sep 2023 UTC
   * 658c6975c9c18528c1166ecaaf7ea7dc3460b0bc auto expanding dynamic/meta values in HTTP client JSON body
   * a3db9bfd76646bae33cd29a2130d14d2ab2075ef added ability to create and verify mongo documents using json format
