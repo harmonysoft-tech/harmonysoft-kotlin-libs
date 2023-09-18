@@ -88,3 +88,19 @@ Feature: Mongo cucumber feature tests
         }
       }
       """
+
+  Scenario: int values in mongo JSON setup
+
+    When mongo test collection has the following JSON document:
+      """
+      {
+        "key": 1
+      }
+      """
+
+    Then mongo test collection should have a document with at least the following data:
+      """
+      {
+        "key": 1
+      }
+      """

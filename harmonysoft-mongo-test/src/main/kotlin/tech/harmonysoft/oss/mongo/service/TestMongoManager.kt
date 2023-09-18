@@ -16,6 +16,7 @@ import org.bson.Document
 import org.bson.conversions.Bson
 import org.bson.types.ObjectId
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.fail
 import org.slf4j.Logger
 import tech.harmonysoft.oss.common.ProcessingResult
 import tech.harmonysoft.oss.common.collection.CollectionUtil
@@ -95,7 +96,21 @@ class TestMongoManager(
             data = CommonJsonUtil.prepareDynamicMarkers(json)
         ).toString()
         val parsed = jsonApi.parseJson(preparedJson)
-        ensureDocumentExists(collection, CollectionUtil.flatten(parsed as Map<String, Any?>) as Map<String, String>)
+        ensureDocumentExists(collection, toStringValues(CollectionUtil.flatten(parsed as Map<String, Any?>)))
+    }
+
+    private fun toStringValues(data: Map<String, Any?>): Map<String, String> {
+        return data.mapValues { (key, value) ->
+            when (value) {
+                is String -> value
+                is Int -> "<int($value)>"
+                null -> "<null>"
+                else -> fail(
+                    "can not convert mongo input data's value for key '$key' - it has unsupported type "
+                    + "${value::class.qualifiedName} ($value)"
+                )
+            }
+        }
     }
 
     /**
@@ -183,7 +198,7 @@ class TestMongoManager(
             data = CommonJsonUtil.prepareDynamicMarkers(json)
         ).toString()
         val parsed = jsonApi.parseJson(preparedJson)
-        val data = CollectionUtil.flatten(parsed as Map<String, Any?>) as Map<String, String>
+        val data = toStringValues(CollectionUtil.flatten(parsed as Map<String, Any?>))
         verifyDocumentsExist(collectionName, listOf(data))
     }
 
