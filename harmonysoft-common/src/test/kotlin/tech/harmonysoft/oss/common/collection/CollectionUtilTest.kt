@@ -78,4 +78,18 @@ class CollectionUtilTest {
             )
         ))
     }
+
+    @Test
+    fun `when map with null values is unflattened then it works as expected`() {
+        val input = mapOf(
+            "data.key1" to "value1",
+            "data.key2" to null
+        )
+        Assertions.assertThat(CollectionUtil.unflatten(input)).isEqualTo(mapOf(
+            "data" to mapOf(
+                "key1" to "value1",
+                "key2" to null
+            )
+        ))
+    }
 }

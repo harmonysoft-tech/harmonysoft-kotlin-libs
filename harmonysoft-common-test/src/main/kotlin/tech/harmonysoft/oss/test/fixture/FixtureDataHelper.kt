@@ -140,7 +140,9 @@ class FixtureDataHelper (
     fun <T : Any> prepareTestData(type: FixtureType<T>, context: T, data: String): Any {
         val key = "temp"
         val prepared = prepareTestData(type, context, mapOf(key to data))
-        return prepared[key] ?: fail("magic: $prepared")
+        return prepared[key] ?: fail(
+            "failed to prepare test data '$data', fixture type '$type' and context '$context', result: $prepared"
+        )
     }
 
     companion object {

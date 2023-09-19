@@ -87,16 +87,14 @@ object CollectionUtil {
      * ```
      */
     @Suppress("UNCHECKED_CAST")
-    fun unflatten(input: Map<String, *>): Map<String, Any> {
+    fun unflatten(input: Map<String, *>): Map<String, Any?> {
         var result: Data? = null
         for ((key, value) in input) {
-            value?.let {
-                val data = unflatten(key, Data.LeafData(it))
-                result?.let {
-                    merge(data, it)
-                } ?: run {
-                    result = data
-                }
+            val data = unflatten(key, Data.LeafData(value))
+            result?.let {
+                merge(data, it)
+            } ?: run {
+                result = data
             }
         }
         return result?.let {
@@ -152,7 +150,7 @@ object CollectionUtil {
         }
     }
 
-    private fun replaceDataHolders(from: Data): Any {
+    private fun replaceDataHolders(from: Data): Any? {
         return when (from) {
             is Data.MapData -> from.data.mapValues { (_, v) -> replaceDataHolders(v) }
             is Data.ArrayData -> from.byIndex.entries.sortedBy { it.key }.map { replaceDataHolders(it.value) }
@@ -220,7 +218,7 @@ object CollectionUtil {
         }
 
         class LeafData(
-            val value: Any
+            val value: Any?
         ) : Data {
 
             override fun toString(): String {

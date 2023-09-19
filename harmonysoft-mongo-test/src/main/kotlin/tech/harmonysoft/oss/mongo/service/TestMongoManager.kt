@@ -9,6 +9,7 @@ import com.mongodb.client.MongoClients
 import com.mongodb.client.model.Projections
 import com.mongodb.client.model.UpdateOptions
 import com.mongodb.client.model.Updates
+import java.util.UUID
 import java.util.concurrent.TimeUnit
 import javax.inject.Named
 import org.bson.BSONObject
@@ -90,13 +91,28 @@ class TestMongoManager(
 
     @Suppress("UNCHECKED_CAST")
     fun ensureJsonDocumentExist(collection: String, json: String) {
+        // there is a possible case that we define a document with 'null' values of some properties, like below:
+        // { "key": <null> }
+        // If we try to expand meta values in such string, that would fail because <null> meta value should be
+        // expanded as 'null' but it's a part of the string, so, such an expansion attempt would result in failure.
+        // That's why here we explicitly replace null meta value (<null>) by UUID and then replace it back to null
+        // in the parsed values
+        val nullReplacement = UUID.randomUUID().toString()
+        val jsonWithNullsReplaced = json.replace("<null>", "\"$nullReplacement\"")
         val preparedJson = fixtureHelper.prepareTestData(
             type = MongoTestFixture.TYPE,
             context = Any(),
-            data = CommonJsonUtil.prepareDynamicMarkers(json)
+            data = CommonJsonUtil.prepareDynamicMarkers(jsonWithNullsReplaced)
         ).toString()
         val parsed = jsonApi.parseJson(preparedJson)
-        ensureDocumentExists(collection, toStringValues(CollectionUtil.flatten(parsed as Map<String, Any?>)))
+        val documentData = CollectionUtil.flatten(parsed as Map<String, Any?>).mapValues { (_, value) ->
+            if (value == nullReplacement) {
+                "<null>"
+            } else {
+                value
+            }
+        }
+        ensureDocumentExists(collection, toStringValues(documentData))
     }
 
     private fun toStringValues(data: Map<String, Any?>): Map<String, String> {
@@ -177,7 +193,9 @@ class TestMongoManager(
     fun toCollections(dbData: Any): Any {
         return when (dbData) {
             is Document -> dbData.entries.map { (key, value) ->
-                key to toCollections(value)
+                key to value?.let {
+                    toCollections(value)
+                }
             }.toMap()
 
             is Collection<*> -> dbData.mapNotNull { value ->

@@ -104,3 +104,22 @@ Feature: Mongo cucumber feature tests
         "key": 1
       }
       """
+
+  Scenario: Comparing mongo document with null values
+
+    When mongo test collection has the following JSON document:
+      """
+      {
+        "_id": <bind:id>,
+        "key1": 42,
+        "key2": <null>
+      }
+      """
+
+    Then mongo test collection should have a document with at least the following data:
+      """
+      {
+        "_id": "<bound:id>",
+        "key1": 42
+      }
+      """

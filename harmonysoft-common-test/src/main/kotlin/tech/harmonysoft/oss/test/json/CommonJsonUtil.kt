@@ -165,7 +165,11 @@ object CommonJsonUtil {
                                + "type ${it::class.simpleName}: $it")
                 }
             } else {
-                actual[key]?.let {
+                val actualValue = actual[key]
+                if (value == actualValue) {
+                    continue
+                }
+                actualValue?.let {
                     val result = compareAndBind(value as Any, it, "$path.$key", strict)
                     errors += result.errors
                     dynamicBindings += result.boundDynamicValues
@@ -259,10 +263,10 @@ object CommonJsonUtil {
     fun dropDynamicMarkers(parsedJson: Any): Any {
         return when (parsedJson) {
             is Map<*, *> -> parsedJson.mapNotNull { (k, v) ->
-                v?.takeIf {
-                    it !is String || !it.startsWith(DYNAMIC_VALUE_PREFIX)
-                }?.let {
-                    k to it
+                if (v is String && v.startsWith(DYNAMIC_VALUE_PREFIX)) {
+                    null
+                } else {
+                    k to v
                 }
             }.toMap()
 
