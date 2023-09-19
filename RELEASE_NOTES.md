@@ -1,3 +1,5 @@
+## v1.88.0 released on 19 Sep 2023 UTC
+  * 377aa46492cefcf012b9110889d74b7def52eac2 support <null> meta-value in mongo tests
 ## v1.87.0 released on 18 Sep 2023 UTC
   * 78345737d1864b50026261ace4424bc693f41e18 support int values in json mongo test setup
 ## v1.86.0 released on 15 Sep 2023 UTC
