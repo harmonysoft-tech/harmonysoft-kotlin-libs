@@ -352,3 +352,39 @@ Feature: Mock HTTP server tests
     When HTTP GET request to /test is made
 
     Then at least 1000 ms is elapsed since the time anchored by 'start'
+
+  Scenario: Received HTTP requests count
+
+    Given the following HTTP request is received by mock server:
+      | method | path  |
+      | GET    | /test |
+
+    And the following mock HTTP response with code 200 is returned:
+      """
+      ok
+      """
+
+    When HTTP GET request to /test is made
+
+    And HTTP GET request to /test is made
+
+    Then HTTP GET call to /test is made 2 times
+
+  Scenario: Min received HTTP requests count
+
+    Given the following HTTP request is received by mock server:
+      | method | path  |
+      | GET    | /test |
+
+    And the following mock HTTP response with code 200 is returned:
+      """
+      ok
+      """
+
+    When HTTP GET request to /test is made
+
+    And HTTP GET request to /test is made
+
+    Then HTTP GET call to /test is made at least 1 time
+
+    And HTTP GET call to /test is made at least 2 times

@@ -240,18 +240,34 @@ class MockHttpServerManager(
         }
     }
 
-    fun verifyNoCallIsMade(method: String, path: String) {
+    fun verifyCallsCount(method: String, path: String, expectedCallsNumber: Int) {
+        verifyCalls(method, path) { requests ->
+            if (requests.size != expectedCallsNumber) {
+                TestUtil.fail(
+                    "expected that HTTP $method to path $path is done $expectedCallsNumber time(s) but it was done "
+                    + "${requests.size} time(s)"
+                )
+            }
+        }
+    }
+
+    fun verifyMinCallsCount(method: String, path: String, expectedMinCallsNumber: Int) {
+        verifyCalls(method, path) { requests ->
+            if (requests.size < expectedMinCallsNumber) {
+                TestUtil.fail(
+                    "expected that HTTP $method to path $path is done t least $expectedMinCallsNumber time(s) "
+                    + "but it was done only ${requests.size} time(s)"
+                )
+            }
+        }
+    }
+
+    fun verifyCalls(method: String, path: String, checker: (Array<out HttpRequest>) -> Unit) {
         val expandedPath = fixtureDataHelper.prepareTestData(MockHttpServerPathTestFixture.TYPE, Unit, path).toString()
         val requests = mockRef.get().retrieveRecordedRequests(
             HttpRequest.request(expandedPath).withMethod(method)
         )
-        if (requests.isNotEmpty()) {
-            TestUtil.fail(
-                "expected that no HTTP $method requests to $path are done but there were "
-                + "${requests.size} request(s): \n"
-                + requests.joinToString("\n---------------\n")
-            )
-        }
+        checker(requests)
     }
 
     class ExpectationInfo(
@@ -262,5 +278,4 @@ class MockHttpServerManager(
         val responseProviders = CopyOnWriteArrayList<ResponseProvider>()
         val dynamicRequestConditionRef = AtomicReference<DynamicRequestCondition?>()
     }
-
 }

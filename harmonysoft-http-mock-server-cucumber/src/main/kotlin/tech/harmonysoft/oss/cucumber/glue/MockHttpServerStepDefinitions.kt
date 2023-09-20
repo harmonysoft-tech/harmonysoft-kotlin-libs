@@ -116,6 +116,16 @@ class MockHttpServerStepDefinitions {
 
     @Then("^no HTTP ([^\\s]+) call to ([^\\s]+) is made$")
     fun verifyNoCallIsMade(method: String, path: String) {
-        manager.verifyNoCallIsMade(method, path)
+        manager.verifyCallsCount(method, path, 0)
+    }
+
+    @Then("^HTTP ([^\\s]+) call to ([^\\s]+) is made (\\d+) times?$")
+    fun verifyNumberOfCalls(method: String, path: String, expectedCallsNumber: Int) {
+        manager.verifyCallsCount(method, path, expectedCallsNumber)
+    }
+
+    @Then("^HTTP ([^\\s]+) call to ([^\\s]+) is made at least (\\d+) times?$")
+    fun verifyMinNumberOfCalls(method: String, path: String, expectedMinCallsNumber: Int) {
+        manager.verifyMinCallsCount(method, path, expectedMinCallsNumber)
     }
 }
