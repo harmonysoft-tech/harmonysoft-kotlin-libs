@@ -1,3 +1,5 @@
+## v1.90.0 released on 20 Sep 2023 UTC
+  * e0a49cc86d15f75f4950ec3fe0f3e12775bb4ec3 added ability to verify exact and minimum number of HTTP calls in test
 ## v1.89.0 released on 20 Sep 2023 UTC
   * c06a56e83cb62813bd29218fa20a19426b5a069f added ability to delay test HTTP responses
 ## v1.88.0 released on 19 Sep 2023 UTC
