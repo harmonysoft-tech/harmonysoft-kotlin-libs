@@ -1,3 +1,5 @@
+## v1.89.0 released on 20 Sep 2023 UTC
+  * c06a56e83cb62813bd29218fa20a19426b5a069f added ability to delay test HTTP responses
 ## v1.88.0 released on 19 Sep 2023 UTC
   * 377aa46492cefcf012b9110889d74b7def52eac2 support <null> meta-value in mongo tests
 ## v1.87.0 released on 18 Sep 2023 UTC
