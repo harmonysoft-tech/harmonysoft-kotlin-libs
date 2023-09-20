@@ -130,6 +130,11 @@ class CommonStepDefinitions {
         bindingContext.storeBinding(DynamicBindingKey(key), value)
     }
 
+    @Given("^current time is saved in key '([^']+)'$")
+    fun saveCurrentTime(key: String) {
+        bindingContext.storeBinding(DynamicBindingKey(key), System.currentTimeMillis())
+    }
+
     @Then("^dynamic key '([^']+)' should have value '([^']+)'$")
     fun verifyDynamicValue(key: String, expected: String) {
         val actual = bindingContext.getBinding(DynamicBindingKey((key)))
@@ -144,6 +149,22 @@ class CommonStepDefinitions {
         val bound = bindingContext.hasBindingFor(dynamicKey)
         if (bound) {
             fail("expected that dynamic key '$key' is not set but it has value '${bindingContext.getBinding(dynamicKey)}'")
+        }
+    }
+
+    @Then("^at least (\\d+) ms is elapsed since the time anchored by '([^']+)'$")
+    fun verifyElapsedTime(expectedDurationMs: Long, startTimeKey: String) {
+        val now = System.currentTimeMillis()
+        val startTimeMs = (bindingContext.getBinding(DynamicBindingKey(startTimeKey)) as? Long) ?: fail(
+            "no start time is stored under dynamic key '$startTimeKey'"
+        )
+        val actualDuration = now - startTimeMs
+        if (actualDuration < expectedDurationMs) {
+            fail(
+                "expected that at least $expectedDurationMs ms is elapsed since the time anchored by dynamic "
+                + "variable '$startTimeKey' ($startTimeMs), but only $actualDuration ms were spent "
+                + "(current time is $now)"
+            )
         }
     }
 }

@@ -22,6 +22,7 @@ import tech.harmonysoft.oss.http.server.mock.request.condition.JsonBodyPathToMat
 import tech.harmonysoft.oss.http.server.mock.request.condition.ParameterName2ValueCondition
 import tech.harmonysoft.oss.http.server.mock.response.ConditionalResponseProvider
 import tech.harmonysoft.oss.http.server.mock.response.CountConstrainedResponseProvider
+import tech.harmonysoft.oss.http.server.mock.response.DelayedResponseProvider
 import tech.harmonysoft.oss.http.server.mock.response.ResponseProvider
 import tech.harmonysoft.oss.jackson.JsonHelper
 import tech.harmonysoft.oss.json.JsonApi
@@ -130,6 +131,21 @@ class MockHttpServerManager(
             )
         }
         activeExpectationInfo.responseProviders[i] = CountConstrainedResponseProvider(lastResponseProvider, count)
+    }
+
+    fun delayLastResponse(delayMs: Long) {
+        val lastResponseProvider = lastResponseProviderRef.get() ?: TestUtil.fail(
+            "can not configure the last HTTP response provider to delay $delayMs ms - no response provider "
+            + "is defined so far"
+        )
+        val i = activeExpectationInfo.responseProviders.indexOfFirst { it === lastResponseProvider }
+        if (i < 0) {
+            TestUtil.fail(
+                "something is very wrong - can not find the last response provider in the active expectation "
+                + "info ($lastResponseProvider)"
+            )
+        }
+        activeExpectationInfo.responseProviders[i] = DelayedResponseProvider(lastResponseProvider, delayMs)
     }
 
     fun configureResponseWithCode(code: Int, response: String, headers: Map<String, String> = emptyMap()) {

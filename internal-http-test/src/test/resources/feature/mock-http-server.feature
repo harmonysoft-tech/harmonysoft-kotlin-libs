@@ -333,3 +333,22 @@ Feature: Mock HTTP server tests
       """
       success
       """
+
+  Scenario: Delayed HTTP response
+
+    Given the following HTTP request is received by mock server:
+      | method | path  |
+      | GET    | /test |
+
+    And the following mock HTTP response with code 200 is returned:
+      """
+      ok
+      """
+
+    And the last mock HTTP response is delayed by 1000 ms
+
+    And current time is saved in key 'start'
+
+    When HTTP GET request to /test is made
+
+    Then at least 1000 ms is elapsed since the time anchored by 'start'
