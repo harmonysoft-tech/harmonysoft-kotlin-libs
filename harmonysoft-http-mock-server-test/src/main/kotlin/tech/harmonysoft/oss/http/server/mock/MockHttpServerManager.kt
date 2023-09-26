@@ -232,7 +232,7 @@ class MockHttpServerManager(
                 + bodiesWithErrors.joinToString("\n-------------------------------------------------\n") {
                     """
                     ${it.first}
-                    ${it.second} error(s):
+                    ${it.second.size} error(s):
                     * ${it.second.joinToString("\n* ")}
                 """.trimIndent()
                 }
