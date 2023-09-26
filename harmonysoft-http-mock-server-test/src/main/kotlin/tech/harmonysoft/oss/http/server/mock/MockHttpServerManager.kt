@@ -241,33 +241,49 @@ class MockHttpServerManager(
     }
 
     fun verifyCallsCount(method: String, path: String, expectedCallsNumber: Int) {
-        verifyCalls(method, path) { requests ->
+        verifyCalls(
+            method = method,
+            path = path,
+            conditionDescription = "exactly $expectedCallsNumber times(s)"
+        ) { requests ->
             if (requests.size != expectedCallsNumber) {
-                TestUtil.fail(
+                ProcessingResult.failure(
                     "expected that HTTP $method to path $path is done $expectedCallsNumber time(s) but it was done "
                     + "${requests.size} time(s)"
                 )
+            } else {
+                ProcessingResult.success()
             }
         }
     }
 
     fun verifyMinCallsCount(method: String, path: String, expectedMinCallsNumber: Int) {
-        verifyCalls(method, path) { requests ->
+        verifyCalls(
+            method = method,
+            path = path,
+            conditionDescription = "at least $expectedMinCallsNumber time(s)"
+        ) { requests ->
             if (requests.size < expectedMinCallsNumber) {
-                TestUtil.fail(
-                    "expected that HTTP $method to path $path is done t least $expectedMinCallsNumber time(s) "
+                ProcessingResult.failure(
+                    "expected that HTTP $method to path $path is done at least $expectedMinCallsNumber time(s) "
                     + "but it was done only ${requests.size} time(s)"
                 )
+            } else {
+                ProcessingResult.success()
             }
         }
     }
 
-    fun verifyCalls(method: String, path: String, checker: (Array<out HttpRequest>) -> Unit) {
+    fun verifyCalls(method: String, path: String, conditionDescription: String, checker: (Array<out HttpRequest>) -> ProcessingResult<Unit, String>) {
         val expandedPath = fixtureDataHelper.prepareTestData(MockHttpServerPathTestFixture.TYPE, Unit, path).toString()
         val requests = mockRef.get().retrieveRecordedRequests(
             HttpRequest.request(expandedPath).withMethod(method)
         )
-        checker(requests)
+        VerificationUtil.verifyConditionHappens(
+            description = "http $method request to $path is done $conditionDescription"
+        ) {
+            checker(requests)
+        }
     }
 
     class ExpectationInfo(
