@@ -1,3 +1,6 @@
+## v1.91.0 released on 26 Sep 2023 UTC
+  * 717565767ee40abbaad52c1c3219e9b9182fa08c switched HTTP calls number verification to ttl mode
+  * 39804917ca73e930f87837e517e0c6eac52646a0 corrected failed expectation error description
 ## v1.90.0 released on 20 Sep 2023 UTC
   * e0a49cc86d15f75f4950ec3fe0f3e12775bb4ec3 added ability to verify exact and minimum number of HTTP calls in test
 ## v1.89.0 released on 20 Sep 2023 UTC
