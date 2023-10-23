@@ -1,3 +1,5 @@
+## v1.92.0 released on 23 Oct 2023 UTC
+  * 4ad55c5a778d3154d8904be7b94bbea4957a5297 make sure that mock http server is started before the first use
 ## v1.91.0 released on 26 Sep 2023 UTC
   * 717565767ee40abbaad52c1c3219e9b9182fa08c switched HTTP calls number verification to ttl mode
   * 39804917ca73e930f87837e517e0c6eac52646a0 corrected failed expectation error description
