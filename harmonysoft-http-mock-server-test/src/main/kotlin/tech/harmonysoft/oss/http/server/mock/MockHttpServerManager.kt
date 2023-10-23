@@ -46,6 +46,12 @@ class MockHttpServerManager(
 ) {
 
     private val mockRef = AtomicReference<ClientAndServer>()
+    private val httpMock: ClientAndServer
+        get() {
+            startIfNecessary()
+            return mockRef.get()
+        }
+
     private val expectations = ConcurrentHashMap<HttpRequest, ExpectationInfo>()
     private val receivedRequests = CopyOnWriteArrayList<HttpRequest>()
 
@@ -78,7 +84,7 @@ class MockHttpServerManager(
     fun cleanExpectations() {
         logger.info("Cleaning all mock HTTP server expectation rules")
         for (info in expectations.values) {
-            mockRef.get().clear(info.expectationId)
+            httpMock.clear(info.expectationId)
         }
         expectations.clear()
         logger.info("Finished cleaning all mock HTTP server expectation rules")
@@ -93,7 +99,7 @@ class MockHttpServerManager(
             return
         }
         val info = ExpectationInfo(request)
-        mockRef.get().`when`(request).withId(info.expectationId).respond { req ->
+        httpMock.`when`(request).withId(info.expectationId).respond { req ->
             info.responseProviders.mapFirstNotNull { responseProvider ->
                 responseProvider.maybeRespond(req)
             } ?: TestUtil.fail(
@@ -208,7 +214,7 @@ class MockHttpServerManager(
         val expected = jsonApi.parseJson(prepared)
 
         VerificationUtil.verifyConditionHappens {
-            val candidateBodies = mockRef.get().retrieveRecordedRequests(
+            val candidateBodies = httpMock.retrieveRecordedRequests(
                 HttpRequest.request(expandedPath).withMethod(httpMethod)
             ).map { it.body.value as String }
 
@@ -276,7 +282,7 @@ class MockHttpServerManager(
 
     fun verifyCalls(method: String, path: String, conditionDescription: String, checker: (Array<out HttpRequest>) -> ProcessingResult<Unit, String>) {
         val expandedPath = fixtureDataHelper.prepareTestData(MockHttpServerPathTestFixture.TYPE, Unit, path).toString()
-        val requests = mockRef.get().retrieveRecordedRequests(
+        val requests = httpMock.retrieveRecordedRequests(
             HttpRequest.request(expandedPath).withMethod(method)
         )
         VerificationUtil.verifyConditionHappens(
