@@ -265,7 +265,7 @@ class TestKafkaManager(
     fun verifyJsonMessageIsReceived(expectedJson: String, topic: String) {
         val preparedExpected = fixtureHelper.prepareTestData(
             type = KafkaTestFixture.TYPE,
-            context = Unit,
+            context = KafkaFixtureContext(topic),
             data = CommonJsonUtil.prepareDynamicMarkers(expectedJson)
         ).toString()
         val parsedExpectedJson = jsonApi.parseJson(preparedExpected)
