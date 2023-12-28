@@ -1,3 +1,6 @@
+## v1.93.0 released on 28 Dec 2023 UTC
+  * 0a766241c99d7c7ef372e2c94802b2ef5aabe34a added ability to verify that an http call to the mock server is made with a json body which doesn't have specific data
+  * 84e867af624080b3d04052f28d5d0b212b69c12c use proper context for kafka fixture
 ## v1.92.0 released on 23 Oct 2023 UTC
   * 4ad55c5a778d3154d8904be7b94bbea4957a5297 make sure that mock http server is started before the first use
 ## v1.91.0 released on 26 Sep 2023 UTC
