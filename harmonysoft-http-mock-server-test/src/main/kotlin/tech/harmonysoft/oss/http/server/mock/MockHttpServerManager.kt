@@ -4,6 +4,7 @@ import java.util.Optional
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CopyOnWriteArrayList
+import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
 import javax.inject.Named
 import org.junit.jupiter.api.AfterEach
@@ -14,6 +15,7 @@ import org.mockserver.model.HttpRequest
 import org.mockserver.model.HttpResponse
 import org.slf4j.Logger
 import tech.harmonysoft.oss.common.ProcessingResult
+import tech.harmonysoft.oss.common.collection.CollectionUtil
 import tech.harmonysoft.oss.common.collection.mapFirstNotNull
 import tech.harmonysoft.oss.http.server.mock.config.MockHttpServerConfigProvider
 import tech.harmonysoft.oss.http.server.mock.fixture.MockHttpServerPathTestFixture
@@ -32,7 +34,7 @@ import tech.harmonysoft.oss.test.fixture.FixtureDataHelper
 import tech.harmonysoft.oss.test.json.CommonJsonUtil
 import tech.harmonysoft.oss.test.matcher.Matcher
 import tech.harmonysoft.oss.test.util.NetworkUtil
-import tech.harmonysoft.oss.test.util.TestUtil
+import tech.harmonysoft.oss.test.util.TestUtil.fail
 import tech.harmonysoft.oss.test.util.VerificationUtil
 
 @Named
@@ -57,8 +59,9 @@ class MockHttpServerManager(
 
     private val activeExpectationInfoRef = AtomicReference<ExpectationInfo?>()
     private val activeExpectationInfo: ExpectationInfo
-        get() = activeExpectationInfoRef.get() ?: TestUtil.fail("no active mock HTTP request if defined")
+        get() = activeExpectationInfoRef.get() ?: fail("no active mock HTTP request if defined")
     private val lastResponseProviderRef = AtomicReference<ResponseProvider?>()
+    private val expectTestVerificationFailure = AtomicBoolean()
 
     @BeforeEach
     fun setUp() {
@@ -91,6 +94,7 @@ class MockHttpServerManager(
         receivedRequests.clear()
         activeExpectationInfoRef.set(null)
         lastResponseProviderRef.set(null)
+        expectTestVerificationFailure.set(false)
     }
 
     fun targetRequest(request: HttpRequest) {
@@ -102,7 +106,7 @@ class MockHttpServerManager(
         httpMock.`when`(request).withId(info.expectationId).respond { req ->
             info.responseProviders.mapFirstNotNull { responseProvider ->
                 responseProvider.maybeRespond(req)
-            } ?: TestUtil.fail(
+            } ?: fail(
                 "request $req is not matched by ${info.responseProviders.size} configured expectations:\n" +
                 info.responseProviders.joinToString("\n")
             )
@@ -125,13 +129,13 @@ class MockHttpServerManager(
     }
 
     fun restrictLastResponseByCount(count: Int) {
-        val lastResponseProvider = lastResponseProviderRef.get() ?: TestUtil.fail(
+        val lastResponseProvider = lastResponseProviderRef.get() ?: fail(
             "can not configure the last HTTP response provider to act $count time(s) - no response provider "
             + "is defined so far"
         )
         val i = activeExpectationInfo.responseProviders.indexOfFirst { it === lastResponseProvider }
         if (i < 0) {
-            TestUtil.fail(
+            fail(
                 "something is very wrong - can not find the last response provider in the active expectation "
                 + "info ($lastResponseProvider)"
             )
@@ -140,13 +144,13 @@ class MockHttpServerManager(
     }
 
     fun delayLastResponse(delayMs: Long) {
-        val lastResponseProvider = lastResponseProviderRef.get() ?: TestUtil.fail(
+        val lastResponseProvider = lastResponseProviderRef.get() ?: fail(
             "can not configure the last HTTP response provider to delay $delayMs ms - no response provider "
             + "is defined so far"
         )
         val i = activeExpectationInfo.responseProviders.indexOfFirst { it === lastResponseProvider }
         if (i < 0) {
-            TestUtil.fail(
+            fail(
                 "something is very wrong - can not find the last response provider in the active expectation "
                 + "info ($lastResponseProvider)"
             )
@@ -244,6 +248,111 @@ class MockHttpServerManager(
                 }
             )
         }
+    }
+
+    fun verifyRequestWithoutSpecificDataReceived(httpMethod: String, path: String, expectedRawJson: String) {
+        val expandedPath = fixtureDataHelper.prepareTestData(MockHttpServerPathTestFixture.TYPE, Unit, path).toString()
+        val prepared = fixtureDataHelper.prepareTestData(
+            type = CommonTestFixture.TYPE,
+            context = Any(),
+            data = CommonJsonUtil.prepareDynamicMarkers(expectedRawJson)
+        ).toString()
+        val expected = jsonApi.parseJson(prepared)
+        val findUnexpectedHttpCall = {
+            val candidateBodies = httpMock.retrieveRecordedRequests(
+                HttpRequest.request(expandedPath).withMethod(httpMethod)
+            ).map { it.body.value as String }
+
+
+            candidateBodies.find {
+                val candidate = jsonApi.parseJson(it)
+                val matches = findMatches(candidate, expected, "<root>")
+                matches.isNotEmpty()
+            }
+        }
+        if (expectTestVerificationFailure.get()) {
+            VerificationUtil.verifyConditionHappens(
+                "unexpected HTTP $httpMethod call to $expandedPath didn't happen"
+            ) {
+                findUnexpectedHttpCall()?.let {
+                    ProcessingResult.success()
+                } ?: ProcessingResult.failure("no unexpected HTTP $httpMethod request to $path is found")
+            }
+        } else {
+            VerificationUtil.verifyConditionDoesNotHappen(
+                "unexpected HTTP $httpMethod request to $path is detected"
+            ) {
+                findUnexpectedHttpCall()?.let {
+                    ProcessingResult.failure("found unexpected HTTP $httpMethod request to $path: $it")
+                } ?: ProcessingResult.success()
+            }
+            val candidateBodies = httpMock.retrieveRecordedRequests(
+                HttpRequest.request(expandedPath).withMethod(httpMethod)
+            )
+            if (candidateBodies.isEmpty()) {
+                fail("no HTTP $httpMethod request to $path is made")
+            }
+        }
+    }
+
+    fun expectVerificationFailure() {
+        expectTestVerificationFailure.set(true)
+    }
+
+    fun findMatches(actualData: Any?, toFind: Any?, path: String): Collection<String> {
+        return when {
+            toFind == "<any>" || toFind == actualData -> listOf("path $path is matched")
+            actualData == null || toFind == null -> emptyList()
+
+            toFind is Map<*, *> -> toFind.entries.fold(emptyList()) { acc, (key, value) ->
+                val newMatches = if (actualData is Map<*, *>) {
+                    value?.let { subValueToFind ->
+                        key?.let { subKey ->
+                            actualData[subKey]?.let { subActualValue ->
+                                findMatches(subActualValue, subValueToFind, "$path.$subKey")
+                            }
+                        }
+                    } ?: emptyList()
+                } else {
+                    emptyList()
+                }
+                acc + newMatches
+            }
+
+            else -> {
+                val toFindIterator = CollectionUtil.maybeGetIterator(toFind)
+                if (toFindIterator == null) {
+                    if (actualData == toFind) {
+                        listOf("path $path is matched")
+                    } else {
+                        emptyList()
+                    }
+                } else if (CollectionUtil.maybeGetIterator(actualData) == null) {
+                    emptyList()
+                } else {
+                    // we consider that there is a match if any element of the 'actual data' array/collection
+                    //  matches any element of the 'to match' array/collection
+                    mutableListOf<String>().apply {
+                        for (subValueToFind in toFindIterator) {
+                            this += findMatchInArray(actualData, subValueToFind, path)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    fun findMatchInArray(array: Any, toFind: Any?, path: String): Collection<String> {
+        val iterator = CollectionUtil.maybeGetIterator(array) ?: return emptyList()
+        var i = 0
+        for (arrayElement in iterator) {
+            val matches = findMatches(arrayElement, toFind, "$path[$i]")
+            if (matches.isNotEmpty()) {
+                return matches
+            }
+            i++
+        }
+        return emptyList()
     }
 
     fun verifyCallsCount(method: String, path: String, expectedCallsNumber: Int) {

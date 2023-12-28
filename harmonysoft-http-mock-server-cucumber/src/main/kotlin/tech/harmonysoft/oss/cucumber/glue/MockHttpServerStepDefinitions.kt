@@ -109,9 +109,19 @@ class MockHttpServerStepDefinitions {
         manager.delayLastResponse(delayMs)
     }
 
-    @Then("^the following ([^\\s]+) request for path ([^\\s]+) with at least this JSON data is received by mock HTTP server:$")
+    @Given("HTTP server test verification failure is expected")
+    fun expectVerificationFailure() {
+        manager.expectVerificationFailure()
+    }
+
+    @Then("^the following HTTP ([^\\s]+) request for path ([^\\s]+) with at least this JSON data is received:$")
     fun verifyRequestReceived(httpMethod: String, path: String, expectedRawJson: String) {
         manager.verifyRequestReceived(httpMethod, path, expectedRawJson)
+    }
+
+    @Then("^the following JSON HTTP ([^^\\s]+) request for path ([^\\s]+) without the following data is received:$")
+    fun verifyJsonRequestWithoutSpecificDataIsReceived(httpMethod: String, path: String, expectedRawJson: String) {
+        manager.verifyRequestWithoutSpecificDataReceived(httpMethod, path, expectedRawJson)
     }
 
     @Then("^no HTTP ([^\\s]+) call to ([^\\s]+) is made$")

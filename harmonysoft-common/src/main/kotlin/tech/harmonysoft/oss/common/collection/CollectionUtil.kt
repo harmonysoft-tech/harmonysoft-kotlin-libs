@@ -187,7 +187,31 @@ object CollectionUtil {
         return currentValue
     }
 
-    private sealed interface Data {
+    fun maybeGetIterator(collectionOrArray: Any): Iterator<Any?>? {
+        return when {
+            collectionOrArray is Collection<*> -> collectionOrArray.iterator()
+            collectionOrArray.javaClass.isArray -> getArrayIterator(collectionOrArray)
+            else -> null
+        }
+    }
+
+    fun getArrayIterator(array: Any): Iterator<Any?> {
+        return when (array) {
+            is Array<*> -> array.iterator()
+            is IntArray -> array.iterator()
+            is LongArray -> array.iterator()
+            is DoubleArray -> array.iterator()
+            is FloatArray -> array.iterator()
+            is ShortArray -> array.iterator()
+            is CharArray -> array.iterator()
+            is ByteArray -> array.iterator()
+            else -> throw IllegalArgumentException(
+                "given argument of type ${array::class.qualifiedName} is not an array ($array)"
+            )
+        }
+    }
+
+     sealed interface Data {
 
         class ArrayData(
             index: Int,

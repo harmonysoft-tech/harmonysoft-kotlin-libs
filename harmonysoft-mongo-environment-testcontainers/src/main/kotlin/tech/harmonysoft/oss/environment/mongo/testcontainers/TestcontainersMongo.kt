@@ -41,6 +41,5 @@ class TestcontainersMongo(
             db = ext.db,
             credential = ext.credential
         )
-
     }
 }

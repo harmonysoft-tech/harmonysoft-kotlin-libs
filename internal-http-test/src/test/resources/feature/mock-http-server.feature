@@ -388,3 +388,290 @@ Feature: Mock HTTP server tests
     Then HTTP GET call to /test is made at least 1 time
 
     And HTTP GET call to /test is made at least 2 times
+
+  Scenario: Failed negative HTTP request match for top level property with any value
+
+    When HTTP POST request to /test is made with JSON body:
+      """
+      {
+        "key1": "value1",
+        "key2": "value2"
+      }
+      """
+
+    And HTTP server test verification failure is expected
+
+    Then the following JSON HTTP POST request for path /test without the following data is received:
+      """
+      {
+        "key1": "<any>"
+      }
+      """
+
+  Scenario: Passed negative HTTP request match for top level property with any value
+
+    When HTTP POST request to /test is made with JSON body:
+      """
+      {
+        "key1": "value1"
+      }
+      """
+
+    Then the following JSON HTTP POST request for path /test without the following data is received:
+      """
+      {
+        "key2": "<any>"
+      }
+      """
+
+  Scenario: Failed negative HTTP request match for top level property with specific value
+
+    When HTTP POST request to /test is made with JSON body:
+      """
+      {
+        "key1": "value1",
+        "key2": "value2"
+      }
+      """
+
+    And HTTP server test verification failure is expected
+
+    Then the following JSON HTTP POST request for path /test without the following data is received:
+      """
+      {
+        "key2": "value2"
+      }
+      """
+
+  Scenario: Passed negative HTTP request match for top level property with specific value
+
+    When HTTP POST request to /test is made with JSON body:
+      """
+      {
+        "key1": "value1",
+        "key2": "value2"
+      }
+      """
+
+    Then the following JSON HTTP POST request for path /test without the following data is received:
+      """
+      {
+        "key2": "value1"
+      }
+      """
+
+  Scenario: Failed negative HTTP request match for nested level property with any value
+
+    When HTTP POST request to /test is made with JSON body:
+      """
+      {
+        "key1": {
+          "key2": "value1"
+        }
+      }
+      """
+
+    And HTTP server test verification failure is expected
+
+    Then the following JSON HTTP POST request for path /test without the following data is received:
+      """
+      {
+        "key1": {
+          "key2": "<any>"
+        }
+      }
+      """
+
+  Scenario: Passed negative HTTP request match for nested level property with any value
+
+    When HTTP POST request to /test is made with JSON body:
+      """
+      {
+        "key1": {
+          "key2": "value1"
+        }
+      }
+      """
+
+    Then the following JSON HTTP POST request for path /test without the following data is received:
+      """
+      {
+        "key1": {
+          "key3": "<any>"
+        }
+      }
+      """
+
+  Scenario: Failed negative HTTP request match for nested level property with specific value
+
+    When HTTP POST request to /test is made with JSON body:
+      """
+      {
+        "key1": {
+          "key2": "value1"
+        }
+      }
+      """
+
+    And HTTP server test verification failure is expected
+
+    Then the following JSON HTTP POST request for path /test without the following data is received:
+      """
+      {
+        "key1": {
+          "key2": "value1"
+        }
+      }
+      """
+
+  Scenario: Passed negative HTTP request match for nested level property with specific value
+
+    When HTTP POST request to /test is made with JSON body:
+      """
+      {
+        "key1": {
+          "key2": "value1"
+        }
+      }
+      """
+
+    Then the following JSON HTTP POST request for path /test without the following data is received:
+      """
+      {
+        "key1": {
+          "key2": "value2"
+        }
+      }
+      """
+
+  Scenario: Failed negative HTTP request match for array data with any value
+
+    When HTTP POST request to /test is made with JSON body:
+      """
+      {
+        "array1": [
+          {
+            "key1": "value1"
+          },
+          {
+            "array2": [
+              { "key2": "value2" }
+            ]
+          }
+        ]
+      }
+      """
+
+    And HTTP server test verification failure is expected
+
+    Then the following JSON HTTP POST request for path /test without the following data is received:
+      """
+      {
+        "array1": [
+          {
+            "array2": [
+              { "key2": "<any>" }
+            ]
+          }
+        ]
+      }
+      """
+
+  Scenario: Passed negative HTTP request match for array data with any value
+
+    When HTTP POST request to /test is made with JSON body:
+      """
+      {
+        "array1": [
+          {
+            "key1": "value1"
+          },
+          {
+            "array2": [
+              { "key2": "value2" }
+            ]
+          }
+        ]
+      }
+      """
+
+    Then the following JSON HTTP POST request for path /test without the following data is received:
+      """
+      {
+        "array1": [
+          {
+            "array2": [
+              { "key3": "<any>" }
+            ]
+          }
+        ]
+      }
+      """
+
+  Scenario: Failed negative HTTP request match for array data with specific value
+
+    When HTTP POST request to /test is made with JSON body:
+      """
+      {
+        "array1": [
+          {
+            "key1": "value1"
+          },
+          {
+            "array2": [
+              { "key2": "value2" },
+              { "key3": "value3" },
+              { "key4": "value4" }
+            ]
+          }
+        ]
+      }
+      """
+
+    And HTTP server test verification failure is expected
+
+    Then the following JSON HTTP POST request for path /test without the following data is received:
+      """
+      {
+        "array1": [
+          {
+            "array2": [
+              { "key4": "value4" }
+            ]
+          }
+        ]
+      }
+      """
+
+  Scenario: Passed negative HTTP request match for array data with specific value
+
+    When HTTP POST request to /test is made with JSON body:
+      """
+      {
+        "array1": [
+          {
+            "key1": "value1"
+          },
+          {
+            "array2": [
+              { "key2": "value2" },
+              { "key3": "value3" },
+              { "key4": "value4" }
+            ]
+          }
+        ]
+      }
+      """
+
+    Then the following JSON HTTP POST request for path /test without the following data is received:
+      """
+      {
+        "array1": [
+          {
+            "array2": [
+              { "key3": "value4" }
+            ]
+          }
+        ]
+      }
+      """
