@@ -1,3 +1,7 @@
+## v1.94.0 released on 08 Jan 2024 UTC
+  * f8200698c120d5393ea3321da5275c228be82218 * added ability to manager kafka headers for test kafka messages * improved logging for test kafka processing
+  * c27d5ae6b7c68773ed6f2781e85dd55cceffefa3 * expose active test name * clean recorded calls to http mock after test
+  * 107d4b9e296803ca663a70172149864c117ecda6 * correct mongo verification in case of empty collection * extracted common functionality from CommonStepDefinitions into CommonTestManager
 ## v1.93.0 released on 28 Dec 2023 UTC
   * 0a766241c99d7c7ef372e2c94802b2ef5aabe34a added ability to verify that an http call to the mock server is made with a json body which doesn't have specific data
   * 84e867af624080b3d04052f28d5d0b212b69c12c use proper context for kafka fixture
