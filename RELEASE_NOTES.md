@@ -1,3 +1,5 @@
+## v1.95.0 released on 08 Jan 2024 UTC
+  * 87e6bcf0471004da5f0c601d8eda81f48610b79b corrected DI setup
 ## v1.94.0 released on 08 Jan 2024 UTC
   * f8200698c120d5393ea3321da5275c228be82218 * added ability to manager kafka headers for test kafka messages * improved logging for test kafka processing
   * c27d5ae6b7c68773ed6f2781e85dd55cceffefa3 * expose active test name * clean recorded calls to http mock after test
