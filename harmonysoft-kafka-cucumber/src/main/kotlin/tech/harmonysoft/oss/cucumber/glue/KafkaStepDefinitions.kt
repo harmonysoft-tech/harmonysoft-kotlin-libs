@@ -12,7 +12,7 @@ class KafkaStepDefinitions {
 
     @After
     fun tearDown() {
-        kafka.clean()
+        kafka.tearDown()
     }
 
     @Given("^kafka topic '$([^']+)' exists$")
@@ -25,6 +25,21 @@ class KafkaStepDefinitions {
         kafka.subscribe(topic)
     }
 
+    @Given("^header ([^=]+)=([^\\s]+) is used for sending all subsequent kafka messages$")
+    fun addHeader(key: String, value: String) {
+        kafka.addHeader(key, value)
+    }
+
+    @Given("^header ([^\\s]+) is not used for sending all subsequent kafka messages$")
+    fun cleanHeader(key: String) {
+        kafka.cleanHeader(key)
+    }
+
+    @Given("^all kafka message headers are reset$")
+    fun cleanAllHeaders() {
+        kafka.cleanAllHeaders()
+    }
+
     @Given("^the following kafka message is sent to topic '([^']+)':$")
     fun sendMessage(topic: String, message: String) {
         kafka.sendMessage(topic, message)
@@ -33,6 +48,15 @@ class KafkaStepDefinitions {
     @Then("^the following message is received in kafka topic '([^']+)':$")
     fun verifyMessageIsReceived(topic: String, expected: String) {
         kafka.verifyMessageIsReceived(expected, topic)
+    }
+
+    @Then("^a message with header ([^=]+)=([^\\s]+) is received in kafka topic '([^']+)'$")
+    fun verifyMessageWithHeaderValueIsReceived(key: String, value: String, topic: String) {
+        kafka.verifyMessageWithTargetHeaderValueIsReceived(
+            topic = topic,
+            headerKey = key,
+            expectedHeaderValue = value
+        )
     }
 
     @Then("^the following JSON message is received in kafka topic '([^']+)':$")

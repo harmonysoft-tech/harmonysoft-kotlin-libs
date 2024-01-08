@@ -64,3 +64,14 @@ Feature: Kafka cucumber feature tests
         "k1": "v3"
       }
       """
+
+  Scenario: Header value match
+
+    Given header k1=v1 is used for sending all subsequent kafka messages
+
+    When the following kafka message is sent to topic 'test':
+      """
+      test
+      """
+
+    Then a message with header k1=v1 is received in kafka topic 'test'

@@ -16,6 +16,7 @@ import org.apache.kafka.clients.producer.KafkaProducer
 import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.common.ConsumerGroupState
+import org.apache.kafka.common.header.internals.RecordHeader
 import org.apache.kafka.common.serialization.Deserializer
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.apache.kafka.common.serialization.StringSerializer
@@ -55,7 +56,10 @@ class TestKafkaManager(
                         val records = consumer.poll(pollDuration)
                         if (!records.isEmpty) {
                             for (record in records) {
-                                logger.info("received new kafka message from topic '{}': {}", topic, record.value())
+                                logger.info(
+                                    "received new kafka message from topic '{}': {}",
+                                    topic, recordToString(record)
+                                )
                                 topic2messages.computeIfAbsent(topic) { CopyOnWriteArrayList() } += record
                             }
                         }
@@ -68,9 +72,17 @@ class TestKafkaManager(
         }
     }
 
+    private val headers = ConcurrentHashMap<String, String>()
+
     @AfterEach
-    fun clean() {
+    fun tearDown() {
+        cleanAllHeaders()
         topic2messages.clear()
+    }
+
+    fun recordToString(record: ConsumerRecord<*, *>): String {
+        val headers = record.headers().joinToString { "${it.key()}=${String(it.value())}" }
+        return "headers=$headers, value=${record.value()}"
     }
 
     fun getAdmin(config: TestKafkaConfig): Admin {
@@ -97,6 +109,21 @@ class TestKafkaManager(
         }
     }
 
+    fun addHeader(key: String, value: String) {
+        headers[key] = value
+        logger.info("registered kafka message header {}={}", key, value)
+    }
+
+    fun cleanHeader(key: String) {
+        headers.remove(key)
+        logger.info("cleaned kafka message header '{}'", key)
+    }
+
+    fun cleanAllHeaders() {
+        headers.clear()
+        logger.info("cleaned all kafka message headers")
+    }
+
     fun sendMessage(topic: String, message: String) {
         sendMessage(configProvider.data, topic, message)
     }
@@ -108,7 +135,15 @@ class TestKafkaManager(
                 context = KafkaFixtureContext(topic),
                 data = message
             ).toString()
-            it.send(ProducerRecord(topic, withExpandedMetaData))
+            logger.info("sending kafka message to topic '{}'%nheaders: {}%ncontent: {}", topic, headers, message)
+            it.send(ProducerRecord(
+                topic,
+                null, // partition
+                null, // timestamp
+                null, // key
+                withExpandedMetaData, // value
+                headers.map { e -> RecordHeader(e.key, e.value.toByteArray()) }
+            ))
         }
     }
 
@@ -228,6 +263,15 @@ class TestKafkaManager(
         }
     }
 
+    fun verifyMessageWithTargetHeaderValueIsReceived(topic: String, headerKey: String, expectedHeaderValue: String) {
+        verifyMessageIsReceived(
+            expected = "a message with header $headerKey=$expectedHeaderValue",
+            topic = topic
+        ) { record ->
+            record.headers()?.find { it.key() == headerKey && String(it.value()) == expectedHeaderValue } != null
+        }
+    }
+
     fun verifyMessageIsReceived(
         expected: String,
         topic: String,
@@ -251,9 +295,9 @@ class TestKafkaManager(
                         append("target message is not received from kafka topic '$topic'.\n")
                         append("expected:\n")
                         append(preparedExpected)
-                        append("${records.size} messages are received:")
+                        append("\n${records.size} message(s) are received:")
                         records.forEachIndexed { i, record ->
-                            append("\n$i) ").append(record.value())
+                            append("\n$i) ").append(recordToString(record))
                         }
                     }
                     ProcessingResult.failure(error)
