@@ -89,7 +89,7 @@ Feature: HTTP client tests
       }
       """
 
-    Then the following POST request for path /test with at least this JSON data is received by mock HTTP server:
+    Then the following HTTP POST request for path /test with at least this JSON data is received:
       """
       {
         "data": "some-value"
