@@ -5,9 +5,11 @@ import java.time.LocalDate
 import java.time.ZoneId
 import java.util.Optional
 import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicReference
 import javax.inject.Named
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.TestInfo
 import org.slf4j.Logger
 import tech.harmonysoft.oss.common.time.util.DateTimeHelper
 import tech.harmonysoft.oss.test.TestAware
@@ -32,8 +34,17 @@ class CommonTestManager(
     private val _expectTestVerificationFailure = AtomicBoolean()
     val expectTestVerificationFailure: Boolean get() = _expectTestVerificationFailure.get()
 
+    private val _testName = AtomicReference("")
+    val activeTestName: String get() = _testName.get()
+
     @BeforeEach
-    fun notifyOnTestStart() {
+    fun setUp(info: TestInfo) {
+        setUp(info.displayName)
+    }
+
+    fun setUp(testName: String) {
+        _testName.set(testName)
+        logger.info("starting test '{}'", testName)
         testCallbacks.ifPresent {
             for (callback in it) {
                 callback.onTestStart()
@@ -42,8 +53,10 @@ class CommonTestManager(
     }
 
     @AfterEach
-    fun notifyOnTestEnd() {
+    fun tearDown() {
+        logger.info("finished test '{}'", activeTestName)
         _expectTestVerificationFailure.set(false)
+        _testName.set("")
         testCallbacks.ifPresent {
             for (callback in it) {
                 callback.onTestEnd()

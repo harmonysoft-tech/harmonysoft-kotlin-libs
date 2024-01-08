@@ -4,7 +4,6 @@ import java.util.Optional
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CopyOnWriteArrayList
-import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
 import javax.inject.Named
 import org.junit.jupiter.api.AfterEach
@@ -85,12 +84,13 @@ class MockHttpServerManager(
     }
 
     @AfterEach
-    fun cleanExpectations() {
+    fun tearDown() {
         logger.info("Cleaning all mock HTTP server expectation rules")
         for (info in expectations.values) {
             httpMock.clear(info.expectationId)
         }
         expectations.clear()
+        httpMock.clear(HttpRequest.request()) // clear all recorded requests
         logger.info("Finished cleaning all mock HTTP server expectation rules")
         receivedRequests.clear()
         activeExpectationInfoRef.set(null)
@@ -262,7 +262,6 @@ class MockHttpServerManager(
             val candidateBodies = httpMock.retrieveRecordedRequests(
                 HttpRequest.request(expandedPath).withMethod(httpMethod)
             ).map { it.body.value as String }
-
 
             candidateBodies.find {
                 val candidate = jsonApi.parseJson(it)

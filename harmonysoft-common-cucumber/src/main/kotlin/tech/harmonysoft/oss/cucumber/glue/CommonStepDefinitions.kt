@@ -17,23 +17,13 @@ class CommonStepDefinitions {
     @Inject private lateinit var manager: CommonTestManager
 
     @Before
-    fun logScenarioStart(scenario: Scenario) {
-        logger.info("Starting scenario '{}'", scenario.name)
+    fun setUp(scenario: Scenario) {
+        manager.setUp(scenario.name)
     }
 
     @After
-    fun logScenarioEnd(scenario: Scenario) {
-        logger.info("Finished scenario '{}'", scenario.name)
-    }
-
-    @Before
-    fun notifyOnTestStart() {
-        manager.notifyOnTestStart()
-    }
-
-    @After
-    fun notifyOnTestEnd() {
-        manager.notifyOnTestEnd()
+    fun tearDown() {
+        manager.tearDown()
     }
 
     @Given("^current time zone is set as ([^\\s]+)$")

@@ -34,8 +34,8 @@ class MockHttpServerStepDefinitions {
     }
 
     @After
-    fun cleanExpectations() {
-        manager.cleanExpectations()
+    fun tearDown() {
+        manager.tearDown()
     }
 
     @Given("^the following HTTP request is received by mock server:$")
