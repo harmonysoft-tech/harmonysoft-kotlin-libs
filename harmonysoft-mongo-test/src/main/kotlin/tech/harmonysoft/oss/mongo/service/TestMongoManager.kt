@@ -32,6 +32,7 @@ import tech.harmonysoft.oss.test.fixture.FixtureDataHelper
 import tech.harmonysoft.oss.test.input.CommonTestInputHelper
 import tech.harmonysoft.oss.test.input.TestInputRecord
 import tech.harmonysoft.oss.test.json.CommonJsonUtil
+import tech.harmonysoft.oss.test.manager.CommonTestManager
 import tech.harmonysoft.oss.test.util.VerificationUtil
 
 @Named
@@ -41,6 +42,7 @@ class TestMongoManager(
     private val fixtureHelper: FixtureDataHelper,
     private val bindingContext: DynamicBindingContext,
     private val jsonApi: JsonApi,
+    private val common: CommonTestManager,
     private val logger: Logger
 ) {
 
@@ -228,9 +230,9 @@ class TestMongoManager(
             it.data.keys + it.toBind.keys
         }).toSet().toList()
 
-        VerificationUtil.verifyConditionHappens {
+        val actualDocumentsFetcher = {
             val collection = client.getDatabase(configProvider.data.db).getCollection(collectionName)
-            val documents = collection
+            collection
                 .find(Mongo.Filter.ALL)
                 .projection(Projections.include(projection))
                 .map { document ->
@@ -241,15 +243,34 @@ class TestMongoManager(
                             }
                         }
                     }
-                }
+                }.map { toCollections(it) }.toList()
+        }
 
-            matchDocuments(records, documents.map { toCollections(it) }.toList())?.let {
-                ProcessingResult.failure(it)
-            } ?: ProcessingResult.success()
+        if (common.expectTestVerificationFailure) {
+            VerificationUtil.verifyConditionHappens(
+                "target document is not found in mongo '$collectionName' collection"
+            ) {
+                val actual = actualDocumentsFetcher()
+                matchDocuments(records, actual)?.let {
+                    ProcessingResult.success()
+                } ?: ProcessingResult.failure("target document is found in mongo '$collectionName' collection")
+            }
+        } else {
+            VerificationUtil.verifyConditionHappens(
+                "target document is found in mongo '$collectionName' collection"
+            ) {
+                val actual = actualDocumentsFetcher()
+                matchDocuments(records, actual)?.let {
+                    ProcessingResult.failure(it)
+                } ?: ProcessingResult.success()
+            }
         }
     }
 
     private fun matchDocuments(expected: Collection<TestInputRecord>, actual: Collection<Any>): String? {
+        if (actual.isEmpty()) {
+            return "no actual documents are available"
+        }
         val candidates = actual.toMutableList()
         val allErrors = mutableListOf<String>()
         for (record in expected) {

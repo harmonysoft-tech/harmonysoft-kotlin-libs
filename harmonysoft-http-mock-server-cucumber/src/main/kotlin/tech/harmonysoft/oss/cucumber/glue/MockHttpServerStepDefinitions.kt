@@ -109,11 +109,6 @@ class MockHttpServerStepDefinitions {
         manager.delayLastResponse(delayMs)
     }
 
-    @Given("HTTP server test verification failure is expected")
-    fun expectVerificationFailure() {
-        manager.expectVerificationFailure()
-    }
-
     @Then("^the following HTTP ([^\\s]+) request for path ([^\\s]+) with at least this JSON data is received:$")
     fun verifyRequestReceived(httpMethod: String, path: String, expectedRawJson: String) {
         manager.verifyRequestReceived(httpMethod, path, expectedRawJson)

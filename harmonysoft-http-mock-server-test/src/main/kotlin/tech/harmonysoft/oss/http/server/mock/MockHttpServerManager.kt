@@ -32,6 +32,7 @@ import tech.harmonysoft.oss.test.binding.DynamicBindingContext
 import tech.harmonysoft.oss.test.fixture.CommonTestFixture
 import tech.harmonysoft.oss.test.fixture.FixtureDataHelper
 import tech.harmonysoft.oss.test.json.CommonJsonUtil
+import tech.harmonysoft.oss.test.manager.CommonTestManager
 import tech.harmonysoft.oss.test.matcher.Matcher
 import tech.harmonysoft.oss.test.util.NetworkUtil
 import tech.harmonysoft.oss.test.util.TestUtil.fail
@@ -44,6 +45,7 @@ class MockHttpServerManager(
     private val fixtureDataHelper: FixtureDataHelper,
     private val jsonApi: JsonApi,
     private val dynamicContext: DynamicBindingContext,
+    private val common: CommonTestManager,
     private val logger: Logger
 ) {
 
@@ -61,7 +63,6 @@ class MockHttpServerManager(
     private val activeExpectationInfo: ExpectationInfo
         get() = activeExpectationInfoRef.get() ?: fail("no active mock HTTP request if defined")
     private val lastResponseProviderRef = AtomicReference<ResponseProvider?>()
-    private val expectTestVerificationFailure = AtomicBoolean()
 
     @BeforeEach
     fun setUp() {
@@ -94,7 +95,6 @@ class MockHttpServerManager(
         receivedRequests.clear()
         activeExpectationInfoRef.set(null)
         lastResponseProviderRef.set(null)
-        expectTestVerificationFailure.set(false)
     }
 
     fun targetRequest(request: HttpRequest) {
@@ -270,7 +270,7 @@ class MockHttpServerManager(
                 matches.isNotEmpty()
             }
         }
-        if (expectTestVerificationFailure.get()) {
+        if (common.expectTestVerificationFailure) {
             VerificationUtil.verifyConditionHappens(
                 "unexpected HTTP $httpMethod call to $expandedPath didn't happen"
             ) {
@@ -293,10 +293,6 @@ class MockHttpServerManager(
                 fail("no HTTP $httpMethod request to $path is made")
             }
         }
-    }
-
-    fun expectVerificationFailure() {
-        expectTestVerificationFailure.set(true)
     }
 
     fun findMatches(actualData: Any?, toFind: Any?, path: String): Collection<String> {

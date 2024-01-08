@@ -123,3 +123,14 @@ Feature: Mongo cucumber feature tests
         "key1": 42
       }
       """
+
+    Scenario: Expecting a document in empty collection
+
+      When next test verification is expected to fail
+
+      Then mongo test collection should have a document with at least the following data:
+         """
+         {
+           "key": "value"
+         }
+         """

@@ -171,7 +171,7 @@ Feature: Mock HTTP server tests
       }
       """
 
-    Then the following POST request for path /context/<bound:path>/three with at least this JSON data is received by mock HTTP server:
+    Then the following HTTP POST request for path /context/<bound:path>/three with at least this JSON data is received:
       """
       {
         "key1": "value1",
@@ -399,7 +399,7 @@ Feature: Mock HTTP server tests
       }
       """
 
-    And HTTP server test verification failure is expected
+    And next test verification is expected to fail
 
     Then the following JSON HTTP POST request for path /test without the following data is received:
       """
@@ -434,7 +434,7 @@ Feature: Mock HTTP server tests
       }
       """
 
-    And HTTP server test verification failure is expected
+    And next test verification is expected to fail
 
     Then the following JSON HTTP POST request for path /test without the following data is received:
       """
@@ -471,7 +471,7 @@ Feature: Mock HTTP server tests
       }
       """
 
-    And HTTP server test verification failure is expected
+    And next test verification is expected to fail
 
     Then the following JSON HTTP POST request for path /test without the following data is received:
       """
@@ -513,7 +513,7 @@ Feature: Mock HTTP server tests
       }
       """
 
-    And HTTP server test verification failure is expected
+    And next test verification is expected to fail
 
     Then the following JSON HTTP POST request for path /test without the following data is received:
       """
@@ -562,7 +562,7 @@ Feature: Mock HTTP server tests
       }
       """
 
-    And HTTP server test verification failure is expected
+    And next test verification is expected to fail
 
     Then the following JSON HTTP POST request for path /test without the following data is received:
       """
@@ -628,7 +628,7 @@ Feature: Mock HTTP server tests
       }
       """
 
-    And HTTP server test verification failure is expected
+    And next test verification is expected to fail
 
     Then the following JSON HTTP POST request for path /test without the following data is received:
       """
