@@ -11,6 +11,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.TestInfo
 import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import tech.harmonysoft.oss.common.time.util.DateTimeHelper
 import tech.harmonysoft.oss.test.TestAware
 import tech.harmonysoft.oss.test.binding.DynamicBindingContext
@@ -27,8 +28,7 @@ class CommonTestManager(
     private val dateTimeHelper: DateTimeHelper,
     private val contentManager: TestContentManager,
     private val fixtureDataHelper: FixtureDataHelper,
-    private val bindingContext: DynamicBindingContext,
-    private val logger: Logger
+    private val bindingContext: DynamicBindingContext
 ) {
 
     private val _expectTestVerificationFailure = AtomicBoolean()
@@ -36,6 +36,8 @@ class CommonTestManager(
 
     private val _testName = AtomicReference("")
     val activeTestName: String get() = _testName.get()
+
+    private val logger = LoggerFactory.getLogger(this::class.java)
 
     @BeforeEach
     fun setUp(info: TestInfo) {
