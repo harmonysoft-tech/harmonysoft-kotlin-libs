@@ -1,3 +1,6 @@
+## v1.96.0 released on 09 Jan 2024 UTC
+  * 10d1812e2b353f6ca255693840157cec1154bea3 added ability to match double value with decimal128 values in mongo documents
+  * d2e76b767fca895427fb4ba60d0dd99b113a5740 fix tests
 ## v1.95.0 released on 08 Jan 2024 UTC
   * 87e6bcf0471004da5f0c601d8eda81f48610b79b corrected DI setup
 ## v1.94.0 released on 08 Jan 2024 UTC
