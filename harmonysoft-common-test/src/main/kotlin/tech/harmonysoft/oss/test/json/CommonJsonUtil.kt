@@ -99,32 +99,12 @@ object CommonJsonUtil {
         expected: Any,
         actual: Any,
         path: String = "<root>",
-        strict: Boolean = true
+        strict: Boolean = true,
+        equalityMatcher: (Any, Any) -> Boolean = { o1, o2 -> o1 == o2 }
     ): TestMatchResult {
-        val classMatched = (expected is Map<*, *> && actual is Map<*, *>)
-                           || (expected is Collection<*> && actual is Collection<*>)
-                           || (expected::class == actual::class)
-        if (!classMatched) {
-            return TestMatchResult(
-                errors = listOf(
-                    "expected an instance of ${expected::class.qualifiedName} ($expected) at path '$path' " +
-                    "but got and instance of ${actual::class.qualifiedName} ($actual"
-                ),
-                boundDynamicValues = emptyMap()
-            )
-        }
-        return when {
-            expected is Map<*, *> -> compareAndBindMap(expected, actual, path, strict)
-
-            expected is List<*> -> compareAndBindList(expected, actual, path, strict)
-
-            expected is String && expected.startsWith(DYNAMIC_VALUE_PREFIX) -> {
-                TestMatchResult(emptyList(), mapOf(
-                    DynamicBindingKey(expected.substring(DYNAMIC_VALUE_PREFIX.length)) to actual
-                ))
-            }
-
-            else -> if (expected == actual) {
+        if (isSimpleValue(expected) && isSimpleValue(actual)) {
+            val matched = equalityMatcher(expected, actual)
+            return if (matched) {
                 TestMatchResult(emptyList(), emptyMap())
             } else {
                 TestMatchResult(
@@ -134,13 +114,47 @@ object CommonJsonUtil {
                 )
             }
         }
+        val classMatched = (expected is Map<*, *> && actual is Map<*, *>)
+                           || (expected is Collection<*> && actual is Collection<*>)
+                           || (expected::class == actual::class)
+        if (!classMatched) {
+            return TestMatchResult(
+                errors = listOf(
+                    "expected an instance of ${expected::class.qualifiedName} ($expected) at path '$path' " +
+                    "but got and instance of ${actual::class.qualifiedName} ($actual)"
+                ),
+                boundDynamicValues = emptyMap()
+            )
+        }
+        return when {
+            expected is Map<*, *> -> compareAndBindMap(expected, actual, path, strict, equalityMatcher)
+
+            expected is List<*> -> compareAndBindList(expected, actual, path, strict, equalityMatcher)
+
+            expected is String && expected.startsWith(DYNAMIC_VALUE_PREFIX) -> {
+                TestMatchResult(emptyList(), mapOf(
+                    DynamicBindingKey(expected.substring(DYNAMIC_VALUE_PREFIX.length)) to actual
+                ))
+            }
+
+            else -> fail(
+                "unexpected situation during JSON comparison - expected value of type "
+                + "${expected::class.qualifiedName}($expected), actual value of type "
+                + "${actual::class.qualifiedName}($actual)"
+            )
+        }
+    }
+
+    private fun isSimpleValue(value: Any): Boolean {
+        return value !is Map<*, *> && value !is Collection<*> && value !is String
     }
 
     fun compareAndBindMap(
         expected: Map<*, *>,
         actual: Any,
         path: String,
-        strict: Boolean
+        strict: Boolean,
+        equalityMatcher: (Any, Any) -> Boolean
     ): TestMatchResult {
         if (actual !is Map<*, *>) {
             return TestMatchResult(
@@ -170,7 +184,7 @@ object CommonJsonUtil {
                     continue
                 }
                 actualValue?.let {
-                    val result = compareAndBind(value as Any, it, "$path.$key", strict)
+                    val result = compareAndBind(value as Any, it, "$path.$key", strict, equalityMatcher)
                     errors += result.errors
                     dynamicBindings += result.boundDynamicValues
                 } ?: run {
@@ -186,7 +200,8 @@ object CommonJsonUtil {
         expected: List<*>,
         actual: Any,
         path: String,
-        strict: Boolean
+        strict: Boolean,
+        equalityMatcher: (Any, Any) -> Boolean
     ): TestMatchResult {
         if (actual !is List<*>) {
             return TestMatchResult(
@@ -195,16 +210,17 @@ object CommonJsonUtil {
             )
         }
         return if (strict) {
-            compareAndBindListInStrictMode(expected, actual, path)
+            compareAndBindListInStrictMode(expected, actual, path, equalityMatcher)
         } else {
-            compareAndBindListInNonStrictMode(expected, actual, path)
+            compareAndBindListInNonStrictMode(expected, actual, path, equalityMatcher)
         }
     }
 
     fun compareAndBindListInStrictMode(
         expected: List<*>,
         actual: List<*>,
-        path: String
+        path: String,
+        equalityMatcher: (Any, Any) -> Boolean
     ): TestMatchResult {
         return if (expected.size != actual.size) {
             TestMatchResult(
@@ -220,7 +236,7 @@ object CommonJsonUtil {
             expected.forEachIndexed { i: Int, expectedValue: Any? ->
                 expectedValue ?: fail("I can't happen, path: $path, index: $i")
                 actual[i]?.let {
-                    val result = compareAndBind(expectedValue, it, "$path[$i]", true)
+                    val result = compareAndBind(expectedValue, it, "$path[$i]", true, equalityMatcher)
                     errors += result.errors
                     dynamicBindings += result.boundDynamicValues
                 } ?: run {
@@ -235,7 +251,8 @@ object CommonJsonUtil {
     fun compareAndBindListInNonStrictMode(
         expected: List<*>,
         actual: List<*>,
-        path: String
+        path: String,
+        equalityMatcher: (Any, Any) -> Boolean
     ): TestMatchResult {
         val errors = mutableListOf<String>()
         val dynamicBindings = mutableMapOf<DynamicBindingKey, Any?>()
@@ -244,7 +261,7 @@ object CommonJsonUtil {
             expectedElement ?: fail("I can't happen")
             var matched = false
             for (candidate in remainingCandidates) {
-                val result = compareAndBind(expectedElement, candidate as Any, path, false)
+                val result = compareAndBind(expectedElement, candidate as Any, path, false, equalityMatcher)
                 if (result.errors.isEmpty()) {
                     matched = true
                     remainingCandidates.remove(candidate)

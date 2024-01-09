@@ -124,13 +124,26 @@ Feature: Mongo cucumber feature tests
       }
       """
 
-    Scenario: Expecting a document in empty collection
+  Scenario: Expecting a document in empty collection
 
-      When next test verification is expected to fail
+    When next test verification is expected to fail
 
-      Then mongo test collection should have a document with at least the following data:
-         """
-         {
-           "key": "value"
-         }
-         """
+    Then mongo test collection should have a document with at least the following data:
+       """
+       {
+         "key": "value"
+       }
+       """
+
+  Scenario: Decimal128 value in mongo document
+
+    When mongo test collection has the following document:
+      | key1             |
+      | <decimal128(10)> |
+
+    Then mongo test collection should have a document with at least the following data:
+      """
+      {
+        "key1": 10.0
+      }
+      """

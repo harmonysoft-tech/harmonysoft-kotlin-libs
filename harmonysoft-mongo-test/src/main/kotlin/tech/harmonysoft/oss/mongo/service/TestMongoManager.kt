@@ -15,6 +15,7 @@ import javax.inject.Named
 import org.bson.BSONObject
 import org.bson.Document
 import org.bson.conversions.Bson
+import org.bson.types.Decimal128
 import org.bson.types.ObjectId
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.fail
@@ -122,6 +123,8 @@ class TestMongoManager(
             when (value) {
                 is String -> value
                 is Int -> "<int($value)>"
+                is Float -> "<float($value)>"
+                is Double -> "<double($value)>"
                 null -> "<null>"
                 else -> fail(
                     "can not convert mongo input data's value for key '$key' - it has unsupported type "
@@ -316,7 +319,8 @@ class TestMongoManager(
         val result = CommonJsonUtil.compareAndBind(
             expected = expected.data,
             actual = actual,
-            strict = false
+            strict = false,
+            equalityMatcher = this::matcher
         )
         val resolvedBindings = mutableMapOf<DynamicBindingKey, Any?>()
         val errors = mutableListOf<String>()
@@ -344,6 +348,17 @@ class TestMongoManager(
                     append(error)
                 }
             }
+        }
+    }
+
+    private fun matcher(o1: Any, o2: Any): Boolean {
+        return normalise(o1) == normalise(o2)
+    }
+
+    private fun normalise(data: Any): Any {
+        return when (data) {
+            is Decimal128 -> data.toDouble()
+            else -> data
         }
     }
 }
