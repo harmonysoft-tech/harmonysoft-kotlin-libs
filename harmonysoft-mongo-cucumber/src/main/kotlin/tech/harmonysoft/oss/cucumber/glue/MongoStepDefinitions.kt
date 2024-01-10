@@ -35,4 +35,14 @@ class MongoStepDefinitions {
     fun verifyJsonDocumentExists(collectionName: String, json: String) {
         mongo.verifyJsonDocumentExists(collectionName, json)
     }
+
+    @Then("^mongo ([^\\s]+) collection should have (\\d+) documents$")
+    fun verifyDocumentsNumber(collection: String, expectedDocumentsNumber: Int) {
+        mongo.verifyDocumentsNumber(collection, expectedDocumentsNumber)
+    }
+
+    @Then("^mongo ([^\\s]+) collection is empty$")
+    fun verifyCollectionIsEmpty(collectionName: String) {
+        verifyDocumentsNumber(collectionName, 0)
+    }
 }

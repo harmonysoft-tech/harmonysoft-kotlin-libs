@@ -361,4 +361,15 @@ class TestMongoManager(
             else -> data
         }
     }
+
+    fun verifyDocumentsNumber(collectionName: String, expectedDocumentsNumber: Int) {
+        val collection = client.getDatabase(configProvider.data.db).getCollection(collectionName)
+        val allDocuments = collection.find(Mongo.Filter.ALL).toList()
+        if (allDocuments.size != expectedDocumentsNumber) {
+            fail(
+                "expected to find $expectedDocumentsNumber documents in mongo '$collectionName' "
+                + "collection but found ${allDocuments.size}"
+            )
+        }
+    }
 }

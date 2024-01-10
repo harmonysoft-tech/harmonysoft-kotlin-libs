@@ -369,4 +369,18 @@ class TestKafkaManager(
             } ?: ProcessingResult.success()
         }
     }
+
+    fun verifyNoMessageIsReceived(topic: String) {
+        VerificationUtil.verifyConditionDoesNotHappen("no message is received in kafka topic '$topic'") {
+            val messages = topic2messages[topic]
+            if (messages.isNullOrEmpty()) {
+                ProcessingResult.success()
+            } else {
+                ProcessingResult.failure(
+                    "received ${messages.size} in kafka topic '$topic': "
+                    + messages.joinToString { recordToString(it) }
+                )
+            }
+        }
+    }
 }

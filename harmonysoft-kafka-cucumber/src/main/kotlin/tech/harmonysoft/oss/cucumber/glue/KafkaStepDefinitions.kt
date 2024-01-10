@@ -59,7 +59,7 @@ class KafkaStepDefinitions {
         )
     }
 
-    @Then("^the following JSON message is received in kafka topic '([^']+)':$")
+    @Then("^a JSON message with at least the following data is received in kafka topic '([^']+)':$")
     fun verifyJsonMessageIsReceived(topic: String, expectedJson: String) {
         kafka.verifyJsonMessageIsReceived(expectedJson, topic)
     }
@@ -69,8 +69,13 @@ class KafkaStepDefinitions {
         kafka.verifyMessageIsNotReceived(expected, topic)
     }
 
-    @Then("^the following JSON message is not received in kafka topic '([^']+)':$")
+    @Then("^a JSON message with at least the following data is not received in kafka topic '([^']+)':$")
     fun verifyNoJsonMessageIsReceived(topic: String, expected: String) {
         kafka.verifyJsonMessageIsNotReceived(expected, topic)
+    }
+
+    @Then("^no message is received in kafka topic '([^']+)':$")
+    fun verifyNoMessageIsReceived(topic: String) {
+        kafka.verifyNoMessageIsReceived(topic)
     }
 }

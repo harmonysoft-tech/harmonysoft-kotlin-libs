@@ -146,7 +146,9 @@ object CommonJsonUtil {
     }
 
     private fun isSimpleValue(value: Any): Boolean {
-        return value !is Map<*, *> && value !is Collection<*> && value !is String
+        return value !is Map<*, *>
+               && value !is Collection<*>
+               && (value !is String || !value.startsWith(DYNAMIC_VALUE_PREFIX))
     }
 
     fun compareAndBindMap(

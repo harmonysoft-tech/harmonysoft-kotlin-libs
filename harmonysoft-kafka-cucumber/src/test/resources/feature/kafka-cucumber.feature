@@ -26,7 +26,7 @@ Feature: Kafka cucumber feature tests
       }
       """
 
-    Then the following JSON message is received in kafka topic 'test':
+    Then a JSON message with at least the following data is received in kafka topic 'test':
       """
       {
         "k1": "v1",
@@ -58,7 +58,7 @@ Feature: Kafka cucumber feature tests
       }
       """
 
-    Then the following JSON message is not received in kafka topic 'test':
+    Then a JSON message with at least the following data is not received in kafka topic 'test':
       """
       {
         "k1": "v3"
