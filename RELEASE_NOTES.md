@@ -1,3 +1,5 @@
+## v1.97.0 released on 10 Jan 2024 UTC
+  * 98909d45333a7efd8299f362f5965c50413454d5 more step definitions
 ## v1.96.0 released on 09 Jan 2024 UTC
   * 10d1812e2b353f6ca255693840157cec1154bea3 added ability to match double value with decimal128 values in mongo documents
   * d2e76b767fca895427fb4ba60d0dd99b113a5740 fix tests
