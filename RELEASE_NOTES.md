@@ -1,3 +1,5 @@
+## v1.99.0 released on 17 Jan 2024 UTC
+  * dd34b66c35c6aeb2a20e85ced6c47735271db932 added ability to verify that target mongo collection doesn't have a document with specific data
 ## v1.98.0 released on 17 Jan 2024 UTC
   * c4114fec3826c1c49ceef7a684ba76c57fada3cd corrected cucumber texting
 ## v1.97.0 released on 10 Jan 2024 UTC
