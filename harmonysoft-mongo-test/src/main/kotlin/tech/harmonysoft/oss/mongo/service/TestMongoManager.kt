@@ -233,27 +233,11 @@ class TestMongoManager(
             it.data.keys + it.toBind.keys
         }).toSet().toList()
 
-        val actualDocumentsFetcher = {
-            val collection = client.getDatabase(configProvider.data.db).getCollection(collectionName)
-            collection
-                .find(Mongo.Filter.ALL)
-                .projection(Projections.include(projection))
-                .map { document ->
-                    document.apply {
-                        document[Mongo.Column.ID]?.let { id ->
-                            if (id is ObjectId) {
-                                document[Mongo.Column.ID] = id.toString()
-                            }
-                        }
-                    }
-                }.map { toCollections(it) }.toList()
-        }
-
         if (common.expectTestVerificationFailure) {
             VerificationUtil.verifyConditionHappens(
                 "target document is not found in mongo '$collectionName' collection"
             ) {
-                val actual = actualDocumentsFetcher()
+                val actual = getDocuments(collectionName, projection)
                 matchDocuments(records, actual)?.let {
                     ProcessingResult.success()
                 } ?: ProcessingResult.failure("target document is found in mongo '$collectionName' collection")
@@ -262,12 +246,32 @@ class TestMongoManager(
             VerificationUtil.verifyConditionHappens(
                 "target document is found in mongo '$collectionName' collection"
             ) {
-                val actual = actualDocumentsFetcher()
+                val actual = getDocuments(collectionName, projection)
                 matchDocuments(records, actual)?.let {
                     ProcessingResult.failure(it)
                 } ?: ProcessingResult.success()
             }
         }
+    }
+
+    private fun getDocuments(collectionName: String, projections: Collection<String>? = null): Collection<Any> {
+        val collection = client.getDatabase(configProvider.data.db).getCollection(collectionName)
+        return collection
+            .find(Mongo.Filter.ALL)
+            .apply {
+                projections?.let {
+                    this.projection(Projections.include(it.toList()))
+                }
+            }
+            .map { document ->
+                document.apply {
+                    document[Mongo.Column.ID]?.let { id ->
+                        if (id is ObjectId) {
+                            document[Mongo.Column.ID] = id.toString()
+                        }
+                    }
+                }
+            }.map { toCollections(it) }.toList()
     }
 
     private fun matchDocuments(expected: Collection<TestInputRecord>, actual: Collection<Any>): String? {
@@ -370,6 +374,44 @@ class TestMongoManager(
                 "expected to find $expectedDocumentsNumber documents in mongo '$collectionName' "
                 + "collection but found ${allDocuments.size}"
             )
+        }
+    }
+
+    fun verifyJsonDocumentDoesNotExist(collectionName: String, json: String) {
+        val preparedJson = fixtureHelper.prepareTestData(
+            type = MongoTestFixture.TYPE,
+            context = Any(),
+            data = CommonJsonUtil.prepareDynamicMarkers(json)
+        ).toString()
+        val parsed = jsonApi.parseJson(preparedJson)
+        val matchedDocumentFinder = {
+            val actual = getDocuments(collectionName)
+            actual.find { candidate ->
+                CommonJsonUtil.compareAndBind(
+                    expected = parsed,
+                    actual = candidate,
+                    strict = false,
+                    equalityMatcher = this::matcher
+                ).errors.isEmpty()
+            }
+        }
+
+        if (common.expectTestVerificationFailure) {
+            VerificationUtil.verifyConditionHappens(
+                "unexpected document should exist in mongo '$collectionName' collection"
+            ) {
+                matchedDocumentFinder()?.let {
+                    ProcessingResult.success()
+                } ?: ProcessingResult.failure("unexpected document is not found")
+            }
+        } else {
+            VerificationUtil.verifyConditionDoesNotHappen(
+                "target document does not exist in mongo '$collectionName' collection"
+            ) {
+                matchedDocumentFinder()?.let {
+                    ProcessingResult.failure("unexpected document is found: $it")
+                } ?: ProcessingResult.success()
+            }
         }
     }
 }

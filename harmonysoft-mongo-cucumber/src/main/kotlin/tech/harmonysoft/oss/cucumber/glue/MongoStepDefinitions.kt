@@ -45,4 +45,9 @@ class MongoStepDefinitions {
     fun verifyCollectionIsEmpty(collectionName: String) {
         verifyDocumentsNumber(collectionName, 0)
     }
+
+    @Then("^mongo ([^\\s]+) collection should not have a document with at least the following JSON data:$")
+    fun verifyJsonDocumentDoesNotExist(collection: String, json: String) {
+        mongo.verifyJsonDocumentDoesNotExist(collection, json)
+    }
 }

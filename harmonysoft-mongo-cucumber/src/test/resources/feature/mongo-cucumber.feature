@@ -147,3 +147,20 @@ Feature: Mongo cucumber feature tests
         "key1": 10.0
       }
       """
+
+  Scenario: Target mongo document doesn't exist
+
+    Given mongo test collection has the following JSON document:
+      """
+      {
+        "key1": "value1",
+        "key2": "value2"
+      }
+      """
+
+    When next test verification is expected to fail
+
+    Then mongo test collection should not have a document with at least the following JSON data:
+      """
+      { "key1": "value1" }
+      """
