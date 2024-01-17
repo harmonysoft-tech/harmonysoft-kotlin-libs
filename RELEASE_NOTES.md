@@ -1,3 +1,5 @@
+## v1.98.0 released on 17 Jan 2024 UTC
+  * c4114fec3826c1c49ceef7a684ba76c57fada3cd corrected cucumber texting
 ## v1.97.0 released on 10 Jan 2024 UTC
   * 98909d45333a7efd8299f362f5965c50413454d5 more step definitions
 ## v1.96.0 released on 09 Jan 2024 UTC
