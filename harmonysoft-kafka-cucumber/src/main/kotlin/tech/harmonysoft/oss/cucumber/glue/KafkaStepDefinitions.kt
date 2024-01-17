@@ -74,7 +74,7 @@ class KafkaStepDefinitions {
         kafka.verifyJsonMessageIsNotReceived(expected, topic)
     }
 
-    @Then("^no message is received in kafka topic '([^']+)':$")
+    @Then("^no message is received in kafka topic '([^']+)'$")
     fun verifyNoMessageIsReceived(topic: String) {
         kafka.verifyNoMessageIsReceived(topic)
     }
