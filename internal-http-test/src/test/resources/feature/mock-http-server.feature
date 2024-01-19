@@ -675,3 +675,20 @@ Feature: Mock HTTP server tests
         ]
       }
       """
+
+  Scenario: Null in json value
+
+    When HTTP POST request to /test is made with JSON body:
+      """
+      {
+        "key1": "value1",
+        "key2": null
+      }
+      """
+
+    Then the following JSON HTTP POST request for path /test without the following data is received:
+      """
+      {
+        "key2": null
+      }
+      """
