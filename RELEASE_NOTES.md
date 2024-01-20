@@ -1,3 +1,7 @@
+## v1.100.0 released on 20 Jan 2024 UTC
+  * a668ccaf8022001e3c087e89af23730fa16f8504 corrected null JSON values comparison in HTTP calls
+  * a87acdf44ee44e84100bbcb7facc0697c638b4ab more HTTP tests
+  * 29ef67e929da37733fd62a27bfebcac1ae924f7b more HTTP tests
 ## v1.99.0 released on 17 Jan 2024 UTC
   * dd34b66c35c6aeb2a20e85ced6c47735271db932 added ability to verify that target mongo collection doesn't have a document with specific data
 ## v1.98.0 released on 17 Jan 2024 UTC
