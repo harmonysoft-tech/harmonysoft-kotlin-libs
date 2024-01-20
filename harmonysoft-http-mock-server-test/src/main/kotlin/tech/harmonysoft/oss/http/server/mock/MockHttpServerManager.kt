@@ -301,12 +301,8 @@ class MockHttpServerManager(
 
             toFind is Map<*, *> -> toFind.entries.fold(emptyList()) { acc, (key, value) ->
                 val newMatches = if (actualData is Map<*, *>) {
-                    value?.let { subValueToFind ->
-                        key?.let { subKey ->
-                            actualData[subKey]?.let { subActualValue ->
-                                findMatches(subActualValue, subValueToFind, "$path.$subKey")
-                            }
-                        }
+                    key?.let { subKey ->
+                        findMatches(actualData[subKey], value, "$path.$subKey")
                     } ?: emptyList()
                 } else {
                     emptyList()

@@ -686,7 +686,9 @@ Feature: Mock HTTP server tests
       }
       """
 
-    Then the following HTTP POST request for path /test with at least this JSON data is received:
+    Then next test verification is expected to fail
+
+    And the following JSON HTTP POST request for path /test without the following data is received:
       """
       {
         "key2": null
