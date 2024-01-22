@@ -302,7 +302,12 @@ class MockHttpServerManager(
             toFind is Map<*, *> -> toFind.entries.fold(emptyList()) { acc, (key, value) ->
                 val newMatches = if (actualData is Map<*, *>) {
                     key?.let { subKey ->
-                        findMatches(actualData[subKey], value, "$path.$subKey")
+                        // we want to match 'null' value if it is really present in json
+                        if (actualData.containsKey(subKey)) {
+                            findMatches(actualData[subKey], value, "$path.$subKey")
+                        } else {
+                            emptyList()
+                        }
                     } ?: emptyList()
                 } else {
                     emptyList()
