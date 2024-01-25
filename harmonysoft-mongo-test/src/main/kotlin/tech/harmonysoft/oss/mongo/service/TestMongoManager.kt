@@ -12,6 +12,7 @@ import com.mongodb.client.model.Updates
 import java.util.UUID
 import java.util.concurrent.TimeUnit
 import javax.inject.Named
+import javax.inject.Provider
 import org.bson.BSONObject
 import org.bson.Document
 import org.bson.conversions.Bson
@@ -43,7 +44,7 @@ class TestMongoManager(
     private val fixtureHelper: FixtureDataHelper,
     private val bindingContext: DynamicBindingContext,
     private val jsonApi: JsonApi,
-    private val common: CommonTestManager,
+    private val common: Provider<CommonTestManager>,
     private val logger: Logger
 ) : TestAware {
 
@@ -233,7 +234,7 @@ class TestMongoManager(
             it.data.keys + it.toBind.keys
         }).toSet().toList()
 
-        if (common.expectTestVerificationFailure) {
+        if (common.get().expectTestVerificationFailure) {
             VerificationUtil.verifyConditionHappens(
                 "target document is not found in mongo '$collectionName' collection"
             ) {
@@ -396,7 +397,7 @@ class TestMongoManager(
             }
         }
 
-        if (common.expectTestVerificationFailure) {
+        if (common.get().expectTestVerificationFailure) {
             VerificationUtil.verifyConditionHappens(
                 "unexpected document should exist in mongo '$collectionName' collection"
             ) {

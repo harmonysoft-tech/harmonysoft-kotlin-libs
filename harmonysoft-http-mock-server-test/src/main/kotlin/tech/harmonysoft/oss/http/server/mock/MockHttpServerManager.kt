@@ -6,6 +6,7 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.atomic.AtomicReference
 import javax.inject.Named
+import javax.inject.Provider
 import org.mockserver.integration.ClientAndServer
 import org.mockserver.model.Header
 import org.mockserver.model.HttpRequest
@@ -43,7 +44,7 @@ class MockHttpServerManager(
     private val fixtureDataHelper: FixtureDataHelper,
     private val jsonApi: JsonApi,
     private val dynamicContext: DynamicBindingContext,
-    private val common: CommonTestManager,
+    private val common: Provider<CommonTestManager>,
     private val logger: Logger
 ) : TestAware {
 
@@ -267,7 +268,7 @@ class MockHttpServerManager(
                 matches.isNotEmpty()
             }
         }
-        if (common.expectTestVerificationFailure) {
+        if (common.get().expectTestVerificationFailure) {
             VerificationUtil.verifyConditionHappens(
                 "unexpected HTTP $httpMethod call to $expandedPath didn't happen"
             ) {
