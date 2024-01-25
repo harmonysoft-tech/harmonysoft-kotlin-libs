@@ -1,6 +1,5 @@
 package tech.harmonysoft.oss.cucumber.glue
 
-import io.cucumber.java.After
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import javax.inject.Inject
@@ -9,11 +8,6 @@ import tech.harmonysoft.oss.kafka.service.TestKafkaManager
 class KafkaStepDefinitions {
 
     @Inject private lateinit var kafka: TestKafkaManager
-
-    @After
-    fun tearDown() {
-        kafka.tearDown()
-    }
 
     @Given("^kafka topic '$([^']+)' exists$")
     fun createTopicIfNecessary(name: String) {

@@ -6,8 +6,6 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.atomic.AtomicReference
 import javax.inject.Named
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
 import org.mockserver.integration.ClientAndServer
 import org.mockserver.model.Header
 import org.mockserver.model.HttpRequest
@@ -27,6 +25,7 @@ import tech.harmonysoft.oss.http.server.mock.response.DelayedResponseProvider
 import tech.harmonysoft.oss.http.server.mock.response.ResponseProvider
 import tech.harmonysoft.oss.jackson.JsonHelper
 import tech.harmonysoft.oss.json.JsonApi
+import tech.harmonysoft.oss.test.TestAware
 import tech.harmonysoft.oss.test.binding.DynamicBindingContext
 import tech.harmonysoft.oss.test.fixture.CommonTestFixture
 import tech.harmonysoft.oss.test.fixture.FixtureDataHelper
@@ -46,7 +45,7 @@ class MockHttpServerManager(
     private val dynamicContext: DynamicBindingContext,
     private val common: CommonTestManager,
     private val logger: Logger
-) {
+) : TestAware {
 
     private val mockRef = AtomicReference<ClientAndServer>()
     private val httpMock: ClientAndServer
@@ -63,8 +62,7 @@ class MockHttpServerManager(
         get() = activeExpectationInfoRef.get() ?: fail("no active mock HTTP request if defined")
     private val lastResponseProviderRef = AtomicReference<ResponseProvider?>()
 
-    @BeforeEach
-    fun setUp() {
+    override fun onTestStart() {
         startIfNecessary()
     }
 
@@ -83,8 +81,7 @@ class MockHttpServerManager(
         return port
     }
 
-    @AfterEach
-    fun tearDown() {
+    override fun onTestEnd() {
         logger.info("Cleaning all mock HTTP server expectation rules")
         for (info in expectations.values) {
             httpMock.clear(info.expectationId)
@@ -95,6 +92,7 @@ class MockHttpServerManager(
         receivedRequests.clear()
         activeExpectationInfoRef.set(null)
         lastResponseProviderRef.set(null)
+
     }
 
     fun targetRequest(request: HttpRequest) {

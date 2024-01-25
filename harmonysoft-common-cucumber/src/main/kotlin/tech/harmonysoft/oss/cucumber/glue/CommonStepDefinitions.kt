@@ -1,29 +1,20 @@
 package tech.harmonysoft.oss.cucumber.glue
 
-import io.cucumber.java.After
 import io.cucumber.java.Before
 import io.cucumber.java.Scenario
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
-import org.slf4j.LoggerFactory
 import tech.harmonysoft.oss.test.manager.CommonTestManager
 
 class CommonStepDefinitions {
-
-    private val logger = LoggerFactory.getLogger(CommonStepDefinitions::class.java)
 
     @Inject private lateinit var manager: CommonTestManager
 
     @Before
     fun setUp(scenario: Scenario) {
         manager.setUp(scenario.name)
-    }
-
-    @After
-    fun tearDown() {
-        manager.tearDown()
     }
 
     @Given("^current time zone is set as ([^\\s]+)$")

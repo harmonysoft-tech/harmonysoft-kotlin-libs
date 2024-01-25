@@ -1,8 +1,6 @@
 package tech.harmonysoft.oss.cucumber.glue
 
 import io.cucumber.datatable.DataTable
-import io.cucumber.java.After
-import io.cucumber.java.Before
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import javax.inject.Inject
@@ -27,16 +25,6 @@ class MockHttpServerStepDefinitions {
     @Inject private lateinit var fixtureDataHelper: FixtureDataHelper
     @Inject private lateinit var matchersFactory: MatchersFactory
     @Inject private lateinit var dynamicContext: DynamicBindingContext
-
-    @Before
-    fun startIfNecessary() {
-        manager.startIfNecessary()
-    }
-
-    @After
-    fun tearDown() {
-        manager.tearDown()
-    }
 
     @Given("^the following HTTP request is received by mock server:$")
     fun targetRequest(data: DataTable) {

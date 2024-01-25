@@ -17,7 +17,6 @@ import org.bson.Document
 import org.bson.conversions.Bson
 import org.bson.types.Decimal128
 import org.bson.types.ObjectId
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.fail
 import org.slf4j.Logger
 import tech.harmonysoft.oss.common.ProcessingResult
@@ -27,6 +26,7 @@ import tech.harmonysoft.oss.mongo.config.TestMongoConfig
 import tech.harmonysoft.oss.mongo.config.TestMongoConfigProvider
 import tech.harmonysoft.oss.mongo.constant.Mongo
 import tech.harmonysoft.oss.mongo.fixture.MongoTestFixture
+import tech.harmonysoft.oss.test.TestAware
 import tech.harmonysoft.oss.test.binding.DynamicBindingContext
 import tech.harmonysoft.oss.test.binding.DynamicBindingKey
 import tech.harmonysoft.oss.test.fixture.FixtureDataHelper
@@ -45,7 +45,7 @@ class TestMongoManager(
     private val jsonApi: JsonApi,
     private val common: CommonTestManager,
     private val logger: Logger
-) {
+) : TestAware {
 
     private val allDocumentsFilter = BasicDBObject()
 
@@ -53,14 +53,14 @@ class TestMongoManager(
         getClient(configProvider.data)
     }
 
-    @AfterEach
-    fun cleanUpData() {
+    override fun onTestEnd() {
         val db = client.getDatabase(configProvider.data.db)
         for (collectionName in db.listCollectionNames()) {
             logger.info("Deleting all documents from mongo collection {}", collectionName)
             val result = db.getCollection(collectionName).deleteMany(allDocumentsFilter)
             logger.info("Deleted {} document(s) in mongo collection {}", result.deletedCount, collectionName)
         }
+
     }
 
     fun getClient(config: TestMongoConfig): MongoClient {

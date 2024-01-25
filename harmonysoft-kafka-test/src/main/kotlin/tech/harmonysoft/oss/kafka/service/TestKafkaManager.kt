@@ -20,7 +20,6 @@ import org.apache.kafka.common.header.internals.RecordHeader
 import org.apache.kafka.common.serialization.Deserializer
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.apache.kafka.common.serialization.StringSerializer
-import org.junit.jupiter.api.AfterEach
 import org.slf4j.Logger
 import tech.harmonysoft.oss.common.ProcessingResult
 import tech.harmonysoft.oss.json.JsonApi
@@ -28,6 +27,7 @@ import tech.harmonysoft.oss.kafka.config.TestKafkaConfig
 import tech.harmonysoft.oss.kafka.config.TestKafkaConfigProvider
 import tech.harmonysoft.oss.kafka.fixture.KafkaFixtureContext
 import tech.harmonysoft.oss.kafka.fixture.KafkaTestFixture
+import tech.harmonysoft.oss.test.TestAware
 import tech.harmonysoft.oss.test.binding.DynamicBindingContext
 import tech.harmonysoft.oss.test.fixture.FixtureDataHelper
 import tech.harmonysoft.oss.test.json.CommonJsonUtil
@@ -42,7 +42,7 @@ class TestKafkaManager(
     private val jsonApi: JsonApi,
     private val dynamicContext: DynamicBindingContext,
     private val logger: Logger
-) {
+) : TestAware {
 
     private val topic2messages = ConcurrentHashMap<String, MutableList<ConsumerRecord<String, String>>>()
     private val topic2consumer = ConcurrentHashMap<String, KafkaConsumer<String, String>>()
@@ -74,8 +74,7 @@ class TestKafkaManager(
 
     private val headers = ConcurrentHashMap<String, String>()
 
-    @AfterEach
-    fun tearDown() {
+    override fun onTestEnd() {
         cleanAllHeaders()
         topic2messages.clear()
     }

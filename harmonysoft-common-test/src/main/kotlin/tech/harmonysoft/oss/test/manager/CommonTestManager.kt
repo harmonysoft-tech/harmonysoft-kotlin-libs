@@ -7,10 +7,8 @@ import java.util.Optional
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
 import javax.inject.Named
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.TestInfo
-import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import tech.harmonysoft.oss.common.time.util.DateTimeHelper
 import tech.harmonysoft.oss.test.TestAware
@@ -29,7 +27,7 @@ class CommonTestManager(
     private val contentManager: TestContentManager,
     private val fixtureDataHelper: FixtureDataHelper,
     private val bindingContext: DynamicBindingContext
-) {
+) : TestAware {
 
     private val _expectTestVerificationFailure = AtomicBoolean()
     val expectTestVerificationFailure: Boolean get() = _expectTestVerificationFailure.get()
@@ -54,8 +52,7 @@ class CommonTestManager(
         }
     }
 
-    @AfterEach
-    fun tearDown() {
+    override fun onTestEnd() {
         logger.info("finished test '{}'", activeTestName)
         _expectTestVerificationFailure.set(false)
         _testName.set("")
