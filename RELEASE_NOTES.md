@@ -1,3 +1,6 @@
+## v1.101.0 released on 25 Jan 2024 UTC
+  * 4aafc53d0ebab7cdef6bc4532fa9f4289372c0fa switch from junit/cucumber hooks into TestAware
+  * e69d07c1a591b0925f9e88ae717944b17e77dcf1 corrected null JSON values comparison in HTTP calls
 ## v1.100.0 released on 20 Jan 2024 UTC
   * a668ccaf8022001e3c087e89af23730fa16f8504 corrected null JSON values comparison in HTTP calls
   * a87acdf44ee44e84100bbcb7facc0697c638b4ab more HTTP tests
