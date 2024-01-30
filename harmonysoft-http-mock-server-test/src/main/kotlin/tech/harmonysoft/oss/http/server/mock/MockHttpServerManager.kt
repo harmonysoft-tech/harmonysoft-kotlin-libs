@@ -84,11 +84,8 @@ class MockHttpServerManager(
 
     override fun onTestEnd() {
         logger.info("Cleaning all mock HTTP server expectation rules")
-        for (info in expectations.values) {
-            httpMock.clear(info.expectationId)
-        }
+        httpMock.reset()
         expectations.clear()
-        httpMock.clear(HttpRequest.request()) // clear all recorded requests
         logger.info("Finished cleaning all mock HTTP server expectation rules")
         receivedRequests.clear()
         activeExpectationInfoRef.set(null)
