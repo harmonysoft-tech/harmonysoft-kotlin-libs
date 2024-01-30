@@ -3,7 +3,6 @@ package tech.harmonysoft.oss.test.manager
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.ZoneId
-import java.util.Optional
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
 import javax.inject.Named
@@ -21,7 +20,6 @@ import tech.harmonysoft.oss.test.util.TestUtil
 
 @Named
 class CommonTestManager(
-    private val testCallbacks: Optional<Collection<TestAware>>,
     private val clockProvider: TestClockProvider,
     private val dateTimeHelper: DateTimeHelper,
     private val contentManager: TestContentManager,
@@ -45,22 +43,12 @@ class CommonTestManager(
     fun setUp(testName: String) {
         _testName.set(testName)
         logger.info("starting test '{}'", testName)
-        testCallbacks.ifPresent {
-            for (callback in it) {
-                callback.onTestStart()
-            }
-        }
     }
 
     override fun onTestEnd() {
         logger.info("finished test '{}'", activeTestName)
         _expectTestVerificationFailure.set(false)
         _testName.set("")
-        testCallbacks.ifPresent {
-            for (callback in it) {
-                callback.onTestEnd()
-            }
-        }
     }
 
     fun setTimeZone(zone: String) {

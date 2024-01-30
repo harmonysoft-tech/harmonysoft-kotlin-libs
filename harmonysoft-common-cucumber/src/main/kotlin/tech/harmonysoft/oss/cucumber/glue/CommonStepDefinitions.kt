@@ -1,20 +1,38 @@
 package tech.harmonysoft.oss.cucumber.glue
 
+import io.cucumber.java.After
 import io.cucumber.java.Before
 import io.cucumber.java.Scenario
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
+import java.util.Optional
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import tech.harmonysoft.oss.test.TestAware
 import tech.harmonysoft.oss.test.manager.CommonTestManager
 
 class CommonStepDefinitions {
 
     @Inject private lateinit var manager: CommonTestManager
+    @Inject private lateinit var callbacks: Optional<Collection<TestAware>>
 
     @Before
     fun setUp(scenario: Scenario) {
         manager.setUp(scenario.name)
+        callbacks.ifPresent {
+            for (callback in it) {
+                callback.onTestStart()
+            }
+        }
+    }
+
+    @After
+    fun tearDown() {
+        callbacks.ifPresent {
+            for (callback in it) {
+                callback.onTestEnd()
+            }
+        }
     }
 
     @Given("^current time zone is set as ([^\\s]+)$")
