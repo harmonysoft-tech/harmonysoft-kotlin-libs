@@ -1,3 +1,7 @@
+## v1.102.0 released on 30 Jan 2024 UTC
+  * fcd837c114dfadb22b7a8b314051b0714eb74d5e make sure that all mock http server data is reset after a test
+  * 00fe29f42578d7dba1698f1c95fb36bc69aa4642 proper TestAware management
+  * fbefb4a4c30423741ca9a8413ac84af657937122 correct DI initialisation sequence
 ## v1.101.0 released on 25 Jan 2024 UTC
   * 4aafc53d0ebab7cdef6bc4532fa9f4289372c0fa switch from junit/cucumber hooks into TestAware
   * e69d07c1a591b0925f9e88ae717944b17e77dcf1 corrected null JSON values comparison in HTTP calls
