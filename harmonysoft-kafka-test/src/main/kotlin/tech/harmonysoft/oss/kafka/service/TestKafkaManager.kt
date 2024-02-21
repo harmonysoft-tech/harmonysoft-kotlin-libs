@@ -338,7 +338,7 @@ class TestKafkaManager(
             context = KafkaFixtureContext(topic),
             data = expected
         ).toString()
-        VerificationUtil.verifyConditionDoesNotHappen {
+        VerificationUtil.verifyConditionDoesNotHappen("unexpected kafka message in topic '$topic'") {
             topic2messages[topic]?.find { record ->
                 record.value() == preparedExpected
             }?.let {
@@ -354,7 +354,9 @@ class TestKafkaManager(
             data = expected
         ).toString()
         val parsedExpectedJson = jsonApi.parseJson(preparedExpected)
-        VerificationUtil.verifyConditionDoesNotHappen {
+        VerificationUtil.verifyConditionDoesNotHappen(
+            "unexpected JSON message is received in kafka topic '$topic'"
+        ) {
             topic2messages[topic]?.find { record ->
                 val actual = jsonApi.parseJson(record.value())
                 val result = CommonJsonUtil.compareAndBind(

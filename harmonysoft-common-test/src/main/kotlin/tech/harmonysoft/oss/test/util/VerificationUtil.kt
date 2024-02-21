@@ -29,7 +29,7 @@ object VerificationUtil {
      * timeout
      */
     fun verifyConditionHappens(
-        description: String = "<no-description>",
+        description: String,
         checkTtlSeconds: Long = POSITIVE_POLLED_VERIFICATION_TTL_SECONDS,
         checkFrequencyMs: Long = POLLED_VERIFICATION_CHECK_FREQUENCY_MS,
         checker: () -> ProcessingResult<Unit, String>
@@ -51,7 +51,7 @@ object VerificationUtil {
      * condition doesn't happen within particular timeout
      */
     fun verifyConditionDoesNotHappen(
-        description: String = "<no-description>",
+        description: String,
         checkTtlSeconds: Long = NEGATIVE_POLLED_VERIFICATION_TTL_SECONDS,
         checkFrequencyMs: Long = POLLED_VERIFICATION_CHECK_FREQUENCY_MS,
         checker: () -> ProcessingResult<Unit, String>

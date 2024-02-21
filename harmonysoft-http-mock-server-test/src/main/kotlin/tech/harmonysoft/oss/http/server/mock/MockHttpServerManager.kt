@@ -213,7 +213,9 @@ class MockHttpServerManager(
         ).toString()
         val expected = jsonApi.parseJson(prepared)
 
-        VerificationUtil.verifyConditionHappens {
+        VerificationUtil.verifyConditionHappens(
+            "target HTTP $httpMethod JSON request for $path is received"
+        ) {
             val candidateBodies = httpMock.retrieveRecordedRequests(
                 HttpRequest.request(expandedPath).withMethod(httpMethod)
             ).map { it.body.value as String }
