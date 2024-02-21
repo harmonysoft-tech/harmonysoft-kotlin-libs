@@ -1,3 +1,5 @@
+## v1.103.0 released on 21 Feb 2024 UTC
+  * 8548f8dd71e6ae9a5ae8bb3f4dfcbfe6fa56e807 verification description is mandatory now
 ## v1.102.0 released on 30 Jan 2024 UTC
   * fcd837c114dfadb22b7a8b314051b0714eb74d5e make sure that all mock http server data is reset after a test
   * 00fe29f42578d7dba1698f1c95fb36bc69aa4642 proper TestAware management
