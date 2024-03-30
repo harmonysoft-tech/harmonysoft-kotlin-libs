@@ -1,3 +1,5 @@
+## v1.104.0 released on 30 Mar 2024 UTC
+  * f093b849edc98cb2ec0e6cc5eae72d70d256fdd5 prototype logback logger for spring projects
 ## v1.103.0 released on 21 Feb 2024 UTC
   * 8548f8dd71e6ae9a5ae8bb3f4dfcbfe6fa56e807 verification description is mandatory now
 ## v1.102.0 released on 30 Jan 2024 UTC
