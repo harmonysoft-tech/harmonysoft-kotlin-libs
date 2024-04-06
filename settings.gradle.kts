@@ -41,6 +41,11 @@ include("harmonysoft-kafka-cucumber")
 include("harmonysoft-kafka-environment")
 include("harmonysoft-kafka-environment-testcontainers")
 
+include("harmonysoft-redis-test")
+include("harmonysoft-redis-cucumber")
+include("harmonysoft-redis-environment")
+include("harmonysoft-redis-environment-testcontainers")
+
 include("harmonysoft-slf4j-spring")
 
 include("harmonysoft-default-implementations")
