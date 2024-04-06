@@ -1,3 +1,6 @@
+## v1.105.0 released on 06 Apr 2024 UTC
+  * 62b3a75940eae8f230dc90c02c9a83556d03d03e added redis support
+  * 6f4c30304425038c5b30ef9718afe3b40e0f2b3e removed duplicate logback logger configuration
 ## v1.104.0 released on 30 Mar 2024 UTC
   * f093b849edc98cb2ec0e6cc5eae72d70d256fdd5 prototype logback logger for spring projects
 ## v1.103.0 released on 21 Feb 2024 UTC
