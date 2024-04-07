@@ -1,3 +1,5 @@
+## v2.0.0 released on 07 Apr 2024 UTC
+  * d3956d2c09a6e7a08e2a5f26f98972d3b3b850bf upgraded to spring 3, latest version of kotlin and other libs
 ## v1.105.0 released on 06 Apr 2024 UTC
   * 62b3a75940eae8f230dc90c02c9a83556d03d03e added redis support
   * 6f4c30304425038c5b30ef9718afe3b40e0f2b3e removed duplicate logback logger configuration
