@@ -1,10 +1,10 @@
 object Version {
 
-    const val APP = "1.105.0"
+    const val APP = "2.0.0"
 
     object Kotlin {
-        const val COROUTINE = "1.6.4"
-        const val REFLECT = "1.7.0"
+        const val COROUTINE = "1.8.0"
+        const val REFLECT = "1.9.23"
     }
 
     const val JAVAX_ANNOTATION = "1.3.2"
@@ -12,14 +12,14 @@ object Version {
     const val INPERTIO = "1.5.0"
     const val APACHE_HTTP_CLIENT = "5.1.3"
     const val GUAVA = "31.1-jre"
-    const val JACKSON = "2.13.3"
+    const val JACKSON = "2.17.0"
     const val JSQL_PARSER = "4.4"
     const val QUARTZ = "2.3.2"
-    const val MICROMETER = "1.9.2"
+    const val MICROMETER = "1.12.4"
 
-    const val ASSERTJ = "3.22.0"
-    const val JUNIT = "5.8.2"
-    const val MOCKITO_KOTLIN = "4.0.0"
-    const val CUCUMBER = "7.4.1"
-    const val TEST_CONTAINERS = "1.18.3"
+    const val ASSERTJ = "3.25.3"
+    const val JUNIT = "5.10.2"
+    const val MOCKITO_KOTLIN = "5.2.1"
+    const val CUCUMBER = "7.16.1"
+    const val TEST_CONTAINERS = "1.19.7"
 }

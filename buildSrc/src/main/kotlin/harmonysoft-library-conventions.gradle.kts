@@ -2,15 +2,11 @@ plugins {
     `java-library`
     kotlin("jvm")
     id("org.jetbrains.dokka")
-    id("org.springframework.boot")
     `maven-publish`
     if (System.getenv("CI_ENV").isNullOrBlank()) {
         signing
     }
 }
-
-apply(plugin = "org.springframework.boot")
-apply(plugin = "io.spring.dependency-management")
 
 group = "tech.harmonysoft"
 version = Version.APP
@@ -19,13 +15,12 @@ repositories {
     mavenCentral()
 }
 
-tasks.getByName("bootJar").enabled = false
-
 dependencies {
     api("tech.harmonysoft:inpertio-client-jvm-api:${Version.INPERTIO}")
     api("javax.inject:javax.inject:${Version.JAVAX_INJECT}")
     api("javax.annotation:javax.annotation-api:${Version.JAVAX_ANNOTATION}")
 
+    implementation(platform("org.springframework.boot:spring-boot-dependencies:3.2.4"))
     compileOnly("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:${Version.Kotlin.COROUTINE}")
     compileOnly("org.jetbrains.kotlinx:kotlinx-coroutines-slf4j:${Version.Kotlin.COROUTINE}")
     compileOnly("org.jetbrains.kotlin:kotlin-reflect:${Version.Kotlin.REFLECT}")
@@ -39,7 +34,7 @@ dependencies {
 
 kotlin {
     jvmToolchain() {
-        languageVersion.set(JavaLanguageVersion.of(8))
+        languageVersion.set(JavaLanguageVersion.of(17))
     }
 }
 

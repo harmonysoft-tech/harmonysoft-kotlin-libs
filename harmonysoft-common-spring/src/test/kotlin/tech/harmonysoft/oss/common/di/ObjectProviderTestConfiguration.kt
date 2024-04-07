@@ -1,12 +1,12 @@
 package tech.harmonysoft.oss.common.di
 
+import jakarta.annotation.Priority
 import org.springframework.beans.factory.ObjectProvider
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
 import org.springframework.stereotype.Component
-import javax.annotation.Priority
 import javax.inject.Named
 import javax.inject.Provider
 
@@ -22,7 +22,7 @@ class Dependency3
 @Named
 class RegularBean(
     val publicProperty: ObjectProvider<Dependency1>,
-    private val privateProperty: ObjectProvider<Dependency2>,
+    privateProperty: ObjectProvider<Dependency2>,
     param: ObjectProvider<Dependency3>
 ) {
 

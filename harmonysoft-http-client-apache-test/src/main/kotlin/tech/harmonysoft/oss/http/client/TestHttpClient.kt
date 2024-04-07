@@ -1,5 +1,6 @@
 package tech.harmonysoft.oss.http.client
 
+import jakarta.annotation.Priority
 import org.apache.hc.client5.http.classic.methods.HttpUriRequestBase
 import org.slf4j.LoggerFactory
 import tech.harmonysoft.oss.common.di.DiConstants
@@ -8,7 +9,6 @@ import tech.harmonysoft.oss.http.client.response.HttpResponse
 import tech.harmonysoft.oss.http.client.response.HttpResponseConverter
 import tech.harmonysoft.oss.test.TestAware
 import java.util.concurrent.LinkedBlockingQueue
-import javax.annotation.Priority
 import javax.inject.Named
 
 @Priority(DiConstants.LIB_PRIMARY_PRIORITY)

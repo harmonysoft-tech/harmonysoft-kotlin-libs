@@ -1,8 +1,8 @@
 package tech.harmonysoft.oss.event.bus
 
+import jakarta.annotation.Priority
 import tech.harmonysoft.oss.common.collection.mapFirstNotNull
 import tech.harmonysoft.oss.common.di.DiConstants
-import javax.annotation.Priority
 import javax.inject.Named
 
 @Priority(DiConstants.LIB_PRIMARY_PRIORITY)

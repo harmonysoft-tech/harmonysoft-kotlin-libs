@@ -1,11 +1,11 @@
 package tech.harmonysoft.oss.test.time.clock
 
+import jakarta.annotation.Priority
 import tech.harmonysoft.oss.common.di.DiConstants
 import tech.harmonysoft.oss.common.time.clock.ClockProvider
 import tech.harmonysoft.oss.test.TestAware
 import java.time.Clock
 import java.time.ZoneId
-import javax.annotation.Priority
 import javax.inject.Named
 
 @Priority(DiConstants.LIB_PRIMARY_PRIORITY)
