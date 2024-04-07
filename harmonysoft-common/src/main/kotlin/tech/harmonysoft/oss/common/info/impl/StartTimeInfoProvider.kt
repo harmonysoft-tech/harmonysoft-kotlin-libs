@@ -6,7 +6,7 @@ import tech.harmonysoft.oss.common.time.clock.ClockProvider
 import tech.harmonysoft.oss.common.time.util.DateTimeHelper
 import java.time.Instant
 import java.time.ZonedDateTime
-import javax.inject.Named
+import jakarta.inject.Named
 
 @Named
 class StartTimeInfoProvider(

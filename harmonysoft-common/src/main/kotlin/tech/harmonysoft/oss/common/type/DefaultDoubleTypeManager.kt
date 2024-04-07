@@ -1,7 +1,7 @@
 package tech.harmonysoft.oss.common.type
 
 import tech.harmonysoft.oss.common.number.NumberUtil
-import javax.inject.Named
+import jakarta.inject.Named
 
 @Named
 class DefaultDoubleTypeManager : TypeManager<Double> {

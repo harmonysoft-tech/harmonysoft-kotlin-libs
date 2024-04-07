@@ -14,7 +14,7 @@ import tech.harmonysoft.oss.sql.dsl.filter.Filter
 import tech.harmonysoft.oss.sql.dsl.target.SqlTarget
 import tech.harmonysoft.oss.sql.match.SqlKeyValueMatcher
 import tech.harmonysoft.oss.sql.parser.SqlParser
-import javax.inject.Named
+import jakarta.inject.Named
 
 @Named
 class SqlKeyValueMatcherFactory(

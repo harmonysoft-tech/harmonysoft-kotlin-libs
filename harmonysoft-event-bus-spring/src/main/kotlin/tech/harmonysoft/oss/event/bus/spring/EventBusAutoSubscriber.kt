@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.beans.factory.config.BeanPostProcessor
 import tech.harmonysoft.oss.event.bus.AutoSubscribe
 import tech.harmonysoft.oss.event.bus.EventBus
-import javax.inject.Named
+import jakarta.inject.Named
 import kotlin.reflect.full.findAnnotation
 
 @Named

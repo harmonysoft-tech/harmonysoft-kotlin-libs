@@ -17,8 +17,9 @@ repositories {
 
 dependencies {
     api("tech.harmonysoft:inpertio-client-jvm-api:${Version.INPERTIO}")
-    api("javax.inject:javax.inject:${Version.JAVAX_INJECT}")
-    api("javax.annotation:javax.annotation-api:${Version.JAVAX_ANNOTATION}")
+    api("jakarta.inject:jakarta.inject-api:2.0.1.MR")
+
+    api("jakarta.inject:jakarta.inject-api:${Version.JAKARTA_INJECT}")
 
     implementation(platform("org.springframework.boot:spring-boot-dependencies:3.2.4"))
     compileOnly("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:${Version.Kotlin.COROUTINE}")

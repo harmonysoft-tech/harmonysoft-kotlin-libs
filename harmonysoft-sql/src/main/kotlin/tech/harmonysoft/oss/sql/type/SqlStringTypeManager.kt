@@ -1,7 +1,7 @@
 package tech.harmonysoft.oss.sql.type
 
 import tech.harmonysoft.oss.common.type.TypeManager
-import javax.inject.Named
+import jakarta.inject.Named
 
 @Named
 class SqlStringTypeManager : TypeManager<String> {

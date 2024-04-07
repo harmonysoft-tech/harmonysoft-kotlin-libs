@@ -1,6 +1,6 @@
 package tech.harmonysoft.oss.environment.redis.testcontainers
 
-import javax.inject.Named
+import jakarta.inject.Named
 import org.testcontainers.containers.GenericContainer
 import org.testcontainers.utility.DockerImageName
 import tech.harmonysoft.oss.environment.TestContext

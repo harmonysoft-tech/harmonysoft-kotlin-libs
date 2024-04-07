@@ -1,7 +1,7 @@
 package tech.harmonysoft.oss.common.di
 
 import java.util.concurrent.atomic.AtomicReference
-import javax.inject.Provider
+import jakarta.inject.Provider
 
 /**
  * We quite often need to inject not a dependency object itself but a wrapper around it in order to break

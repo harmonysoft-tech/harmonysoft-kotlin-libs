@@ -1,6 +1,6 @@
 package tech.harmonysoft.oss.http.server.mock.config
 
-import javax.inject.Named
+import jakarta.inject.Named
 import tech.harmonysoft.oss.http.client.config.DefaultWebPortProvider
 
 @Named

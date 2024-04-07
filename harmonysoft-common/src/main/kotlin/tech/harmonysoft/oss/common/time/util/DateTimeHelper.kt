@@ -9,7 +9,7 @@ import java.time.LocalTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.concurrent.ConcurrentHashMap
-import javax.inject.Named
+import jakarta.inject.Named
 
 @Named
 class DateTimeHelper(

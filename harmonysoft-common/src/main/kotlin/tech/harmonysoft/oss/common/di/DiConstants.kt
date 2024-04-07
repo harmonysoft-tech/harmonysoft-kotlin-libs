@@ -1,6 +1,6 @@
 package tech.harmonysoft.oss.common.di
 
-import javax.annotation.Priority
+import jakarta.annotation.Priority
 
 object DiConstants {
 

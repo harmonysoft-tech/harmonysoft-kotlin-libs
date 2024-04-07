@@ -2,7 +2,7 @@ package tech.harmonysoft.oss.cucumber.glue
 
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
-import javax.inject.Inject
+import jakarta.inject.Inject
 import tech.harmonysoft.oss.redis.TestRedisManager
 
 class RedisStepDefinitions {

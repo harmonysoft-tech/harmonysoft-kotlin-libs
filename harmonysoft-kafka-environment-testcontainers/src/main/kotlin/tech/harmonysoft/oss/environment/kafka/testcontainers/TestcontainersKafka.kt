@@ -1,6 +1,6 @@
 package tech.harmonysoft.oss.environment.kafka.testcontainers
 
-import javax.inject.Named
+import jakarta.inject.Named
 import org.slf4j.Logger
 import org.testcontainers.containers.KafkaContainer
 import org.testcontainers.utility.DockerImageName

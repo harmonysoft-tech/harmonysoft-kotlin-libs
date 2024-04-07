@@ -4,7 +4,7 @@ import tech.harmonysoft.oss.common.schedule.TaskScheduler
 import tech.harmonysoft.oss.common.schedule.TaskSchedulerFactory
 import tech.harmonysoft.oss.common.time.clock.ClockProvider
 import java.util.concurrent.ScheduledExecutorService
-import javax.inject.Named
+import jakarta.inject.Named
 
 @Named
 class TaskSchedulerFactoryImpl(

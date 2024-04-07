@@ -10,7 +10,7 @@ import tech.harmonysoft.oss.inpertio.client.ConfigPrefix
 import tech.harmonysoft.oss.inpertio.client.DelegatingConfigProvider
 import tech.harmonysoft.oss.inpertio.client.factory.ConfigProviderFactory
 import java.io.File
-import javax.inject.Named
+import jakarta.inject.Named
 
 @Named
 class SslCertificateConfigProviderImpl(

@@ -1,5 +1,7 @@
 package tech.harmonysoft.oss.common.di
 
+import jakarta.inject.Named
+import jakarta.inject.Provider
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.ObjectProvider
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor
@@ -7,8 +9,6 @@ import org.springframework.beans.factory.config.ConfigurableListableBeanFactory
 import tech.harmonysoft.oss.common.string.util.isNotNullNotBlankEffective
 import java.lang.reflect.ParameterizedType
 import java.util.*
-import javax.inject.Named
-import javax.inject.Provider
 
 /**
  * Binds [CacheableObjectProvider] to [ObjectProvider] and [CacheableProvider] to [Provider]

@@ -8,7 +8,7 @@ import tech.harmonysoft.oss.http.client.config.ProxyConfig
 import tech.harmonysoft.oss.inpertio.client.ConfigPrefix
 import tech.harmonysoft.oss.inpertio.client.DelegatingConfigProvider
 import tech.harmonysoft.oss.inpertio.client.factory.ConfigProviderFactory
-import javax.inject.Named
+import jakarta.inject.Named
 
 @Named
 class HttpConfigProviderImpl(

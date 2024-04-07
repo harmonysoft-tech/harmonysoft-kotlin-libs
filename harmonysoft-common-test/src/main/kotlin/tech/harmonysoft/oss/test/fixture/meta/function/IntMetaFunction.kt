@@ -1,6 +1,6 @@
 package tech.harmonysoft.oss.test.fixture.meta.function
 
-import javax.inject.Named
+import jakarta.inject.Named
 
 @Named
 class IntMetaFunction : FixtureMetaFunction {

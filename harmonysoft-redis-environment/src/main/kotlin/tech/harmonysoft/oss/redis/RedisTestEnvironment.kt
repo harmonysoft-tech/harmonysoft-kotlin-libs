@@ -1,6 +1,6 @@
 package tech.harmonysoft.oss.redis
 
-import javax.inject.Named
+import jakarta.inject.Named
 import tech.harmonysoft.oss.environment.TestContext
 import tech.harmonysoft.oss.environment.TestEnvironment
 import tech.harmonysoft.oss.redis.config.TestRedisConfig

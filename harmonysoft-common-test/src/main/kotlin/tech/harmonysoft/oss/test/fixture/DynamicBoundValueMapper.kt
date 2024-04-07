@@ -5,7 +5,7 @@ import tech.harmonysoft.oss.test.binding.DynamicBindingContext
 import tech.harmonysoft.oss.test.binding.DynamicBindingKey
 import tech.harmonysoft.oss.test.binding.DynamicBindingUtil.DYNAMIC_BOUND_VALUE_REGEX
 import tech.harmonysoft.oss.test.fixture.meta.value.FixtureMetaValueMapper
-import javax.inject.Named
+import jakarta.inject.Named
 
 /**
  * There are use-cases when some values are generated during test execution, e.g. unique ids.

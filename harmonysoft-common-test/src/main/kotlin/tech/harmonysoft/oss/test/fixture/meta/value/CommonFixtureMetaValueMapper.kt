@@ -6,7 +6,7 @@ import tech.harmonysoft.oss.common.ProcessingResult.Companion.success
 import tech.harmonysoft.oss.common.time.clock.ClockProvider
 import tech.harmonysoft.oss.test.fixture.CommonTestFixture
 import java.util.*
-import javax.inject.Named
+import jakarta.inject.Named
 
 @Named
 class CommonFixtureMetaValueMapper(

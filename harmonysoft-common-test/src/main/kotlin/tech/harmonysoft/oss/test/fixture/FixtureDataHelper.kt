@@ -1,5 +1,7 @@
 package tech.harmonysoft.oss.test.fixture
 
+import jakarta.inject.Named
+import jakarta.inject.Provider
 import org.slf4j.LoggerFactory
 import tech.harmonysoft.oss.common.di.DiElementsComparatorConfigProvider
 import tech.harmonysoft.oss.common.meta.MetaValueUtil
@@ -9,8 +11,6 @@ import tech.harmonysoft.oss.test.fixture.meta.value.FixtureMetaValueMapper
 import tech.harmonysoft.oss.test.util.TestUtil.fail
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
-import javax.inject.Named
-import javax.inject.Provider
 
 @Named
 class FixtureDataHelper (

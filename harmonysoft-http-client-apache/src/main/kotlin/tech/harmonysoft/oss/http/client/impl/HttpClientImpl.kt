@@ -32,8 +32,8 @@ import java.security.KeyStore
 import java.util.*
 import java.util.concurrent.locks.ReentrantReadWriteLock
 import java.util.zip.GZIPInputStream
-import javax.inject.Inject
-import javax.inject.Named
+import jakarta.inject.Inject
+import jakarta.inject.Named
 import javax.net.ssl.SSLContext
 import kotlin.concurrent.read
 import kotlin.concurrent.write

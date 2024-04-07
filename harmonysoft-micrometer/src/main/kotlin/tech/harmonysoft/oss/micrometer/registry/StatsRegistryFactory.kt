@@ -8,7 +8,7 @@ import io.micrometer.core.instrument.Timer
 import tech.harmonysoft.oss.common.execution.ExecutionContextManager
 import tech.harmonysoft.oss.micrometer.auto.ContextTagsProvider
 import java.util.Optional
-import javax.inject.Named
+import jakarta.inject.Named
 
 @Named
 class StatsRegistryFactory(

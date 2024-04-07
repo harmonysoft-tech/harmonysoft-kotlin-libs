@@ -3,7 +3,7 @@ package tech.harmonysoft.oss.cucumber.glue
 import io.cucumber.datatable.DataTable
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
-import javax.inject.Inject
+import jakarta.inject.Inject
 import org.mockserver.model.HttpRequest
 import tech.harmonysoft.oss.http.server.mock.MockHttpServerManager
 import tech.harmonysoft.oss.http.server.mock.fixture.MockHttpServerPathTestFixture

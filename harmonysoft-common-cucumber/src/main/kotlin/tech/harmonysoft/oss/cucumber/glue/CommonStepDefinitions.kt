@@ -5,9 +5,9 @@ import io.cucumber.java.Before
 import io.cucumber.java.Scenario
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
+import jakarta.inject.Inject
 import java.util.Optional
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 import tech.harmonysoft.oss.test.TestAware
 import tech.harmonysoft.oss.test.manager.CommonTestManager
 

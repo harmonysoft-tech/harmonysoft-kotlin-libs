@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Primary
 import org.springframework.core.annotation.AnnotationAwareOrderComparator
 import org.springframework.core.annotation.AnnotationUtils
 import java.util.concurrent.atomic.AtomicReference
-import javax.annotation.Priority
+import jakarta.annotation.Priority
 
 /**
  * Solves the same problem as [CacheableProvider] but for Spring framework API

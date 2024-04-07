@@ -5,7 +5,7 @@ import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicReference
-import javax.inject.Inject
+import jakarta.inject.Inject
 import org.apache.hc.client5.http.classic.methods.HttpDelete
 import org.apache.hc.client5.http.classic.methods.HttpGet
 import org.apache.hc.client5.http.classic.methods.HttpHead

@@ -2,7 +2,7 @@ package tech.harmonysoft.oss.http.client.di
 
 import org.springframework.beans.factory.DisposableBean
 import tech.harmonysoft.oss.http.client.HttpClient
-import javax.inject.Named
+import jakarta.inject.Named
 
 @Named
 class HttpClientSpringBindings(

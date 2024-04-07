@@ -4,7 +4,7 @@ import java.io.File
 import java.nio.file.Files
 import java.util.Optional
 import java.util.concurrent.ConcurrentHashMap
-import javax.inject.Named
+import jakarta.inject.Named
 import org.junit.jupiter.api.BeforeEach
 import org.slf4j.Logger
 import tech.harmonysoft.oss.common.ProcessingResult

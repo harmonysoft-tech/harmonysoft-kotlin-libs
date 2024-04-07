@@ -11,8 +11,8 @@ import com.mongodb.client.model.UpdateOptions
 import com.mongodb.client.model.Updates
 import java.util.UUID
 import java.util.concurrent.TimeUnit
-import javax.inject.Named
-import javax.inject.Provider
+import jakarta.inject.Named
+import jakarta.inject.Provider
 import org.bson.BSONObject
 import org.bson.Document
 import org.bson.conversions.Bson

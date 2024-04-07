@@ -3,7 +3,7 @@ package tech.harmonysoft.oss.environment.kafka
 import java.time.Duration
 import java.util.UUID
 import java.util.concurrent.TimeUnit
-import javax.inject.Named
+import jakarta.inject.Named
 import org.apache.kafka.common.serialization.StringDeserializer
 import tech.harmonysoft.oss.environment.TestContext
 import tech.harmonysoft.oss.environment.TestEnvironment

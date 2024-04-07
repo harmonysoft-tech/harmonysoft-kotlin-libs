@@ -1,7 +1,7 @@
 package tech.harmonysoft.oss.jackson
 
 import java.io.ByteArrayOutputStream
-import javax.inject.Named
+import jakarta.inject.Named
 import tech.harmonysoft.oss.json.JsonApi
 import kotlin.reflect.KClass
 

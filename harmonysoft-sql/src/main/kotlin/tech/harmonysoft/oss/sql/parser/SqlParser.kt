@@ -4,7 +4,7 @@ import net.sf.jsqlparser.parser.CCJSqlParserUtil
 import tech.harmonysoft.oss.common.string.util.StringUtil
 import tech.harmonysoft.oss.sql.dsl.Sql
 import tech.harmonysoft.oss.sql.dsl.filter.Filter
-import javax.inject.Named
+import jakarta.inject.Named
 
 @Named
 class SqlParser {

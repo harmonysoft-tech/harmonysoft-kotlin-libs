@@ -5,7 +5,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import java.util.Optional
-import javax.inject.Named
+import jakarta.inject.Named
 
 /**
  * We expose the mappers of properties of this wrapper class instead of putting them directly into spring

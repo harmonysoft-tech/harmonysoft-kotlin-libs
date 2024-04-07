@@ -5,7 +5,7 @@ import tech.harmonysoft.oss.event.bus.EventBus
 import tech.harmonysoft.oss.event.bus.EventBusFactory
 import java.util.*
 import java.util.concurrent.Executor
-import javax.inject.Named
+import jakarta.inject.Named
 
 @Named
 class GuavaEventBusFactory(

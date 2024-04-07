@@ -1,7 +1,7 @@
 package tech.harmonysoft.oss.http.server.mock.config
 
 import tech.harmonysoft.oss.test.util.NetworkUtil
-import javax.inject.Named
+import jakarta.inject.Named
 
 @Named
 class PortHolder {

@@ -2,7 +2,7 @@ package tech.harmonysoft.oss.common.type
 
 import tech.harmonysoft.oss.common.number.NumberUtil
 import java.math.BigDecimal
-import javax.inject.Named
+import jakarta.inject.Named
 
 @Named
 class DefaultBigDecimalTypeManager : TypeManager<BigDecimal> {

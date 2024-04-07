@@ -1,9 +1,9 @@
 package tech.harmonysoft.oss.test.binding
 
+import jakarta.inject.Named
 import org.slf4j.LoggerFactory
 import tech.harmonysoft.oss.test.util.TestUtil.fail
 import java.util.concurrent.ConcurrentHashMap
-import javax.inject.Named
 
 @Named
 class DynamicBindingContext {

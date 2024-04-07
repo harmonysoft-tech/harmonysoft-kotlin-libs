@@ -1,7 +1,7 @@
 package tech.harmonysoft.oss.environment.mongo.testcontainers
 
 import java.util.Optional
-import javax.inject.Named
+import jakarta.inject.Named
 import org.testcontainers.containers.BindMode
 import org.testcontainers.containers.GenericContainer
 import org.testcontainers.utility.DockerImageName

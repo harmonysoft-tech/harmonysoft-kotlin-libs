@@ -2,7 +2,7 @@ package tech.harmonysoft.oss.micrometer.influxdb.serialization
 
 import io.micrometer.core.instrument.*
 import java.util.concurrent.TimeUnit
-import javax.inject.Named
+import jakarta.inject.Named
 
 /**
  * Allows serializing given meters into InfluxDB Line Protocol format

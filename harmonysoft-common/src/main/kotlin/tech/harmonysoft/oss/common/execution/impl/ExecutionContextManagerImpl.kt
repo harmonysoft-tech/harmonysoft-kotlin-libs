@@ -7,7 +7,7 @@ import tech.harmonysoft.oss.common.collection.CollectionInitializer
 import tech.harmonysoft.oss.common.execution.ExecutionContextManager
 import tech.harmonysoft.oss.common.reflection.TypeUtil.PRIMITIVES
 import java.util.*
-import javax.inject.Named
+import jakarta.inject.Named
 import kotlin.coroutines.CoroutineContext
 
 @Named

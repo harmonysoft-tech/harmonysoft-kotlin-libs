@@ -1,6 +1,6 @@
 package tech.harmonysoft.oss.common.di
 
-import javax.inject.Qualifier
+import jakarta.inject.Qualifier
 
 /**
  * Common meta-annotation for DI qualifier annotations. Normally it should be marked by [Qualifier] annotation

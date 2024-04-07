@@ -2,7 +2,7 @@ package tech.harmonysoft.oss.common.info.impl
 
 import tech.harmonysoft.oss.common.info.CommonInfoProvider
 import tech.harmonysoft.oss.common.info.CommonInfoRegistry
-import javax.inject.Named
+import jakarta.inject.Named
 
 @Named
 class CommonInfoRegistryImpl(

@@ -2,7 +2,7 @@ package tech.harmonysoft.oss.common.time.clock
 
 import java.time.Clock
 import java.time.ZoneId
-import javax.inject.Named
+import jakarta.inject.Named
 
 @Named
 class ClockProviderImpl : ClockProvider {

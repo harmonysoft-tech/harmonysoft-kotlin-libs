@@ -6,7 +6,7 @@ import tech.harmonysoft.oss.common.time.clock.ClockProvider
 import tech.harmonysoft.oss.test.TestAware
 import java.time.Clock
 import java.time.ZoneId
-import javax.inject.Named
+import jakarta.inject.Named
 
 @Priority(DiConstants.LIB_PRIMARY_PRIORITY)
 @Named

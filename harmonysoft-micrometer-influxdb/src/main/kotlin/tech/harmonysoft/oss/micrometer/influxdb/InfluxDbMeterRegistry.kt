@@ -12,8 +12,8 @@ import tech.harmonysoft.oss.micrometer.influxdb.serialization.LineProtocolSerial
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.locks.ReentrantLock
-import javax.inject.Named
-import javax.inject.Provider
+import jakarta.inject.Named
+import jakarta.inject.Provider
 
 /**
  * Profiling shows that big amount of memory is consumed by default micrometer InfluxDB publisher.

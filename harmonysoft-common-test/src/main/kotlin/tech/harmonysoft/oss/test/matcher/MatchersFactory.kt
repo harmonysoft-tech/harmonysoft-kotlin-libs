@@ -2,7 +2,7 @@ package tech.harmonysoft.oss.test.matcher
 
 import tech.harmonysoft.oss.test.matcher.impl.SimpleMatcher
 import tech.harmonysoft.oss.test.util.TestUtil
-import javax.inject.Named
+import jakarta.inject.Named
 
 @Named
 class MatchersFactory(

@@ -2,7 +2,7 @@ package tech.harmonysoft.oss.common.time.util
 
 import tech.harmonysoft.oss.common.time.clock.ClockProvider
 import java.time.ZonedDateTime
-import javax.inject.Named
+import jakarta.inject.Named
 
 /**
  * There are use-cases when we want to specify particular offsets for target actions in configs, e.g.

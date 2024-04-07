@@ -3,7 +3,7 @@ package tech.harmonysoft.oss.common.data.impl
 import tech.harmonysoft.oss.common.data.ComparisonStrategy
 import tech.harmonysoft.oss.common.type.TypeManagerContext
 import tech.harmonysoft.oss.common.type.TypeManagersHelper
-import javax.inject.Named
+import jakarta.inject.Named
 
 @Named
 class DefaultComparisonStrategyFactory(

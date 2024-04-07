@@ -5,8 +5,8 @@ import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.atomic.AtomicReference
-import javax.inject.Named
-import javax.inject.Provider
+import jakarta.inject.Named
+import jakarta.inject.Provider
 import org.mockserver.integration.ClientAndServer
 import org.mockserver.model.Header
 import org.mockserver.model.HttpRequest

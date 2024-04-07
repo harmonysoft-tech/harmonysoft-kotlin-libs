@@ -16,7 +16,7 @@ import tech.harmonysoft.oss.common.template.factory.impl.provider.ValueProvider
 import tech.harmonysoft.oss.common.template.service.KeyValueConfigurer
 import tech.harmonysoft.oss.common.type.TypeManagerContext
 import tech.harmonysoft.oss.common.type.TypeManagersHelper
-import javax.inject.Named
+import jakarta.inject.Named
 
 @Named
 class KeyValueConfigurerFactoryImpl(

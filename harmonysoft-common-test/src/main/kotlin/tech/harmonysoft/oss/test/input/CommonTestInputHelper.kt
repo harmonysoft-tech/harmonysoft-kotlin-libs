@@ -1,6 +1,6 @@
 package tech.harmonysoft.oss.test.input
 
-import javax.inject.Named
+import jakarta.inject.Named
 import tech.harmonysoft.oss.test.binding.DynamicBindingKey
 import tech.harmonysoft.oss.test.binding.DynamicBindingUtil
 import tech.harmonysoft.oss.test.fixture.FixtureDataHelper

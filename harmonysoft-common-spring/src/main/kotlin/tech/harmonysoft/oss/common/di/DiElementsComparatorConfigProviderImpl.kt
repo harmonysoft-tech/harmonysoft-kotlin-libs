@@ -1,7 +1,7 @@
 package tech.harmonysoft.oss.common.di
 
+import jakarta.inject.Named
 import org.springframework.core.annotation.AnnotationAwareOrderComparator
-import javax.inject.Named
 
 @Named
 class DiElementsComparatorConfigProviderImpl : DiElementsComparatorConfigProvider {

@@ -9,7 +9,7 @@ import tech.harmonysoft.oss.micrometer.influxdb.config.Authentication
 import tech.harmonysoft.oss.micrometer.influxdb.config.InfluxDbStatsConfig
 import tech.harmonysoft.oss.micrometer.influxdb.config.InfluxDbStatsConfigProvider
 import java.net.URL
-import javax.inject.Named
+import jakarta.inject.Named
 
 @Named
 class InfluxDbStatsConfigProviderImpl(

@@ -1,6 +1,6 @@
 package tech.harmonysoft.oss.common.type
 
-import javax.inject.Named
+import jakarta.inject.Named
 
 @Named
 class DefaultIntTypeManager : TypeManager<Int> {

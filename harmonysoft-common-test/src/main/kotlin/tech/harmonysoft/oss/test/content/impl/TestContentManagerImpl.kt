@@ -4,7 +4,7 @@ import tech.harmonysoft.oss.test.TestAware
 import tech.harmonysoft.oss.test.content.TestContentManager
 import tech.harmonysoft.oss.test.util.TestUtil.fail
 import java.util.concurrent.ConcurrentHashMap
-import javax.inject.Named
+import jakarta.inject.Named
 
 @Named
 class TestContentManagerImpl : TestContentManager, TestAware {

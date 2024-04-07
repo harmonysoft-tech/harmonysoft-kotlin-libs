@@ -11,8 +11,8 @@ import tech.harmonysoft.oss.micrometer.influxdb.config.InfluxDbStatsConfigProvid
 import java.util.Base64
 import java.util.concurrent.atomic.AtomicReference
 import java.util.concurrent.locks.ReentrantLock
-import javax.inject.Named
-import javax.inject.Provider
+import jakarta.inject.Named
+import jakarta.inject.Provider
 
 /**
  * The main idea here is to avoid new buffers construction on publishing stats data into InfluxDB.

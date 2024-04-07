@@ -9,7 +9,7 @@ import tech.harmonysoft.oss.http.client.response.HttpResponse
 import tech.harmonysoft.oss.http.client.response.HttpResponseConverter
 import tech.harmonysoft.oss.test.TestAware
 import java.util.concurrent.LinkedBlockingQueue
-import javax.inject.Named
+import jakarta.inject.Named
 
 @Priority(DiConstants.LIB_PRIMARY_PRIORITY)
 @Named
