@@ -1,3 +1,7 @@
+## v2.1.0 released on 25 Apr 2024 UTC
+  * dd5a6e3eeeab7b7a4bfcd2bc8bc73fa2a15f2758 added utilities to manage test environment
+  * 245e169f8e9046ac26f784b32cf7c00699e050b6 added test environment starter entry point
+  * 92ba63acceb9cac96dcde898ea2bd220410c07fa switched from javax annotations to jakarta annotations
 ## v2.0.0 released on 07 Apr 2024 UTC
   * d3956d2c09a6e7a08e2a5f26f98972d3b3b850bf upgraded to spring 3, latest version of kotlin and other libs
 ## v1.105.0 released on 06 Apr 2024 UTC
