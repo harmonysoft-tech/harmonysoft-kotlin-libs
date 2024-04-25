@@ -5,8 +5,9 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
+import tech.harmonysoft.oss.common.util.CommonConstants
 
-@ComponentScan("tech.harmonysoft.oss")
+@ComponentScan(CommonConstants.ROOT_LIBRARY_PACKAGE)
 @TestConfiguration
 open class CommonTestConfig {
 

@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.ComponentScan
 import tech.harmonysoft.oss.common.util.CommonConstants.ROOT_LIBRARY_PACKAGE
-import tech.harmonysoft.oss.environment.starter.TestEnvironmentStarter
+import tech.harmonysoft.oss.environment.bin.TestEnvironmentStarter
 
 @SpringBootApplication
 @ComponentScan(ROOT_LIBRARY_PACKAGE)

@@ -1,4 +1,4 @@
-package tech.harmonysoft.oss.environment.starter
+package tech.harmonysoft.oss.environment.bin
 
 object CommonBinConfigurer {
     fun configure() {

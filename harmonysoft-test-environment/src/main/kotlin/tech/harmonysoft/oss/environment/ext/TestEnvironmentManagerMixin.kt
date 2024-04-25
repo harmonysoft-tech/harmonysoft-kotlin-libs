@@ -8,11 +8,16 @@ interface TestEnvironmentManagerMixin {
 
     fun afterStart(context: TestContext)
 
+    fun beforeStop(context: TestContext)
+
     object NoOp : TestEnvironmentManagerMixin {
         override fun beforeStart(context: TestContext) {
         }
 
         override fun afterStart(context: TestContext) {
+        }
+
+        override fun beforeStop(context: TestContext) {
         }
     }
 }

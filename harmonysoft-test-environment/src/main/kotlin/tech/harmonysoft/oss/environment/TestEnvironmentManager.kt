@@ -37,6 +37,16 @@ class TestEnvironmentManager(
         executionId = environmentInfoProvider.orElse(EnvironmentInfoProvider.Default).executionId
     )
 
+    val rootConfigDir: File
+        get() {
+            val userHomeDir = File(System.getProperty("user.home"))
+            val rootConfigDir = File(userHomeDir, ".test-environment")
+            return File(rootConfigDir, testContext.executionId)
+        }
+
+    val environmentProcessPidFile: File
+        get() = File(rootConfigDir, "environment.pid")
+
     @BeforeEach
     fun startIfNecessary() {
         mixin.beforeStart(testContext)
@@ -130,12 +140,15 @@ class TestEnvironmentManager(
         )
     }
 
-
     private fun getEnvironmentConfigFile(environmentId: String): File {
-        val userHomeDir = File(System.getProperty("user.home"))
-        val rootConfigDir = File(userHomeDir, ".test-environment")
-        val rootExecutionDir = File(rootConfigDir, testContext.executionId)
-        val envConfigDir = File(rootExecutionDir, environmentId)
-        return File(envConfigDir, "$environmentId-config.json")
+        val envConfigDir = File(rootConfigDir, environmentId)
+        return File(envConfigDir, "$environmentId-config.yml")
+    }
+
+    fun checkIfEnvironmentIsReady(): String? {
+        for (environment in environments) {
+            getRunningEnvironmentConfig(environment) ?: return "test environment '${environment.id}' is not ready"
+        }
+        return null
     }
 }
