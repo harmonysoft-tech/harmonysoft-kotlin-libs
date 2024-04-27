@@ -1,3 +1,7 @@
+## v2.2.0 released on 27 Apr 2024 UTC
+  * 570654e8e78cbe27d061bfa52c269fa31439a03b added release-paperwork into the release script
+  * 720b7ff0b46cbd48facb1e47725299139f873588 allow to wait indefinitely on test environment start
+  * fb774c7677f0f2c2876a401da44fab143fad94d0 correct CommandLineHelper setup
 ## v2.1.0 released on 25 Apr 2024 UTC
   * dd5a6e3eeeab7b7a4bfcd2bc8bc73fa2a15f2758 added utilities to manage test environment
   * 245e169f8e9046ac26f784b32cf7c00699e050b6 added test environment starter entry point
