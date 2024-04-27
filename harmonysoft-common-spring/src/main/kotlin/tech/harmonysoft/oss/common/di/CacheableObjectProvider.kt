@@ -7,6 +7,7 @@ import org.springframework.core.annotation.AnnotationAwareOrderComparator
 import org.springframework.core.annotation.AnnotationUtils
 import java.util.concurrent.atomic.AtomicReference
 import jakarta.annotation.Priority
+import java.util.stream.Stream
 
 /**
  * Solves the same problem as [CacheableProvider] but for Spring framework API
@@ -18,7 +19,6 @@ class CacheableObjectProvider<T : Any>(
 
     private val targetBeanRef = AtomicReference<T?>()
 
-    @Suppress("UNCHECKED_CAST")
     override fun getIfAvailable(): T? {
         val cached = targetBeanRef.get()
         if (cached != null) {
@@ -57,8 +57,8 @@ class CacheableObjectProvider<T : Any>(
                 + candidates.entries.joinToString { "${it.key}=${it.value::class.qualifiedName}" }
             )
         }
-        return candidates.values.toList().sortedWith(AnnotationAwareOrderComparator.INSTANCE).first().apply {
-            targetBeanRef.set(this)
+        return candidates.values.toList().sortedWith(AnnotationAwareOrderComparator.INSTANCE).first().also {
+            targetBeanRef.set(it)
         }
     }
 
@@ -72,5 +72,9 @@ class CacheableObjectProvider<T : Any>(
 
     override fun getIfUnique(): T? {
         return ifAvailable
+    }
+
+    override fun orderedStream(): Stream<T> {
+        return Stream.of(getObject())
     }
 }
