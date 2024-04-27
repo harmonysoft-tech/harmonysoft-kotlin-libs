@@ -1,3 +1,5 @@
+## v2.4.0 released on 27 Apr 2024 UTC
+  * 81bf699d28c345fab67d5b54f428fc6c65e16262 adapt CacheableObjectProvider to new spring 6 api
 ## v2.3.0 released on 27 Apr 2024 UTC
   * c47f84c0aaaf72798f3375e591509524a63727d6 fix tests
   * caff92e703baa51534e3b05a8d350bee89395ab5 removed duplicate TestEnvironmentStarter
