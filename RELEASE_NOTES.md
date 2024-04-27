@@ -1,3 +1,6 @@
+## v2.3.0 released on 27 Apr 2024 UTC
+  * c47f84c0aaaf72798f3375e591509524a63727d6 fix tests
+  * caff92e703baa51534e3b05a8d350bee89395ab5 removed duplicate TestEnvironmentStarter
 ## v2.2.0 released on 27 Apr 2024 UTC
   * 570654e8e78cbe27d061bfa52c269fa31439a03b added release-paperwork into the release script
   * 720b7ff0b46cbd48facb1e47725299139f873588 allow to wait indefinitely on test environment start
