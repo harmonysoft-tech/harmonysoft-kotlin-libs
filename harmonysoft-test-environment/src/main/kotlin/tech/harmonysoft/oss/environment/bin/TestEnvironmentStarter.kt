@@ -34,7 +34,15 @@ class TestEnvironmentStarter {
             val pid = ProcessHandle.current().pid().toString()
             pidFile.writeText(pid)
 
-            logger.info("started test environment")
+            val wait = args.isNotEmpty() && args[0] == "wait=true"
+            if (wait) {
+                logger.info("started test environment, waiting indefinitely")
+                while (true) {
+                    Thread.currentThread().join()
+                }
+            } else {
+                logger.info("started test environment")
+            }
         }
     }
 }
