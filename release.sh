@@ -14,6 +14,7 @@ function execute {
   fi
 }
 
+execute "./gradlew release-paperwork"
 execute "./gradlew clean build"
 execute "./gradlew :internal-http-test:cucumber"
 execute "./gradlew :harmonysoft-mongo-cucumber:cucumber"
