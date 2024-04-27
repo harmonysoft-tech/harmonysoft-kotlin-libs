@@ -9,7 +9,7 @@ import tech.harmonysoft.oss.environment.TestEnvironmentManager
 
 @ComponentScan(CommonConstants.ROOT_LIBRARY_PACKAGE)
 @SpringBootApplication
-class TestEnvironmentStarter {
+open class TestEnvironmentStarter {
     companion object {
 
         private val logger = LoggerFactory.getLogger(this::class.java)

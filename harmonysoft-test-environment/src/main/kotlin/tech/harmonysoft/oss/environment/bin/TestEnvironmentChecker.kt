@@ -12,7 +12,7 @@ import tech.harmonysoft.oss.test.util.VerificationUtil
 
 @ComponentScan(CommonConstants.ROOT_LIBRARY_PACKAGE)
 @SpringBootApplication
-class TestEnvironmentChecker {
+open class TestEnvironmentChecker {
     companion object {
 
         private val logger = LoggerFactory.getLogger(this::class.java)
