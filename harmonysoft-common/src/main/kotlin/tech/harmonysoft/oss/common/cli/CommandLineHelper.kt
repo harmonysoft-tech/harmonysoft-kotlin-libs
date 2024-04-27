@@ -2,12 +2,13 @@ package tech.harmonysoft.oss.common.cli
 
 import jakarta.inject.Named
 import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import kotlin.concurrent.thread
 
 @Named
-class CommandLineHelper(
-    private val logger: Logger
-) {
+class CommandLineHelper {
+
+    private val logger = LoggerFactory.getLogger(this::class.java)
 
     private val shell: List<String> =
         run {
