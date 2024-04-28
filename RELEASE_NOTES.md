@@ -1,3 +1,5 @@
+## v3.2.0 released on 28 Apr 2024 UTC
+  * 5371853b4589278f4a3683b18230a3cd4c15f38f corrected CacheableObjectProvider.orderedStream()
 ## v3.1.0 released on 28 Apr 2024 UTC
   * 7bf3207603c7b00395e0df68a3d5e67a5217151e provide configurario-client-kotlin-spring transitively through harmonysoft-common-spring
 ## v3.0.0 released on 28 Apr 2024 UTC
