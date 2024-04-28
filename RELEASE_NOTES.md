@@ -1,3 +1,5 @@
+## v3.0.0 released on 28 Apr 2024 UTC
+  * beedaa2b46857f5417b2ef947689b8b1b0faf19b * inpertio -> configurario * java 21
 ## v2.4.0 released on 27 Apr 2024 UTC
   * 81bf699d28c345fab67d5b54f428fc6c65e16262 adapt CacheableObjectProvider to new spring 6 api
 ## v2.3.0 released on 27 Apr 2024 UTC
