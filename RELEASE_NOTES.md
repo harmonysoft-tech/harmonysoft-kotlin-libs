@@ -1,3 +1,5 @@
+## v3.1.0 released on 28 Apr 2024 UTC
+  * 7bf3207603c7b00395e0df68a3d5e67a5217151e provide configurario-client-kotlin-spring transitively through harmonysoft-common-spring
 ## v3.0.0 released on 28 Apr 2024 UTC
   * beedaa2b46857f5417b2ef947689b8b1b0faf19b * inpertio -> configurario * java 21
 ## v2.4.0 released on 27 Apr 2024 UTC
