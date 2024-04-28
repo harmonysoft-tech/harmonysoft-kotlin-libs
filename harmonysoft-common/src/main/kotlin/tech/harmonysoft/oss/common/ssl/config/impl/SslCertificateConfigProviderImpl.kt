@@ -6,9 +6,9 @@ import tech.harmonysoft.oss.common.string.util.HideValueInToString
 import tech.harmonysoft.oss.common.string.util.ToStringUtil
 import tech.harmonysoft.oss.common.string.util.isNotNullNotBlankEffective
 import tech.harmonysoft.oss.common.string.util.isNullOrBlankEffective
-import tech.harmonysoft.oss.inpertio.client.ConfigPrefix
-import tech.harmonysoft.oss.inpertio.client.DelegatingConfigProvider
-import tech.harmonysoft.oss.inpertio.client.factory.ConfigProviderFactory
+import tech.harmonysoft.oss.configurario.client.ConfigPrefix
+import tech.harmonysoft.oss.configurario.client.DelegatingConfigProvider
+import tech.harmonysoft.oss.configurario.client.factory.ConfigProviderFactory
 import java.io.File
 import jakarta.inject.Named
 

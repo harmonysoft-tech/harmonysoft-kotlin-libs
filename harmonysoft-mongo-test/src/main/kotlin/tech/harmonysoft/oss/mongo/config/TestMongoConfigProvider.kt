@@ -1,7 +1,7 @@
 package tech.harmonysoft.oss.mongo.config
 
 import tech.harmonysoft.oss.common.auth.model.Credential
-import tech.harmonysoft.oss.inpertio.client.ConfigProvider
+import tech.harmonysoft.oss.configurario.client.ConfigProvider
 
 interface TestMongoConfigProvider : ConfigProvider<TestMongoConfig>
 

@@ -16,7 +16,7 @@ repositories {
 }
 
 dependencies {
-    api("tech.harmonysoft:inpertio-client-jvm-api:${Version.INPERTIO}")
+    api("tech.harmonysoft:configurario-client-jvm-api:${Version.CONFIGURARIO}")
     api("jakarta.inject:jakarta.inject-api:2.0.1.MR")
 
     api("jakarta.inject:jakarta.inject-api:${Version.JAKARTA_INJECT}")
@@ -35,7 +35,7 @@ dependencies {
 
 kotlin {
     jvmToolchain() {
-        languageVersion.set(JavaLanguageVersion.of(17))
+        languageVersion.set(JavaLanguageVersion.of(21))
     }
 }
 

@@ -5,9 +5,9 @@ import tech.harmonysoft.oss.common.ssl.config.SslCertificateConfigProvider
 import tech.harmonysoft.oss.http.client.config.HttpConfig
 import tech.harmonysoft.oss.http.client.config.HttpConfigProvider
 import tech.harmonysoft.oss.http.client.config.ProxyConfig
-import tech.harmonysoft.oss.inpertio.client.ConfigPrefix
-import tech.harmonysoft.oss.inpertio.client.DelegatingConfigProvider
-import tech.harmonysoft.oss.inpertio.client.factory.ConfigProviderFactory
+import tech.harmonysoft.oss.configurario.client.ConfigPrefix
+import tech.harmonysoft.oss.configurario.client.DelegatingConfigProvider
+import tech.harmonysoft.oss.configurario.client.factory.ConfigProviderFactory
 import jakarta.inject.Named
 
 @Named

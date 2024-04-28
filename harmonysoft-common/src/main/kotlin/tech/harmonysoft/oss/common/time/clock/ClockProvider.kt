@@ -1,6 +1,6 @@
 package tech.harmonysoft.oss.common.time.clock
 
-import tech.harmonysoft.oss.inpertio.client.ConfigProvider
+import tech.harmonysoft.oss.configurario.client.ConfigProvider
 import java.time.Clock
 import java.time.ZoneId
 

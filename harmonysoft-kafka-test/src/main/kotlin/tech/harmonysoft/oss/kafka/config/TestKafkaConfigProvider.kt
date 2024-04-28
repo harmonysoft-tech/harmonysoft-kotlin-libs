@@ -1,6 +1,6 @@
 package tech.harmonysoft.oss.kafka.config
 
-import tech.harmonysoft.oss.inpertio.client.ConfigProvider
+import tech.harmonysoft.oss.configurario.client.ConfigProvider
 
 interface TestKafkaConfigProvider : ConfigProvider<TestKafkaConfig>
 

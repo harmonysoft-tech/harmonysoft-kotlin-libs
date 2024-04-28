@@ -3,7 +3,7 @@ package tech.harmonysoft.oss.micrometer.influxdb.config
 import io.micrometer.core.instrument.step.StepRegistryConfig
 import tech.harmonysoft.oss.common.string.util.HideValueInToString
 import tech.harmonysoft.oss.common.string.util.ToStringUtil
-import tech.harmonysoft.oss.inpertio.client.ConfigProvider
+import tech.harmonysoft.oss.configurario.client.ConfigProvider
 
 interface InfluxDbStatsConfigProvider : ConfigProvider<InfluxDbStatsConfig>, StepRegistryConfig {
 

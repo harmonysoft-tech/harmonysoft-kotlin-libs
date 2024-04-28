@@ -13,6 +13,5 @@ dependencies {
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:${Version.Kotlin.COROUTINE}")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-slf4j:${Version.Kotlin.COROUTINE}")
     testImplementation("org.quartz-scheduler:quartz:${Version.QUARTZ}")
-    testImplementation("tech.harmonysoft:inpertio-client-kotlin-spring:${Version.INPERTIO}")
-    testImplementation("tech.harmonysoft:inpertio-client-kotlin-event-harmonysoft:${Version.INPERTIO}")
+    testImplementation("tech.harmonysoft:configurario-client-kotlin-spring:${Version.CONFIGURARIO}")
 }

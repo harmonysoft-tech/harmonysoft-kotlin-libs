@@ -1,7 +1,7 @@
 package tech.harmonysoft.oss.http.client.config
 
 import tech.harmonysoft.oss.common.ssl.config.SslCertificateConfig
-import tech.harmonysoft.oss.inpertio.client.ConfigProvider
+import tech.harmonysoft.oss.configurario.client.ConfigProvider
 
 interface HttpConfigProvider : ConfigProvider<HttpConfig>
 

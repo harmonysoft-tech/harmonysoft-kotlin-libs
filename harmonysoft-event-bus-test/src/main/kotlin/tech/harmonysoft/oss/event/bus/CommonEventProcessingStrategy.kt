@@ -1,6 +1,6 @@
 package tech.harmonysoft.oss.event.bus
 
-import tech.harmonysoft.oss.inpertio.client.event.ConfigChangedEvent
+import tech.harmonysoft.oss.configurario.client.event.ConfigChangedEvent
 
 class CommonEventProcessingStrategy : EventProcessingStrategy {
 

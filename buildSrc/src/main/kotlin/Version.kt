@@ -1,15 +1,14 @@
 object Version {
 
-    const val APP = "2.4.0"
+    const val APP = "3.0.0"
 
     object Kotlin {
         const val COROUTINE = "1.8.0"
         const val REFLECT = "1.9.23"
     }
 
-    const val JAVAX_ANNOTATION = "1.3.2"
     const val JAKARTA_INJECT = "2.0.1.MR"
-    const val INPERTIO = "1.5.0"
+    const val CONFIGURARIO = "1.1.0"
     const val APACHE_HTTP_CLIENT = "5.1.3"
     const val GUAVA = "31.1-jre"
     const val JACKSON = "2.17.0"

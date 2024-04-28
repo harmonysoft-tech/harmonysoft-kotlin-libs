@@ -2,9 +2,9 @@ package tech.harmonysoft.oss.micrometer.influxdb.config.impl
 
 import org.slf4j.LoggerFactory
 import tech.harmonysoft.oss.common.string.util.isNullOrBlankEffective
-import tech.harmonysoft.oss.inpertio.client.ConfigPrefix
-import tech.harmonysoft.oss.inpertio.client.DelegatingConfigProvider
-import tech.harmonysoft.oss.inpertio.client.factory.ConfigProviderFactory
+import tech.harmonysoft.oss.configurario.client.ConfigPrefix
+import tech.harmonysoft.oss.configurario.client.DelegatingConfigProvider
+import tech.harmonysoft.oss.configurario.client.factory.ConfigProviderFactory
 import tech.harmonysoft.oss.micrometer.influxdb.config.Authentication
 import tech.harmonysoft.oss.micrometer.influxdb.config.InfluxDbStatsConfig
 import tech.harmonysoft.oss.micrometer.influxdb.config.InfluxDbStatsConfigProvider

@@ -10,6 +10,5 @@ dependencies {
     testImplementation(project(":harmonysoft-common-test-spring"))
     testImplementation(project(":harmonysoft-event-bus-spring"))
     testImplementation(project(":harmonysoft-event-bus-guava"))
-    testImplementation("tech.harmonysoft:inpertio-client-kotlin-spring:${Version.INPERTIO}")
-    testImplementation("tech.harmonysoft:inpertio-client-kotlin-event-harmonysoft:${Version.INPERTIO}")
+    testImplementation("tech.harmonysoft:configurario-client-kotlin-spring:${Version.CONFIGURARIO}")
 }

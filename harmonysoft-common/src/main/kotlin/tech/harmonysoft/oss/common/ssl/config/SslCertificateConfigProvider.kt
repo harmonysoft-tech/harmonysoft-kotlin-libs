@@ -2,7 +2,7 @@ package tech.harmonysoft.oss.common.ssl.config
 
 import tech.harmonysoft.oss.common.string.util.HideValueInToString
 import tech.harmonysoft.oss.common.string.util.ToStringUtil
-import tech.harmonysoft.oss.inpertio.client.ConfigProvider
+import tech.harmonysoft.oss.configurario.client.ConfigProvider
 
 interface SslCertificateConfigProvider : ConfigProvider<SslCertificateConfig>
 
