@@ -18,6 +18,7 @@ class CacheableObjectProvider<T : Any>(
 ) : ObjectProvider<T> {
 
     private val targetBeanRef = AtomicReference<T?>()
+    private val targetBeansRef = AtomicReference<Collection<T>?>()
 
     override fun getIfAvailable(): T? {
         val cached = targetBeanRef.get()
@@ -75,6 +76,13 @@ class CacheableObjectProvider<T : Any>(
     }
 
     override fun orderedStream(): Stream<T> {
-        return Stream.of(getObject())
+        targetBeansRef.get()?.let {
+            return it.stream()
+        }
+
+        val beans = beanFactory.getBeansOfType(targetBeanClass).values
+        val sorted = beans.sortedWith(AnnotationAwareOrderComparator.INSTANCE)
+        targetBeansRef.set(sorted)
+        return sorted.stream()
     }
 }
