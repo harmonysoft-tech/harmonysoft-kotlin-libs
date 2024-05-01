@@ -1,3 +1,5 @@
+## v3.3.0 released on 01 May 2024 UTC
+  * e6e80c9d57c81f7efcd8e8405820ea6abff78b13 added external test environments for redis, kafka and mongo
 ## v3.2.0 released on 28 Apr 2024 UTC
   * 5371853b4589278f4a3683b18230a3cd4c15f38f corrected CacheableObjectProvider.orderedStream()
 ## v3.1.0 released on 28 Apr 2024 UTC
