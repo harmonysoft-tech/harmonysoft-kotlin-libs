@@ -27,6 +27,7 @@ include("harmonysoft-mongo-test")
 include("harmonysoft-mongo-cucumber")
 include("harmonysoft-mongo-environment")
 include("harmonysoft-mongo-environment-testcontainers")
+include("harmonysoft-mongo-environment-external")
 
 include("harmonysoft-json-api")
 include("harmonysoft-jackson")
@@ -40,11 +41,13 @@ include("harmonysoft-kafka-test")
 include("harmonysoft-kafka-cucumber")
 include("harmonysoft-kafka-environment")
 include("harmonysoft-kafka-environment-testcontainers")
+include("harmonysoft-kafka-environment-external")
 
 include("harmonysoft-redis-test")
 include("harmonysoft-redis-cucumber")
 include("harmonysoft-redis-environment")
 include("harmonysoft-redis-environment-testcontainers")
+include("harmonysoft-redis-environment-external")
 
 include("harmonysoft-slf4j-spring")
 
