@@ -33,6 +33,7 @@ open class TestEnvironmentStopper {
                 )
             }
             mixin?.beforeStop(envManager.testContext)
+            context.close()
         }
     }
 }

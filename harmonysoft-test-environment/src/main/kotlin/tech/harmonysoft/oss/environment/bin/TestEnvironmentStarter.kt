@@ -43,6 +43,7 @@ open class TestEnvironmentStarter {
             } else {
                 logger.info("started test environment")
             }
+            context.close()
         }
     }
 }

@@ -32,6 +32,7 @@ open class TestEnvironmentChecker {
                 } ?: ProcessingResult.success()
             }
             logger.info("verified that test environment is available")
+            context.close()
         }
     }
 }
