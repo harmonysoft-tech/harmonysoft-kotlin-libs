@@ -1,3 +1,5 @@
+## v3.5.0 released on 24 May 2024 UTC
+  * bc44de69ae1483a0db20ea63cf4497cbf3ecb29e put HttpSpringStepDefinitions into common glue package
 ## v3.4.0 released on 24 May 2024 UTC
   * 8b95181cd73e4ab824ccec83699064b188596f96 closing spring context after test environment action
 ## v3.3.0 released on 01 May 2024 UTC
