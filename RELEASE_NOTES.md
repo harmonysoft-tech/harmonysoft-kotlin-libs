@@ -1,3 +1,5 @@
+## v3.4.0 released on 24 May 2024 UTC
+  * 8b95181cd73e4ab824ccec83699064b188596f96 closing spring context after test environment action
 ## v3.3.0 released on 01 May 2024 UTC
   * e6e80c9d57c81f7efcd8e8405820ea6abff78b13 added external test environments for redis, kafka and mongo
 ## v3.2.0 released on 28 Apr 2024 UTC
