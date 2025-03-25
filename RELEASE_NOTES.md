@@ -1,3 +1,5 @@
+## v3.6.0 released on 25 Mar 2025 UTC
+  * 9d273722e6e41239282726352f73f43b55d70774 allow to match numeric values from json
 ## v3.5.0 released on 24 May 2024 UTC
   * bc44de69ae1483a0db20ea63cf4497cbf3ecb29e put HttpSpringStepDefinitions into common glue package
 ## v3.4.0 released on 24 May 2024 UTC
