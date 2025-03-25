@@ -14,6 +14,7 @@ import tech.harmonysoft.oss.test.TestAware
 import tech.harmonysoft.oss.test.binding.DynamicBindingContext
 import tech.harmonysoft.oss.test.binding.DynamicBindingKey
 import tech.harmonysoft.oss.test.content.TestContentManager
+import tech.harmonysoft.oss.test.fixture.CommonTestFixture
 import tech.harmonysoft.oss.test.fixture.FixtureDataHelper
 import tech.harmonysoft.oss.test.time.clock.TestClockProvider
 import tech.harmonysoft.oss.test.util.TestUtil
@@ -107,7 +108,8 @@ class CommonTestManager(
 
     fun verifyDynamicValue(key: String, expected: String) {
         val actual = bindingContext.getBinding(DynamicBindingKey((key)))
-        if (actual != expected) {
+        val expectedToUse = fixtureDataHelper.prepareTestData(CommonTestFixture.TYPE, Unit, expected)
+        if (actual != expectedToUse) {
             TestUtil.fail("expected dynamic key '$key' to have value '$expected' but it has value '$actual' instead")
         }
     }

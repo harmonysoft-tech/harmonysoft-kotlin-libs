@@ -694,3 +694,27 @@ Feature: Mock HTTP server tests
         "key2": null
       }
       """
+
+ Scenario: Binding numerical value
+
+   Given the following HTTP request is received by mock server:
+     | method | path  |
+     | GET    | /test |
+
+   And the following mock HTTP response with code 200 is returned:
+      """
+      {
+        "data": 1
+      }
+      """
+
+   When HTTP GET request to /test is made
+
+   Then last HTTP GET request returns JSON with at least the following data:
+      """
+      {
+        "data": <bind:value>
+      }
+      """
+
+   And dynamic key 'value' should have value '<int(1)>'

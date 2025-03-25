@@ -117,6 +117,7 @@ object CommonJsonUtil {
         val classMatched = (expected is Map<*, *> && actual is Map<*, *>)
                            || (expected is Collection<*> && actual is Collection<*>)
                            || (expected::class == actual::class)
+                           || expected is String && expected.startsWith(DYNAMIC_VALUE_PREFIX)
         if (!classMatched) {
             return TestMatchResult(
                 errors = listOf(
