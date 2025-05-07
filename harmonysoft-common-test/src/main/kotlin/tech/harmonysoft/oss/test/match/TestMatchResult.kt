@@ -59,4 +59,8 @@ data class TestMatchResult(
      * data structure. It's up to the caller to actually register them in [DynamicBindingContext]
      */
     val boundDynamicValues: Map<DynamicBindingKey, Any?>
-)
+) {
+    companion object {
+        val EMPTY = TestMatchResult(emptyList(), emptyMap())
+    }
+}

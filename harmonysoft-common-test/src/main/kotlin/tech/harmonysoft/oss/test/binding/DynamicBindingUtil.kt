@@ -8,4 +8,6 @@ object DynamicBindingUtil {
     val TO_BIND_REGEX = """<bind:([^>]+)>""".toRegex()
 
     val DYNAMIC_BOUND_VALUE_REGEX = """bound:(.+)""".toRegex()
+
+    val REGEXP_REGEXP = """<regexp:(.+)>""".toRegex()
 }

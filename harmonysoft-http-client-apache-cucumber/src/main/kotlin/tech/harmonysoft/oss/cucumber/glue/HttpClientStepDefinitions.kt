@@ -3,8 +3,6 @@ package tech.harmonysoft.oss.cucumber.glue
 import io.cucumber.java.After
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
-import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.atomic.AtomicReference
 import jakarta.inject.Inject
 import org.apache.hc.client5.http.classic.methods.HttpDelete
 import org.apache.hc.client5.http.classic.methods.HttpGet
@@ -34,7 +32,10 @@ import tech.harmonysoft.oss.test.binding.DynamicBindingContext
 import tech.harmonysoft.oss.test.content.TestContentManager
 import tech.harmonysoft.oss.test.fixture.FixtureDataHelper
 import tech.harmonysoft.oss.test.json.CommonJsonUtil
+import tech.harmonysoft.oss.test.manager.CommonTestManager
 import tech.harmonysoft.oss.test.util.TestUtil.fail
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.atomic.AtomicReference
 
 class HttpClientStepDefinitions {
 
@@ -48,6 +49,7 @@ class HttpClientStepDefinitions {
     @Inject private lateinit var contentManager: TestContentManager
     @Inject private lateinit var jsonApi: JsonApi
     @Inject private lateinit var dynamicContext: DynamicBindingContext
+    @Inject private lateinit var commonTestManager: CommonTestManager
 
     private val requestBuilders = mapOf<String, (String) -> HttpUriRequestBase> (
         HttpGet.METHOD_NAME to { HttpGet(it) },
@@ -216,7 +218,11 @@ class HttpClientStepDefinitions {
 
     fun verifyJsonResponse(httpMethod: String, expectedJson: String, strict: Boolean) {
         val result = matchJsonResponse(httpMethod, expectedJson, strict)
-        if (!result.success) {
+        if (commonTestManager.expectTestVerificationFailure) {
+            if (result.success) {
+                fail("expected that last HTTP $httpMethod returns JSON which doesn't match this:\n$expectedJson")
+            }
+        } else if (!result.success) {
             fail(result.failureValue)
         }
     }

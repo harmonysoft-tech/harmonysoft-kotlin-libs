@@ -1,6 +1,7 @@
 package tech.harmonysoft.oss.test.json
 
 import tech.harmonysoft.oss.test.binding.DynamicBindingKey
+import tech.harmonysoft.oss.test.binding.DynamicBindingUtil.REGEXP_REGEXP
 import tech.harmonysoft.oss.test.binding.DynamicBindingUtil.TO_BIND_REGEX
 import tech.harmonysoft.oss.test.match.TestMatchResult
 import tech.harmonysoft.oss.test.util.TestUtil.fail
@@ -8,7 +9,13 @@ import tech.harmonysoft.oss.test.util.TestUtil.fail
 object CommonJsonUtil {
 
     private const val DYNAMIC_VALUE_PREFIX = "dynamic-value-"
+    private const val REGEXP_PREFIX = "__harmonysoft-regexp-"
     private const val NOT_SET_MARKER = "<not-set>"
+
+    private val NORMALIZATIONS = listOf(
+        TO_BIND_REGEX to DYNAMIC_VALUE_PREFIX,
+        REGEXP_REGEXP to REGEXP_PREFIX,
+    )
 
     /**
      * Normally when we want to capture any dynamic value from json, we define it as-is, without any quotes:
@@ -33,15 +40,21 @@ object CommonJsonUtil {
      * ```
      */
     fun prepareDynamicMarkers(json: String): String {
+        return NORMALIZATIONS.fold(json) { currentJson, (regexp, prefix) ->
+            prepareDynamicMarkers(currentJson, regexp, prefix)
+        }
+    }
+
+    private fun prepareDynamicMarkers(json: String, regexp: Regex, prefix: String): String {
         val normalized = StringBuilder()
         var start = 0
         while (true) {
-            TO_BIND_REGEX.find(json, start)?.let {
+            regexp.find(json, start)?.let {
                 normalized
                     .append(json.substring(start, it.range.first))
                     .append("\"")
-                    .append(DYNAMIC_VALUE_PREFIX)
-                    .append(it.groupValues[1])
+                    .append(prefix)
+                    .append(escapeJsonString(it.groupValues[1]))
                     .append("\"")
                 start = it.range.last + 1
             } ?: break
@@ -50,6 +63,10 @@ object CommonJsonUtil {
             normalized.append(json.substring(start))
         }
         return normalized.toString()
+    }
+
+    private fun escapeJsonString(value: String): String {
+        return value.replace("\"", "\\\"")
     }
 
     /**
@@ -105,7 +122,7 @@ object CommonJsonUtil {
         if (isSimpleValue(expected) && isSimpleValue(actual)) {
             val matched = equalityMatcher(expected, actual)
             return if (matched) {
-                TestMatchResult(emptyList(), emptyMap())
+                TestMatchResult.EMPTY
             } else {
                 TestMatchResult(
                     errors = listOf("mismatch at path '$path' - expected a ${expected::class.qualifiedName} "
@@ -117,7 +134,8 @@ object CommonJsonUtil {
         val classMatched = (expected is Map<*, *> && actual is Map<*, *>)
                            || (expected is Collection<*> && actual is Collection<*>)
                            || (expected::class == actual::class)
-                           || expected is String && expected.startsWith(DYNAMIC_VALUE_PREFIX)
+                           || (expected is String
+                              && (expected.startsWith(DYNAMIC_VALUE_PREFIX) || expected.startsWith(REGEXP_PREFIX)))
         if (!classMatched) {
             return TestMatchResult(
                 errors = listOf(
@@ -138,6 +156,18 @@ object CommonJsonUtil {
                 ))
             }
 
+            expected is String && expected.startsWith(REGEXP_PREFIX) -> {
+                val regexp = expected.substring(REGEXP_PREFIX.length).toRegex()
+                if (regexp.matches(actual.toString())) {
+                    return TestMatchResult.EMPTY
+                } else {
+                    TestMatchResult(
+                        listOf("value '$actual' doesn't match regexp '$regexp' at path '$path'"),
+                        emptyMap()
+                    )
+                }
+            }
+
             else -> fail(
                 "unexpected situation during JSON comparison - expected value of type "
                 + "${expected::class.qualifiedName}($expected), actual value of type "
@@ -149,7 +179,8 @@ object CommonJsonUtil {
     private fun isSimpleValue(value: Any): Boolean {
         return value !is Map<*, *>
                && value !is Collection<*>
-               && (value !is String || !value.startsWith(DYNAMIC_VALUE_PREFIX))
+               && (value !is String
+                   || (!value.startsWith(DYNAMIC_VALUE_PREFIX) && !value.startsWith(REGEXP_PREFIX)))
     }
 
     fun compareAndBindMap(
@@ -283,7 +314,7 @@ object CommonJsonUtil {
     fun dropDynamicMarkers(parsedJson: Any): Any {
         return when (parsedJson) {
             is Map<*, *> -> parsedJson.mapNotNull { (k, v) ->
-                if (v is String && v.startsWith(DYNAMIC_VALUE_PREFIX)) {
+                if (v is String && NORMALIZATIONS.any { v.startsWith(it.second) }) {
                     null
                 } else {
                     k to v
@@ -291,15 +322,15 @@ object CommonJsonUtil {
             }.toMap()
 
             is Collection<*> -> parsedJson.mapNotNull { value ->
-                value?.let {
-                    if (it is String) {
-                        if (it.startsWith(DYNAMIC_VALUE_PREFIX)) {
+                value?.let { v ->
+                    if (v is String) {
+                        if (NORMALIZATIONS.any { v.startsWith(it.second) }) {
                             null
                         } else {
-                            it
+                            v
                         }
                     } else {
-                        dropDynamicMarkers(it)
+                        dropDynamicMarkers(v)
                     }
                 }
             }

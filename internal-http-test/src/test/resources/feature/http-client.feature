@@ -95,3 +95,49 @@ Feature: HTTP client tests
         "data": "some-value"
       }
       """
+
+  Scenario: Passed regexp match in HTTP response
+
+    Given the following HTTP request is received by mock server:
+      | method | path  |
+      | GET    | /test |
+
+    And the following mock HTTP response is returned:
+      """
+      {
+        "data": "part1 - \"part2\" - part3"
+      }
+      """
+
+    When HTTP GET request to /test is made
+
+    Then last HTTP GET request returns JSON with at least the following data:
+      """
+      {
+        "data": <regexp:.*"part2".*>
+      }
+      """
+
+  Scenario: Failed regexp match in HTTP response
+
+    Given the following HTTP request is received by mock server:
+      | method | path  |
+      | GET    | /test |
+
+    And the following mock HTTP response is returned:
+      """
+      {
+        "data": "part1 - \"part2\" - part3"
+      }
+      """
+
+    When HTTP GET request to /test is made
+
+    Then next test verification is expected to fail
+
+    And last HTTP GET request returns JSON with at least the following data:
+      """
+      {
+        "data": <regexp:.*"partX".*>
+      }
+      """
