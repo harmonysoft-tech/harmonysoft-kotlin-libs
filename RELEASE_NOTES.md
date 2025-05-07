@@ -1,3 +1,5 @@
+## v3.7.0 released on 07 May 2025 UTC
+  * ab27a999a413f144aadde863abc34621f42094c9 support json matching with regexp rules
 ## v3.6.0 released on 25 Mar 2025 UTC
   * 9d273722e6e41239282726352f73f43b55d70774 allow to match numeric values from json
 ## v3.5.0 released on 24 May 2024 UTC
