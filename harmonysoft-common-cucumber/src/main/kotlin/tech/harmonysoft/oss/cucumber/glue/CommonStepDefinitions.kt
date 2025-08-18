@@ -6,10 +6,10 @@ import io.cucumber.java.Scenario
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import jakarta.inject.Inject
-import java.util.Optional
-import java.util.concurrent.TimeUnit
 import tech.harmonysoft.oss.test.TestAware
 import tech.harmonysoft.oss.test.manager.CommonTestManager
+import java.util.Optional
+import java.util.concurrent.TimeUnit
 
 class CommonStepDefinitions {
 
@@ -102,8 +102,13 @@ class CommonStepDefinitions {
         manager.verifyElapsedTime(expectedDurationMs, startTimeKey)
     }
 
-    @Given("next test verification is expected to fail")
+    @Given("^next test verification is expected to fail$")
     fun expectVerificationFailure() {
         manager.expectVerificationFailure()
+    }
+
+    @Then("^test verification is failed with this message:$")
+    fun verifyExpectedVerificationFailureMessage(expected: String) {
+        manager.verifyExpectedVerificationFailureMessage(expected)
     }
 }

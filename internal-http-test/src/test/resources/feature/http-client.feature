@@ -141,3 +141,43 @@ Feature: HTTP client tests
         "data": <regexp:.*"partX".*>
       }
       """
+
+  Scenario: Mismatch in non-strict JSON array matching
+
+    Given the following HTTP request is received by mock server:
+      | method | path  |
+      | GET    | /test |
+
+    And the following mock HTTP response is returned:
+      """
+      [
+        { "error": "error1" },
+        { "error": "error2" }
+      ]
+      """
+
+    When HTTP GET request to /test is made
+
+    And next test verification is expected to fail
+
+    And last HTTP GET request returns JSON with at least the following data:
+      """
+      [
+        { "error": "specific-error" }
+      ]
+      """
+
+    Then test verification is failed with this message:
+      """
+      found 1 error(s) on expected JSON content comparison
+        *) mismatch at path '<root>[0]' - none of 2 remaining candidate(s) matched:
+          candidate #0:
+            * mismatch at path '<root>[0].error' - expected a kotlin.String 'specific-error' but got kotlin.String 'error1'
+          candidate #1:
+            * mismatch at path '<root>[0].error' - expected a kotlin.String 'specific-error' but got kotlin.String 'error2'
+      complete response:
+      [
+        { "error": "error1" },
+        { "error": "error2" }
+      ]
+      """

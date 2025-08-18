@@ -291,21 +291,36 @@ object CommonJsonUtil {
         val errors = mutableListOf<String>()
         val dynamicBindings = mutableMapOf<DynamicBindingKey, Any?>()
         val remainingCandidates = actual.toMutableList()
-        for (expectedElement in expected) {
+        expected.forEachIndexed { expectedElementIndex, expectedElement ->
             expectedElement ?: fail("I can't happen")
-            var matched = false
-            for (candidate in remainingCandidates) {
-                val result = compareAndBind(expectedElement, candidate as Any, path, false, equalityMatcher)
-                if (result.errors.isEmpty()) {
-                    matched = true
-                    remainingCandidates.remove(candidate)
-                    dynamicBindings += result.boundDynamicValues
-                    break
+            if (remainingCandidates.isEmpty()) {
+                errors += "mismatch at path '$path[$expectedElementIndex]' - expected " +
+                          "'$expectedElement' but no more candidates are available"
+            } else {
+                var matched = false
+                val errorsOnCurrentExpectedElement = mutableListOf<Collection<String>>()
+                for (candidate in remainingCandidates) {
+                    val result = compareAndBind(expectedElement, candidate as Any, "$path[$expectedElementIndex]", false, equalityMatcher)
+                    if (result.errors.isEmpty()) {
+                        matched = true
+                        remainingCandidates.remove(candidate)
+                        dynamicBindings += result.boundDynamicValues
+                        break
+                    } else {
+                        errorsOnCurrentExpectedElement += result.errors
+                    }
                 }
-            }
-            if (!matched) {
-                errors += "mismatch at path '$path' - expected to find a " +
-                          "${expectedElement::class.qualifiedName} '$expectedElement' but got null"
+                if (!matched) {
+                    var error = "mismatch at path '$path[$expectedElementIndex]' - none of ${remainingCandidates.size} remaining " +
+                              "candidate(s) matched:"
+                    errorsOnCurrentExpectedElement.forEachIndexed { candidateIndex, candidateErrores ->
+                        error += "\n    candidate #$candidateIndex:"
+                        for (e in candidateErrores) {
+                            error += "\n      * $e"
+                        }
+                    }
+                    errors += error
+                }
             }
         }
         return TestMatchResult(errors, dynamicBindings)

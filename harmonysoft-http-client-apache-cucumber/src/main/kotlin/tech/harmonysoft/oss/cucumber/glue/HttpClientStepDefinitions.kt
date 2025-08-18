@@ -221,6 +221,8 @@ class HttpClientStepDefinitions {
         if (commonTestManager.expectTestVerificationFailure) {
             if (result.success) {
                 fail("expected that last HTTP $httpMethod returns JSON which doesn't match this:\n$expectedJson")
+            } else {
+                commonTestManager.onActualTestVerificationFailureMessage(result.failureValue)
             }
         } else if (!result.success) {
             fail(result.failureValue)

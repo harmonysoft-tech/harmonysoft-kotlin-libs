@@ -1,10 +1,5 @@
 package tech.harmonysoft.oss.test.manager
 
-import java.time.DayOfWeek
-import java.time.LocalDate
-import java.time.ZoneId
-import java.util.concurrent.atomic.AtomicBoolean
-import java.util.concurrent.atomic.AtomicReference
 import jakarta.inject.Named
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.TestInfo
@@ -18,6 +13,11 @@ import tech.harmonysoft.oss.test.fixture.CommonTestFixture
 import tech.harmonysoft.oss.test.fixture.FixtureDataHelper
 import tech.harmonysoft.oss.test.time.clock.TestClockProvider
 import tech.harmonysoft.oss.test.util.TestUtil
+import java.time.DayOfWeek
+import java.time.LocalDate
+import java.time.ZoneId
+import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicReference
 
 @Named
 class CommonTestManager(
@@ -30,6 +30,8 @@ class CommonTestManager(
 
     private val _expectTestVerificationFailure = AtomicBoolean()
     val expectTestVerificationFailure: Boolean get() = _expectTestVerificationFailure.get()
+
+    private val _actualTestVerificationFailureMessage = AtomicReference<String?>()
 
     private val _testName = AtomicReference("")
     val activeTestName: String get() = _testName.get()
@@ -49,6 +51,7 @@ class CommonTestManager(
     override fun onTestEnd() {
         logger.info("finished test '{}'", activeTestName)
         _expectTestVerificationFailure.set(false)
+        _actualTestVerificationFailureMessage.set(null)
         _testName.set("")
     }
 
@@ -145,5 +148,21 @@ class CommonTestManager(
 
     fun expectVerificationFailure() {
         _expectTestVerificationFailure.set(true)
+    }
+
+    fun onActualTestVerificationFailureMessage(message: String) {
+        _actualTestVerificationFailureMessage.set(message)
+    }
+
+    fun verifyExpectedVerificationFailureMessage(expected: String) {
+        val actual = _actualTestVerificationFailureMessage.get()
+                     ?: TestUtil.fail(
+                         "expected that test verification failure message is '$expected' but it is not set"
+                     )
+        if (actual != expected) {
+            TestUtil.fail(
+                "expected that test verification failure message is '$expected' but it is '$actual'"
+            )
+        }
     }
 }
